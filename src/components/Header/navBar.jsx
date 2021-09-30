@@ -1,11 +1,20 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Login from "../../services/Auth/components/Login/Login";
+import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
+import { logout } from "../../services/Auth/userSlice";
 
 NavBar.propTypes = {};
 
 function NavBar(props) {
+  const dispatch = useDispatch();
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser.id;
+
   const [showCategories, setShowCategories] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isToggleLogginUser, setisToggleLogginUser] = useState(false);
 
   const handleCategoriesClick = () => {
     setShowCategories(!showCategories);
@@ -13,6 +22,15 @@ function NavBar(props) {
 
   const handleLoginOnclick = () => {
     setShowModal(!showModal);
+  };
+
+  const handleLogOutClick = () => {
+    const action = logout();
+    dispatch(action);
+  };
+
+  const toggleUserMenu = () => {
+    setisToggleLogginUser(!isToggleLogginUser);
   };
 
   return (
@@ -68,33 +86,63 @@ function NavBar(props) {
               </svg>
             </div>
             {/* <!-- User icon  --> */}
-            <div
-              className="userIcon cursor-pointer"
-              onClick={handleLoginOnclick}
-            >
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+
+            {!isLoggedIn && (
+              <div
+                className="userIcon cursor-pointer"
+                onClick={handleLoginOnclick}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div className="userIconDropDown hidden text-sm mt-0.5 ml-1 p-1.5 absolute border-2 rounded gap-4 border-gray-500 border-opacity-80">
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                {/* <div className="userIconDropDown hidden text-sm mt-0.5 ml-1 p-1.5 absolute border-2 rounded gap-4 border-gray-500 border-opacity-80">
                 <ul>
                   <li className="userLoginHover" id="loginButton">
                     Login
                   </li>
                   <li className="userLoginHover">Register</li>
                 </ul>
+              </div> */}
               </div>
-            </div>
+            )}
+
+            {isLoggedIn && (
+              <div className="cursor-pointer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+
+                <div className="border-2 absolute p-1 bg-gray-100">
+                  <ul>
+                    <li className="cursor-pointer">My Account</li>
+                    <li className="cursor-pointer" onClick={handleLogOutClick}>
+                      Log out
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
             {/* <!-- Burger Icon --> */}
             <div className="navbarBtn lg:hidden cursor-pointer">
               <svg
@@ -121,8 +169,8 @@ function NavBar(props) {
       <div className="navbarShow hidden lg:flex justify-center text-center lg:justify-around lg:mt-5 border-t-2 border-b-2 border-opacity-50 border-gray-300 w-full shadow-md">
         <ul className="lg:flex lg:p-3 lg:gap-28 uppercase text-sm w-screen lg:w-auto">
           <li className="navItemPadding">
-            <Link to="/newest" className="navItemsHover">
-              Newest
+            <Link to="/" className="navItemsHover">
+              Home
             </Link>
           </li>
           <li className="navItemPadding">
@@ -145,7 +193,7 @@ function NavBar(props) {
             </Link>
           </li>
           <li className="navItemPadding">
-            <Link to="/" className="navItemsHover">
+            <Link to="/createNewPost" className="navItemsHover">
               Post
             </Link>
           </li>
@@ -208,30 +256,15 @@ function NavBar(props) {
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                  <form action="">
-                    <div className="flex flex-col">
-                      <label htmlFor="username" className="font-bold">
-                        Email
-                      </label>
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="eg: myemail@domain.com"
-                        className="border-2 w-80 h-10 rounded-sm p-2"
-                      />
-                    </div>
-                    <div className="mt-4 flex flex-col">
-                      <label htmlFor="password" className="font-bold">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        name="password"
-                        placeholder="Your Password"
-                        className="border-2 w-80 h-10 rounded-sm p-2"
-                      />
-                    </div>
-                  </form>
+                  <div
+                    className="flex justify-center"
+                    onClick={handleLoginOnclick}
+                  >
+                    <MyGoogleLogin />
+                  </div>
+                  <div className="my-4">
+                    <Login />
+                  </div>
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">

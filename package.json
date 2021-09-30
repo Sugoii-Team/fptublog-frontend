@@ -16,6 +16,7 @@
     "query-string": "^7.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-google-login": "^5.2.2",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
@@ -25,7 +26,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "myToolkit": "npm install react react-dom @emotion/react @emotion/styled @mui/material @mui/icons-material react-scripts --save-dev node-sass classnames react-router-dom query-string axios react-hook-form yup @hookform/resolvers @hookform/error-message @reduxjs/toolkit react-redux -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco"
+    "myToolkit": "npm install react-google-login react react-dom @emotion/react @emotion/styled @mui/material @mui/icons-material react-scripts --save-dev node-sass classnames react-router-dom query-string axios react-hook-form yup @hookform/resolvers @hookform/error-message @reduxjs/toolkit react-redux -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco"
   },
   "eslintConfig": {
     "extends": [
