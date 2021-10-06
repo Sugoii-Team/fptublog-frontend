@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
 const categoryApi = {
-  getAll(params) {
-    const url = "/categories";
+  getCategories(params) {
+    const url = "api/categories";
     return axiosClient.get(url, {
       params,
     });

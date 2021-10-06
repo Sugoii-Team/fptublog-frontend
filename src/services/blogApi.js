@@ -1,3 +1,4 @@
+import StorageKey from "../constant/storage-keys";
 import axiosClient from "./axiosClient";
 
 const blogApi = {
@@ -15,9 +16,16 @@ const blogApi = {
     const url = `api/blogs/${id}`;
     return axiosClient.get(url);
   },
-  add(data) {
+
+  post(data) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = "api/blogs";
-    return axiosClient.post(url, data);
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
   },
   update(data) {
     const url = `api/blogs/${data.id}`;
@@ -26,6 +34,11 @@ const blogApi = {
   remove(id) {
     const url = `api/blogs/${id}`;
     return axiosClient.delete(url);
+  },
+
+  getAuthorById(id) {
+    const url = `/api/accounts/${id}`;
+    return axiosClient.get(url);
   },
 };
 
