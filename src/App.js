@@ -1,9 +1,10 @@
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 import NavBar from "./components/Header/navBar";
+import Approval from "./pages/Approval/components/Approval";
 import HomePage from "./pages/Newest/HomePage";
-import Markdown from './pages/Markdown/markdown';
 import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import Dashboard from "./pages/AdminDashboard/Dashboard";
+import PostBlog from "./pages/PostBlog/PostBlog";
 function App() {
   return (
     <div className="App font-monsterrat">
@@ -11,12 +12,13 @@ function App() {
         <header>
           <NavBar />
         </header>
-        <div className="flex justify-center">
+        <div>
           <Switch>
             <Route path="/" component={HomePage} exact />
-            <Route path='/blogdetail' component = {BlogContentFeature} exact/>
-            <Route path='/markdown' component = {Markdown} exact/>
+            <Route path= '/blogdetail' component = {BlogContentFeature} exact/>
             <Route path='/dashboard' component = {Dashboard} exact/>
+            <Route path="/createNewPost" component={PostBlog} />
+            <Route path="/approval" component={Approval} />
           </Switch>
         </div>
         <footer></footer>

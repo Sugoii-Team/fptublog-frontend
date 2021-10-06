@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useRouteMatch } from 'react-router';
 import blogApi from '../../services/blogApi';
 import BlogContentDetail from './components/BlogContentDetail';
 
@@ -10,8 +11,15 @@ BlogContentFeature.propTypes = {
 
 function BlogContentFeature(props) {
 
+  const location = useLocation().search.substr(1);
+  console.log("location ", location);
+
+  const blogId = useRouteMatch().url.search;
+  console.log(blogId);
+
   const [blogDetail, setBlogDetail] = useState();
   const [tagOfBlog, setTagOfBlog] = useState();
+
 
   // useEffect(() => {
   //   (async () => {
@@ -32,11 +40,9 @@ function BlogContentFeature(props) {
   useEffect(() => {
     (async () => {
       try {
-        const data = await blogApi.get("E3F0423E-F36B-1410-892A-008CAF34AFE2");
-        // const dataOfBlog = await blogApi.get(3);
+        const data = await blogApi.get(location);        
         
-        const tag = await blogApi.getTagOfBlogById("E3F0423E-F36B-1410-892A-008CAF34AFE2");
-        // const tag = await blogApi.getTagOfBlogById(3);
+        const tag = await blogApi.getTagOfBlogById(location);
 
         setBlogDetail(data);
         setTagOfBlog(tag);

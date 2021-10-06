@@ -57,8 +57,8 @@ function CommentsFeature(props) {
       </ol>
 
       <ul>
-        {commentsOfBlog.map((comment) => ( 
-          <li className="grid grid-cols-5" key = {comment.id}>
+        {commentsOfBlog.map((comment) => (
+          <li className="grid grid-cols-5" key={comment.id}>
             <div className="col-span-1 flex justify-around">
               <a href="">
                 <img className="w-20 h-20 my-auto mx-auto rounded-full" alt="img" src="http://placehold.it/70x70" />

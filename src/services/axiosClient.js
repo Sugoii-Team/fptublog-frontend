@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://97d2-113-23-108-235.ngrok.io/fptu-blog",
+  baseURL: "http://e0f2-113-23-108-235.ngrok.io/fptu-blog",
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
   },
 });
 
@@ -33,6 +33,7 @@ axiosClient.interceptors.response.use(
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    console.log("Error Response: ", error.response);
     return Promise.reject(error);
   }
 );

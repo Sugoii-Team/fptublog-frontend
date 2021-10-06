@@ -1,11 +1,21 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Login from "../../services/Auth/components/Login/Login";
+import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
+import CategoriesShow from "./CategoriesShow";
+import UserDropDownMenu from "./UserDropDownMenu";
 
 NavBar.propTypes = {};
 
 function NavBar(props) {
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser.id;
+  const userImg = loggedInUser.avatarUrl;
+
   const [showCategories, setShowCategories] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isToggleLogginUser, setisToggleLogginUser] = useState(false);
 
   const handleCategoriesClick = () => {
     setShowCategories(!showCategories);
@@ -13,6 +23,10 @@ function NavBar(props) {
 
   const handleLoginOnclick = () => {
     setShowModal(!showModal);
+  };
+
+  const toggleUserMenu = () => {
+    setisToggleLogginUser(!isToggleLogginUser);
   };
 
   return (
@@ -68,33 +82,68 @@ function NavBar(props) {
               </svg>
             </div>
             {/* <!-- User icon  --> */}
-            <div
-              className="userIcon cursor-pointer"
-              onClick={handleLoginOnclick}
-            >
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+
+            {!isLoggedIn && (
+              <div
+                className="userIcon cursor-pointer"
+                onClick={handleLoginOnclick}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div className="userIconDropDown hidden text-sm mt-0.5 ml-1 p-1.5 absolute border-2 rounded gap-4 border-gray-500 border-opacity-80">
-                <ul>
-                  <li className="userLoginHover" id="loginButton">
-                    Login
-                  </li>
-                  <li className="userLoginHover">Register</li>
-                </ul>
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
               </div>
-            </div>
+            )}
+
+            {/* User field after logged in */}
+            {isLoggedIn && (
+              /* User icon when logged in */
+              <div className="cursor-pointer">
+                <div onClick={toggleUserMenu}>
+                  {userImg ? (
+                    <div className="w-6 h-6">
+                      <img
+                        src={userImg}
+                        alt="User's img"
+                        className="rounded-full border-2 border-black"
+                      />
+                    </div>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </div>
+
+                {/* User Dropdown menu */}
+                {isToggleLogginUser ? (
+                  <UserDropDownMenu userInfo={loggedInUser} />
+                ) : null}
+
+                {/* User Dropdown menu */}
+              </div>
+            )}
+            {/* User field after logged in */}
+
             {/* <!-- Burger Icon --> */}
             <div className="navbarBtn lg:hidden cursor-pointer">
               <svg
@@ -112,6 +161,7 @@ function NavBar(props) {
                 />
               </svg>
             </div>
+            {/* <!-- Burger Icon --> */}
           </div>
           {/* <!-- User --> */}
         </div>
@@ -121,31 +171,30 @@ function NavBar(props) {
       <div className="navbarShow hidden lg:flex justify-center text-center lg:justify-around lg:mt-5 border-t-2 border-b-2 border-opacity-50 border-gray-300 w-full shadow-md">
         <ul className="lg:flex lg:p-3 lg:gap-28 uppercase text-sm w-screen lg:w-auto">
           <li className="navItemPadding">
-            <Link to="/newest" className="navItemsHover">
-              Newest
+            <Link to="/" className="navItemsHover">
+              Home
             </Link>
           </li>
           <li className="navItemPadding">
-            <Link
-              to=""
-              className="navItemsHover"
+            <span
+              className="navItemsHover cursor-pointer"
               onClick={handleCategoriesClick}
             >
               Categories
-            </Link>
+            </span>
           </li>
           <li className="navItemPadding">
-            <Link to="/" className="navItemsHover">
+            <Link to="" className="navItemsHover">
               Archives
             </Link>
           </li>
           <li className="navItemPadding">
-            <Link to="/" className="navItemsHover">
+            <Link to="" className="navItemsHover">
               About
             </Link>
           </li>
           <li className="navItemPadding">
-            <Link to="/" className="navItemsHover">
+            <Link to="/createNewPost" className="navItemsHover">
               Post
             </Link>
           </li>
@@ -154,37 +203,7 @@ function NavBar(props) {
       {/* Navigation bar */}
 
       {/* Category show */}
-      {showCategories ? (
-        <div className="bg-gray-100 w-full h-96 border-b-2 border-gray-300 absolute">
-          <div className="flex justify-center ">
-            <div className="grid grid-cols-5 pt-10 w-3/4 text-sm text-secondary font-bold ">
-              <div className="text-left ">
-                <div className="borderForCategories">Software Engineer</div>
-                <div>
-                  <ul className="grid grid-rows-4text-sm font-normal">
-                    <li>Doi song</li>
-                    <li>Doi song</li>
-                    <li>Doi song</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="text-left">
-                <div className="borderForCategories">Software Engineer</div>
-              </div>
-              <div className="text-left">
-                <div className="borderForCategories">Software Engineer</div>
-              </div>
-              <div className="text-left">
-                <div className="borderForCategories">Software Engineer</div>
-              </div>
-              <div className="text-left">
-                <div className="borderForCategories">Software Engineer</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
+      {showCategories ? <CategoriesShow /> : null}
       {/* Category show */}
 
       {/* Login Dialog */}
@@ -197,41 +216,18 @@ function NavBar(props) {
                 {/*header*/}
                 <div className="flex items-start justify-center p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-2xl font-semibold uppercase">Login</h3>
-                  {/* <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      X
-                    </span>
-                  </button> */}
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                  <form action="">
-                    <div className="flex flex-col">
-                      <label htmlFor="username" className="font-bold">
-                        Email
-                      </label>
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="eg: myemail@domain.com"
-                        className="border-2 w-80 h-10 rounded-sm p-2"
-                      />
-                    </div>
-                    <div className="mt-4 flex flex-col">
-                      <label htmlFor="password" className="font-bold">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        name="password"
-                        placeholder="Your Password"
-                        className="border-2 w-80 h-10 rounded-sm p-2"
-                      />
-                    </div>
-                  </form>
+                  <div
+                    className="flex justify-center"
+                    onClick={handleLoginOnclick}
+                  >
+                    <MyGoogleLogin />
+                  </div>
+                  <div className="my-4">
+                    <Login />
+                  </div>
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
