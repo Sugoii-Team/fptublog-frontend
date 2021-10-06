@@ -1,8 +1,27 @@
+// tailwind.config.js
 module.exports = {
-  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
-  darkMode: false, // or 'media' or 'class'
+  corePlugins: {
+   listStyleType: false,
+  },
   theme: {
     extend: {
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            a:{
+              textDecoration: 'none',
+              color: theme('colors.blue.600'),
+              fontWeight: '600',
+              '&:hover':{
+                textDecoration:'underline',
+              }
+            },
+            // ul:{
+            //   listStyleType: 'disc',
+            // }
+          }
+        },
+      }),
       colors: {
         primary: "#009660",
         secondary: "#1D2325",
@@ -29,10 +48,26 @@ module.exports = {
       maxWidth: {
         maxWForIndexPicture: "15rem",
       },
-    },
+
+      height: {
+        sm: '8px',
+        md: '16px',
+        lg: '24px',
+        xl: '100px',
+      },
+      width: {
+        sm: '8px',
+        md: '16px',
+        lg: '24px',
+        xl: '100px',
+      }
+    }
   },
   variants: {
     extend: {},
   },
-  plugins: [],
-};
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
+}
+
