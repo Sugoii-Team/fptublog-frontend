@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
 import CategoriesShow from "./CategoriesShow";
 import UserDropDownMenu from "./UserDropDownMenu";
@@ -138,7 +137,6 @@ function NavBar(props) {
                 {isToggleLogginUser ? (
                   <UserDropDownMenu userInfo={loggedInUser} />
                 ) : null}
-
                 {/* User Dropdown menu */}
               </div>
             )}
@@ -189,7 +187,7 @@ function NavBar(props) {
             </Link>
           </li>
           <li className="navItemPadding">
-            <Link to="" className="navItemsHover">
+            <Link to="/about" className="navItemsHover">
               About
             </Link>
           </li>
@@ -218,16 +216,16 @@ function NavBar(props) {
                   <h3 className="text-2xl font-semibold uppercase">Login</h3>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
+                <div className="relative p-6 px-16 flex-auto">
                   <div
                     className="flex justify-center"
                     onClick={handleLoginOnclick}
                   >
                     <MyGoogleLogin />
                   </div>
-                  <div className="my-4">
+                  {/* <div className="my-4">
                     <Login />
-                  </div>
+                  </div> */}
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-center p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -238,13 +236,13 @@ function NavBar(props) {
                   >
                     Cancel
                   </button>
-                  <button
+                  {/* <button
                     className="bg-emerald-500 text-black active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() => setShowModal(false)}
                   >
                     Login Now!
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

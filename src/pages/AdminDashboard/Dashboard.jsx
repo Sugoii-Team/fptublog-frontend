@@ -1,6 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import DashboardDetail from './components/DashboardDetail';
+import React from "react";
+import DashboardDetail from "./components/DashboardDetail";
 
 DashboardPage.propTypes = {};
 

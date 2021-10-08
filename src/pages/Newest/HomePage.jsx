@@ -34,6 +34,7 @@ function HomePage(props) {
             <BlogList data={blogList} />
           </div>
           {/* Blog loader */}
+
           {/* Side Items */}
           <BlogPopular />
           {/* Side Items */}
