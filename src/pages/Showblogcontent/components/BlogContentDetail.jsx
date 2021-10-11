@@ -112,7 +112,9 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
                 </ReactMarkdown>
               </article>
             </span>
-            {userRole === "LECTURER" && blog.statusId === pendingId ? (
+            {!(
+              userRole === "LECTURER" && blog.statusId === pendingId
+            ) ? null : (
               <div className="my-5 flex gap-3">
                 <span>
                   {" "}
@@ -133,7 +135,7 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
                   </button>
                 </span>
               </div>
-            ) : null}
+            )}
           </div>
 
           {/* <!--Aside area--> */}

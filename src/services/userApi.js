@@ -3,7 +3,9 @@ import axiosClient from "./axiosClient";
 const userApi = {
   register(data) {
     const url = "api/auth/registration";
-    return axiosClient.post(url, data);
+    const promise = axiosClient.post(url, data);
+    var dataPromise = promise.then((respone) => respone);
+    return dataPromise;
   },
 
   login(data) {

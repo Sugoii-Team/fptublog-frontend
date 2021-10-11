@@ -9,7 +9,7 @@ const Blog = ({ blog }) => {
   const goToUserDetail = `/users/${author.id}`;
   const blogImg = blog.thumnail;
   const defaultImg = "http://placehold.it/240x208";
-  const blogContent = blog.content;
+  const blogContent = blog.description;
   var maxContentLength = 250;
   var trimmedContent = blogContent.substring(0, maxContentLength) + "...";
 

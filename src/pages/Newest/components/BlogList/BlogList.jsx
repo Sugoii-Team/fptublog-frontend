@@ -11,13 +11,18 @@ BlogList.defaultProps = {
 };
 
 function BlogList({ data }) {
+  console.log("Data cua blog list", data);
   return (
     <div>
-      {data.map((blog, index) => (
-        <div key={index}>
-          <Blog blog={blog} />
-        </div>
-      ))}
+      {data !== null ? (
+        data?.map((blog, index) => (
+          <div key={index}>
+            <Blog blog={blog} />
+          </div>
+        ))
+      ) : (
+        <div>We are under mainternance</div>
+      )}
     </div>
   );
 }

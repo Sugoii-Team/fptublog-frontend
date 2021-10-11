@@ -11,8 +11,7 @@ ApprovalTable.defaultProps = {
 };
 
 function ApprovalTable(props) {
-  const ListBlog = props.listReviewBlogs;
-
+  const listBlog = props.listReviewBlogs;
   return (
     <div className="flex justify-center my-4">
       <table className="border-collapse w-10/12">
@@ -30,7 +29,7 @@ function ApprovalTable(props) {
           </tr>
         </thead>
         <tbody>
-          {ListBlog.map((blog, index) => (
+          {listBlog.map((blog, index) => (
             <tr
               key={index}
               className="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0"
