@@ -9,11 +9,12 @@ export const register = createAsyncThunk(
     /* Call api to register */
     const responeData = await userApi.register(payload);
     /* Save data to local storage after data responsed */
-    console.log(responeData);
-    localStorage.setItem(StorageKey.TOKEN, responeData.headers.authorization);
+    const jwt = responeData.headers.authorization;
+    const newJwt = jwt.replace("Bearer ", "");
+    localStorage.setItem(StorageKey.TOKEN, newJwt);
     localStorage.setItem(StorageKey.USER, JSON.stringify(responeData.data));
     /* return user data */
-    return responeData.data.user;
+    return responeData;
   }
 );
 
