@@ -1,37 +1,53 @@
+//React Things
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+//Markdown and display
 import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import gfm from "remark-gfm";
+import MyDialog from "../../../components/Dialog/MyDialog";
+//Components
 import blogApi from "../../../services/blogApi";
+import lecturerApi from "../../../services/lecturerApi";
 import AsideBlogContent from "./Aside";
+import FBComment from "./FBComent";
 
 BlogContentDetail.propTypes = {
   blog: PropTypes.object,
   tagOfBlog: PropTypes.array,
   statusList: PropTypes.array,
+  conditionToApprove: PropTypes.bool,
 };
 
 BlogContentDetail.defaultProps = {
   blog: {},
   tagOfBlog: [],
+  conditionToApprove: false,
 };
 
 function BlogContentDetail({ blog, tagOfBlog, statusList }) {
-  const time = moment(blog.createdDateTime).format("L");
-  /* Get role incase this blog is need to approving */
+  const blogId = blog.id;
+  const history = useHistory(); // Get blog history path
+  const time = moment(blog.createdDateTime).format("MMM Do YY");
+  /* Get role in case this blog is need to approving */
   const userData = useSelector((state) => state.user.current);
   const userRole = userData.role;
+  const [accountOfAuthor, setAccountOfAuthor] = useState({});
   /* Get pending status to compare to this blog */
+  const [approvedDialog, setApprovedDialog] = useState(false);
   const pendingStatus = statusList.filter((status) => {
-    return status.name === "pending";
+    return status.name === "pending approved";
   });
-  const pendingId = pendingStatus[0]?.id;
+  const pendingId = pendingStatus[0]?.id; // Get pendingId to compare
+  const conditionToApprove =
+    userRole === "LECTURER" && blog.statusId === pendingId;
+  //Get to change author avatar
+  const defaultAvatar = "http://placehold.it/70x70";
+  const authorAvatar = accountOfAuthor?.avatarUrl;
 
   // take the author account to take info about author of blog
-  const [accountOfAuthor, setAccountOfAuthor] = useState({});
   useEffect(() => {
     (async () => {
       try {
@@ -43,26 +59,50 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
     })();
   }, [blog.authorId]);
 
+  const responseFromDialog = (TrueOrFalse) => {
+    if (TrueOrFalse) {
+      // if return true then redirect to another page and close dialog
+      setApprovedDialog(false);
+      history.push("/");
+    }
+  };
+
   /* Let Author Update status of blog */
   const HandleApprovalBtn = async (typeOfApproval) => {
-    if (userRole === "LECTURER") {
+    //In case blog take time to load, button cannot do anything
+    if (blog.id === undefined) {
+    } else if (userRole === "LECTURER") {
+      //Filter list status to get status
       const statusAction = statusList.filter((status) => {
         return typeOfApproval === status.name;
       });
       const statusObj = statusAction[0];
 
+      //Prepare data for approval
       const dataPrepare = {
         statusId: statusObj.id,
         reviewerId: userData.id,
       };
 
+      //Update blog
       try {
-        const response = await blogApi.updateBlog(blog.id, dataPrepare);
-        console.log("Success", response);
+        const response = await lecturerApi.approveBlog(
+          blog.id,
+          dataPrepare,
+          userData.id
+        );
+        //If update success then redirect to home page
+        if (
+          response.data === "Update successfully!" &&
+          response.status === 200
+        ) {
+          setApprovedDialog(true);
+        }
       } catch (error) {
         console.log("Failed to approve blog: ", error);
       }
     } else {
+      // If user not Lecturer then can't update
       console.log("Permission Error!");
     }
   };
@@ -75,24 +115,20 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
           {/* <!--Image of the author--> */}
           <span className="inline-block mr-2">
             <img
-              className="rounded-full h-10 w-10 flex items-center justify-center"
-              src="http://placehold.it/70x70"
+              className="rounded-full h-16 w-16 flex items-center justify-center"
+              src={authorAvatar ? authorAvatar : defaultAvatar}
               alt="Author Img"
             />
           </span>
 
           <span className="inline-block ml-2 text-xl">
-            <p>
+            <p className=" font-bold">
               {" "}
               {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
               <br></br>
               {accountOfAuthor.description} <br></br>
-              {tagOfBlog.map((tag) => (
-                <Link to="" key={tag.id}>
-                  {tag.name}
-                </Link>
-              ))}
             </p>
+            <p className="text-md italic ">Created: {time}</p>
           </span>
         </div>
         {/* About the blog content */}
@@ -101,20 +137,23 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
           {/* <!--Content area--> */}
           {/* Title of the blog */}
           <div className="md:col-span-2 ml-20">
-            <p className="text-xl ">Created: {time}</p>
-            <h1 className="mt-9 font-bold text-4xl ">{blog.title}</h1>
-
+            <div className="mb-5">
+              {tagOfBlog.map((tag) => (
+                <Link to="" key={tag.id}>
+                  {tag.name}
+                </Link>
+              ))}
+              <h1 className="mt-9 font-bold text-4xl ">{blog.title}</h1>
+            </div>
             {/* Content of the blog */}
-            <span className="text-justify text-3xl">
+            <span className="text-justify text-3xl ">
               <article className="prose">
                 <ReactMarkdown remarkPlugins={[gfm]}>
                   {blog.content}
                 </ReactMarkdown>
               </article>
             </span>
-            {!(
-              userRole === "LECTURER" && blog.statusId === pendingId
-            ) ? null : (
+            {conditionToApprove ? (
               <div className="my-5 flex gap-3">
                 <span>
                   {" "}
@@ -135,7 +174,7 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
                   </button>
                 </span>
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* <!--Aside area--> */}
@@ -147,8 +186,19 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
       </div>
 
       {/* <!-- Comment Area --> */}
-      <div className="col-span-2 mb-16">{/* <CommentsFeature /> */}</div>
+      <div className="col-span-2 mb-16">
+        <FBComment blogId={blogId} />
+      </div>
       {/* <!-- Comment Area /- --> */}
+      {/* Dialog Area */}
+      {approvedDialog ? (
+        <MyDialog
+          isCancel={responseFromDialog}
+          title="Sucesss"
+          description="Blog Approved"
+          icon="success"
+        />
+      ) : null}
     </div>
   );
 }

@@ -22,8 +22,8 @@ function PostBlog() {
   /* Get current user for check if there is no user
   then can't post blog */
   const getUserState = useSelector((state) => state.user.current);
-  /*  const isLoggedIn = !!getUserState.id; */
-  const isLoggedIn = true;
+  const isLoggedIn = !!getUserState.id;
+  /* const isLoggedIn = true; */
   const userId = getUserState.id;
 
   /* State for some field */
@@ -57,7 +57,7 @@ function PostBlog() {
 
   /* Call api to post */
   const handleSubmit = (e) => {
-    /* If user didn't select categories then prevent them to post blog */
+    /* Validate some field */
     if (title < minLength) {
       setTitleDialog(true);
       e.preventDefault();
@@ -173,6 +173,7 @@ function PostBlog() {
           isCancel={responseFromDialog}
           title="Warning"
           description="Please select a categories"
+          icon="warning"
         />
       ) : null}
       {desDialog ? (
@@ -180,6 +181,7 @@ function PostBlog() {
           isCancel={responseFromDialog}
           title="Warning"
           description="Description need at least 50 chars and below 200 chars!!"
+          icon="warning"
         />
       ) : null}
       {titleDialog ? (
@@ -187,6 +189,7 @@ function PostBlog() {
           isCancel={responseFromDialog}
           title="Warning"
           description="Title need at least 50 chars!!"
+          icon="warning"
         />
       ) : null}
       {contentDialog ? (
@@ -194,6 +197,7 @@ function PostBlog() {
           isCancel={responseFromDialog}
           title="Warning"
           description="Min content length is 300 characters!"
+          icon="warning"
         />
       ) : null}
     </div>

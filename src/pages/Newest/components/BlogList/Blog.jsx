@@ -1,12 +1,16 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import blogApi from "../../../../services/blogApi";
 
 const Blog = ({ blog }) => {
   const [author, setAuthor] = useState({});
+  const currentDate = moment(blog.createdDateTime).startOf("minutes").fromNow();
 
+  //Url config
   const goToBlogDetail = `/blogdetail?${blog.id}`;
   const goToUserDetail = `/users/${author.id}`;
+  //Some field
   const blogImg = blog.thumnail;
   const defaultImg = "http://placehold.it/240x208";
   const blogContent = blog.description;
@@ -48,7 +52,7 @@ const Blog = ({ blog }) => {
                 {author.firstName + " " + author.lastName}{" "}
               </span>
             </Link>
-            <span className="text-xs italic block">Posted 05/09/2021</span>
+            <span className="text-xs italic block">Posted {currentDate}</span>
           </div>
           <div className=""></div>
           <div className="mt-3">

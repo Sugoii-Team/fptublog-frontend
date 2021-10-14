@@ -9,7 +9,6 @@ function Approval(props) {
   const userData = useSelector((state) => state.user.current);
   const userRole = userData.role;
   const [reviewBlog, setReviewBlog] = useState([]);
-  
 
   useEffect(() => {
     (async () => {
@@ -22,6 +21,7 @@ function Approval(props) {
     })();
   }, [userData.id]);
 
+  console.log("All reviewing Blog: ", reviewBlog);
   return (
     <div>
       {userRole === "LECTURER" ? (
