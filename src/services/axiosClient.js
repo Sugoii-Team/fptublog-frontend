@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://e0f2-113-23-108-235.ngrok.io/fptu-blog",
+  baseURL: "http://9863-2402-800-6315-91d5-f45b-50f5-2e57-70e7.ngrok.io/fptu-blog",
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
+    // "Content-Type": "application/json",
   },
 });
 

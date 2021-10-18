@@ -12,7 +12,7 @@ const userApi = {
     var dataPromise = promise.then((respone) => respone);
     return dataPromise;
   },
-
+  
   viewProfile(params, token) {
     const url = "api/test";
     const headers = { Authorization: token };

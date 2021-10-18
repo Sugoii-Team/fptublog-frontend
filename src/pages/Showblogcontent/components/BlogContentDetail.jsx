@@ -2,6 +2,7 @@ import moment from 'moment';
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 import gfm from 'remark-gfm';
 import blogApi from "../../../services/blogApi";
 import AsideBlogContent from "./Aside";
@@ -36,7 +37,7 @@ function BlogContentDetail({ blog, tabOfBlog }) {
         console.log("Failed to fetch Author: ", error);
       }
     })();
-  }, [blog.authorId]);
+  }, [authorId]);
 
 
 
@@ -51,14 +52,14 @@ function BlogContentDetail({ blog, tabOfBlog }) {
           {/* <!--Image of the author--> */}
           <span className="inline-block mr-2">
             <img className="rounded-full h-10 w-10 flex items-center justify-center" src="http://placehold.it/70x70"
-              alt="Author image" />
+              alt="Author" />
           </span>
 
           <span className="inline-block ml-2 text-xl">
             <p> {accountOfAuthor.firstName + ' ' + accountOfAuthor.lastName} <br></br>
               {accountOfAuthor.description} <br></br>
               {tabOfBlog.map(tag => (
-                <a href='#' key={tag.id}>{tag.name}</a>
+                <Link to="" key={tag.id}>{tag.name}</Link>
               ))}
             </p>
           </span>

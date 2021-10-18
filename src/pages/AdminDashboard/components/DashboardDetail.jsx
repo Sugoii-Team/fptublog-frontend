@@ -1,69 +1,43 @@
+import PropTypes from "prop-types";
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import SubmitForm from "../components/UpdateUserDialog/SubmitForm/SubmitForm";
 
-DashboardDetail.propTypes = {};
 
-function DashboardDetail(props) {
+DashboardDetail.propTypes = {
+  userList: PropTypes.array,
+  dataOfUserToUpdate: PropTypes.func,
 
-  // const [people, setPeople] = useState([]);
+  onRemoveClick: PropTypes.func,
+  onBanClick: PropTypes.func,
+};
 
-  const people = [
-    {
-      firstname: 'Pham',
-      lastname: 'Tam',
-      title: 'Regional Paradigm Technician',
-      department: 'Optimization',
-      role: 'Admin',
-      email: 'jane.cooper@example.com',
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU",
-    },
-    {
-      firstname: 'Dong',
-      lastname: 'Quan',
-      title: 'Regional Paradigm Technician',
-      department: 'Optimization',
-      role: 'Admin',
-      email: 'jane.cooper@example.com',
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU",
-    },
-    {
-      firstname: 'Quang',
-      lastname: 'Ky',
-      title: 'Regional Paradigm Technician',
-      department: 'Optimization',
-      role: 'Admin',
-      email: 'jane.cooper@example.com',
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU",
-    },
-    {
-      firstname: 'Phuoc',
-      lastname: 'Thanh',
-      title: 'Regional Paradigm Technician',
-      department: 'Optimization',
-      role: 'Admin',
-      email: 'jane.cooper@example.com',
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU",
-    },
-    {
-      firstname: 'Xuan',
-      lastname: 'Dat',
-      title: 'Regional Paradigm Technician',
-      department: 'Optimization',
-      role: 'Admin',
-      email: 'jane.cooper@example.com',
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU",
-    },
-    // More people...
-  ]
+
+
+function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanClick }) {
+  const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU";
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
+
+
+  const handleShowSubmitForm = (values) => {
+    setShowSubmitForm(values);
+  }
+
+  const handleRemoveClick = (user) => {
+    onRemoveClick(user.id);
+  };
+
+  const handleBanAccountClick = (user) => {
+    onBanClick(user.id);
+  };
+
+  const handleDataOfFrom = (data) => {
+    // console.log(data);
+    dataOfUserToUpdate(data);
+  }
 
 
   return (
-    <div className="mt-3">
+    <div className="mt-3 p-10">
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -73,7 +47,7 @@ function DashboardDetail(props) {
                   <tr>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="pr-12 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
                       Name
                     </th>
@@ -101,59 +75,83 @@ function DashboardDetail(props) {
                     >
                       Remove Account
                     </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Ban Account
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {people.map((person) => (
-                    <tr key={person.email}>
-
+                <tbody className="bg-white divide-y divide-gray-200 text-center">
+                  {userList.map((user, idx) => (
+                    <tr key={idx}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <img className="h-10 w-10 rounded-full" src={person.image} alt="" />
+                            <img className="h-10 w-10 rounded-full" src={user.image ? user.image : image} alt="" />
                           </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{person.firstname} {person.lastname}</div>
+                          <div className="ml-4 px-6">
+                            <div className="text- font-medium text-gray-900">{user.firstName} {user.lastName}</div>
                           </div>
                         </div>
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">{person.email}</div>
+                        <div className="text-sm text-gray-500">{user.email}</div>
                       </td>
-
-                      {/* <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Active
-                        </span>
-                      </td> */}
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <div class="relative inline-flex">
-                          <svg class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero" /></svg>
-                          <select class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
-                            <option>Choose a color</option>
-                            <option>Red</option>
-                            <option>Blue</option>
-                            <option>Yellow</option>
-                            <option>Black</option>
-                            <option>Orange</option>
-                            <option>Purple</option>
-                            <option>Gray</option>
-                            <option>White</option>
-                          </select>
-                        </div>
-                        {person.role}</td>
+                        {user.role}</td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                          Edit
-                        </a>
+                        <button onClick={() => setShowSubmitForm(true)} className="text-indigo-600 hover:text-indigo-900">
+                          EDIT
+                        </button>
+
+
+                        {showSubmitForm ? (
+                          <>
+                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                              onSubmit={() => handleShowSubmitForm(false)}>
+                              <div className="relative w-auto my-6 mx-auto max-w-md">
+                                {/*content*/}
+                                <div className="border-0 rounded-md shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                  {/*header*/}
+                                  <div className="flex items-start justify-center p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                    <h3 className="text-2xl font-semibold uppercase">UPDATE USER ROLE</h3>
+                                  </div>
+                                  {/*body*/}
+                                  <div className="relative p-6 flex-auto">
+                                    <div
+                                      className="flex justify-center"
+                                    >
+                                      <SubmitForm
+                                        userInfo={user}
+                                        onCancelClick={handleShowSubmitForm}
+                                        dataOfFrom={handleDataOfFrom}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div>
+
+                                </div>
+                              </div>
+                            </div>
+                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                          </>
+                        ) : null}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <a href="#" className="text-red-400 hover:text-red-600">
-                          Remove
-                        </a>
+                        <button onClick={() => handleRemoveClick(user)} className="text-red-400 hover:text-red-600">
+                          REMOVE
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <button onClick={() => handleBanAccountClick(user)} className="text-yellow-300 hover:text-red-600">
+                          BAN
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -163,6 +161,9 @@ function DashboardDetail(props) {
           </div>
         </div>
       </div>
+
+      
+
     </div>
   )
 }

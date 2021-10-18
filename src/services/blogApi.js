@@ -7,11 +7,12 @@ const blogApi = {
     const promise = axiosClient.get(url, {
       params,
     });
+    const dataPromise = promise.then((response) => response.data);
+    return dataPromise;
   },
 
   get(id) {
     const url = `/api/blogs/${id}`;
-    // const url = `blog${id}`;
     const promise = axiosClient.get(url);
     const dataPromise = promise.then((response) => response.data);
     console.log("Data sau khi  promise:", dataPromise);

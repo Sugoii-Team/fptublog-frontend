@@ -1,12 +1,15 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../../userSlice";
+import { login } from "../../adminSlice";
 import LoginForm from "../LoginForm/LoginForm";
+import PropTypes from 'prop-types';
 
-Login.propTypes = {};
+Login.propTypes = {
+  onCancelClick: PropTypes.func,
+};
 
-function Login(props) {
+function Login({onCancelClick}) {
   const dispatch = useDispatch();
 
   const handleFormSubmit = async (values) => {
@@ -22,9 +25,13 @@ function Login(props) {
     }
   };
 
+  const handleCancleClick = (values) => {
+    onCancelClick(values);
+  }
+
   return (
     <div>
-      <LoginForm onSubmit={handleFormSubmit} />
+      <LoginForm onSubmit={handleFormSubmit} onCancelClick={handleCancleClick}/>
     </div>
   );
 }
