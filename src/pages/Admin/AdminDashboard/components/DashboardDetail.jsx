@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState } from 'react';
-import SubmitForm from "../components/UpdateUserDialog/SubmitForm/SubmitForm";
+import SubmitForm from "./UpdateUserDialog/SubmitForm/SubmitForm";
 
 
 DashboardDetail.propTypes = {

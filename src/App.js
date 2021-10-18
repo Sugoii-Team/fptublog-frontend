@@ -1,7 +1,7 @@
 import { Route, Switch } from "react-router-dom";
 import NavBar from "./components/Header/navBar";
-import SubmitForm from "./pages/AdminDashboard/components/UpdateUserDialog/SubmitForm/SubmitForm";
-import Dashboard from "./pages/AdminDashboard/Dashboard";
+import SubmitForm from "./pages/Admin/AdminDashboard/components/UpdateUserDialog/SubmitForm/SubmitForm";
+import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import Approval from "./pages/Approval/components/Approval";
 import HomePage from "./pages/Newest/HomePage";
 import PostBlog from "./pages/PostBlog/PostBlog";

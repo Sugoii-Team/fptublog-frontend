@@ -30,9 +30,7 @@ const adminApi = {
         "Content-Type": "application/json",
         Authorization: accessToken,
       }
-    })
-    // const dataPromise = promise.then((response) => response.data);
-    // return dataPromise;
+    });
   },
 
   updateUserRole(id,params){
@@ -53,6 +51,29 @@ const adminApi = {
     const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = `api/admin/accounts/${id}`;
     return axiosClient.put(url, obj,{
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      }
+    })
+  },
+
+  getListBannedAccount(){
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
+    const url = "";
+    return promise = axiosClient.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      }
+    })
+    
+  },
+
+  deleteBlog(id){
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const url = "";
+    return promise = axiosClient.put(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,

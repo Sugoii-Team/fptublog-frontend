@@ -8,8 +8,8 @@ import DashboardHeader from './components/Header';
 DashboardPage.propTypes = {};
 
 function DashboardPage(props) {
-  const [reload, setReload] = useState();
   const [user, setUser] = useState([]);
+  const [reload, setReload] = useState();
   
   const [status, setStatus] = useState(false);
   const cancelButtonRef = useRef(null);
