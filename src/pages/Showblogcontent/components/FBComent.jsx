@@ -10,7 +10,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import getFirestore from "../../../services/fireBase";
+import { db } from "../../../services/fireBase";
 import CommentsFeature from "./Comments";
 import moment from "moment";
 
@@ -44,15 +44,12 @@ function FBComent({ blogId }) {
       statusId: "status01",
       replyTo: null,
     };
-    await addDoc(collection(getFirestore, "comments"), payload);
+    await addDoc(collection(db, "comments"), payload);
   };
 
   //Get comment from firestore by BlogId
   useEffect(() => {
-    const q = query(
-      collection(getFirestore, "comments"),
-      where("blogId", "==", blogId)
-    );
+    const q = query(collection(db, "comments"), where("blogId", "==", blogId));
     onSnapshot(q, (querySnapshot) => {
       const commentsFilter = [];
       querySnapshot.forEach((doc) => {
@@ -98,8 +95,8 @@ function FBComent({ blogId }) {
               </div>
               <div className="w-full flex justify-end">
                 <button
-                  className="mt-3 mr-1 bg-white text-black w-xl border border-gray-500 border-opacity-50 rounded-md shadow-lg cursor-pointer hover:opacity-60 
-                transition ease-in-out duration-200 transform hover:-translate-y-1 hover:scale-110"
+                  className="mt-3 mr-1 bg-white text-black border border-gray-300 border-opacity-50 rounded-md shadow-lg cursor-pointer hover:opacity-60 
+                transition ease-in-out duration-200 transform hover:-translate-y-0.5 hover:scale-105 px-4 py-1 font-semibold"
                 >
                   Comment{" "}
                 </button>

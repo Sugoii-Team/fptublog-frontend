@@ -1,4 +1,6 @@
+import StorageKey from "../constant/storage-keys";
 import axiosClient from "./axiosClient";
+const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
 
 const categoryApi = {
   getCategories(params) {
@@ -7,9 +9,14 @@ const categoryApi = {
       params,
     });
   },
-  get(id) {
-    const url = `/categories/${id}`;
-    return axiosClient.get(url);
+  getCategoryById(id) {
+    const url = `api/categories/${id}`;
+    return axiosClient.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
   },
   add(data) {
     const url = "/categories";

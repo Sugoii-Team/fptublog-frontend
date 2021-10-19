@@ -5,12 +5,10 @@ const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
 
 const blogApi = {
   getAll(params) {
-    const url = "api/blogs";
-    const promise = axiosClient.get(url, {
+    const url = "api/blogs?limit=50&page=1";
+    return axiosClient.get(url, {
       params,
     });
-    const dataPromise = promise.then((response) => response.data);
-    return dataPromise;
   },
 
   get(id) {
@@ -24,8 +22,9 @@ const blogApi = {
     const url = "/api/blogs";
     return axiosClient.post(url, data);
   },
+
   updateBlog(blogId, data) {
-    const url = `api/blogs/${blogId}/review`;
+    const url = `api/blogs/${blogId}`;
     return axiosClient.put(url, data, {
       headers: {
         "Content-Type": "application/json",
@@ -44,9 +43,14 @@ const blogApi = {
     });
   },
 
-  removeBlog(id) {
-    const url = `/api/blogs/${id}`;
-    return axiosClient.delete(url);
+  removeBlog(studentId, blogId) {
+    const url = `api/blogs/${blogId}`;
+    return axiosClient.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
   },
 
   getAuthorById(id) {
@@ -55,7 +59,7 @@ const blogApi = {
   },
 
   getTagOfBlogById(id) {
-    const url = `api/blogs/${id}/tags`;
+    const url = `api/tags/blogs/${id}`;
     // const url = `tag-${id}`
     const promise = axiosClient.get(url);
     const dataAfterPromise = promise.then((response) => response.data);

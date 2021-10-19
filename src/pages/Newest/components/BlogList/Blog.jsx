@@ -11,7 +11,7 @@ const Blog = ({ blog }) => {
   const goToBlogDetail = `/blogdetail?${blog.id}`;
   const goToUserDetail = `/users/${author.id}`;
   //Some field
-  const blogImg = blog.thumnail;
+  const blogImg = blog.thumbnailUrl;
   const defaultImg = "http://placehold.it/240x208";
   const blogContent = blog.description;
   var maxContentLength = 250;

@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
 import blogApi from "../../services/blogApi";
 import BlogList from "./components/BlogList/BlogList";
+import BlogListSkeleton from "./components/BlogList/BlogListSkeleton";
 import BlogPopular from "./components/PopularPost/BlogPopular";
 
 HomePage.propTypes = {};
 
 function HomePage(props) {
   const [blogList, setBlogList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  //Get all Blogs
   useEffect(() => {
     (async () => {
       try {
-        const data = await blogApi.getAll();
-        setBlogList(data);
+        setLoading(true);
+        const response = await blogApi.getAll();
+        if (response.status === 200) {
+          setLoading(false);
+        }
+        setBlogList(response.data);
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
       }
@@ -30,13 +37,14 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-
-            <BlogList data={blogList} />
+            {loading ? <BlogListSkeleton /> : <BlogList data={blogList} />}
           </div>
           {/* Blog loader */}
 
           {/* Side Items */}
-          <BlogPopular />
+          <div className="col-span-1">
+            <BlogPopular />
+          </div>
           {/* Side Items */}
         </div>
       </div>
