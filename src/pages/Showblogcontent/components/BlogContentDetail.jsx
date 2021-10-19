@@ -174,9 +174,13 @@ function BlogContentDetail({
           <span className="inline-block ml-2 text-xl">
             <p className=" font-bold">
               {" "}
-              {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
+              {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}
+              {" "}
               <br></br>
               {accountOfAuthor.description} <br></br>
+              {tagOfBlog.map(tag => (
+                <Link to="" key={tag.id}>{tag.name}</Link>
+              ))}
             </p>
           </span>
         </div>
@@ -264,6 +268,15 @@ function BlogContentDetail({
             {/* <!--Advertise blog area - include 3 blog demo--> */}
             <AsideBlogContent />
           </div>
+        </div>
+      </div>
+
+      {/* Delete buttons */}
+      <div class="grid grid-cols-9 mt-4 mb-8">
+        <div class="text-center grid col-start-6">
+          <button class="p-2 pl-3 pr-3 w-32 transition-colors duration-300 rounded-3xl transform text-white bg-red-200 hover:bg-red-500 border-red-300 text-lg focus:border-4">
+            DELETE
+          </button>
         </div>
       </div>
 

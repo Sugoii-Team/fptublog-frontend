@@ -2,7 +2,9 @@ import { Route, Switch } from "react-router-dom";
 import ScrollToTop from "./components/Button/ScrollToTop";
 import Footer from "./components/Footer/footer";
 import NavBar from "./components/Header/navBar";
-import Dashboard from "./pages/AdminDashboard/Dashboard";
+import Privateroute from "./pages/Admin/AdminDashboard/AdminRouter/privateRoute";
+import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
+import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import Approval from "./pages/Approval/Approval";
 import HomePage from "./pages/Newest/HomePage";
 import MyOwnBlogTable from "./pages/OwnBlog/MyOwnBlogTable";
@@ -14,6 +16,7 @@ import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
 function App() {
   return (
     <div className="App font-monsterrat">
+<<<<<<< HEAD
       <header>
         <NavBar />
       </header>
@@ -37,6 +40,33 @@ function App() {
             }}
           />
         </Switch>
+=======
+      <div>
+        <header>
+          <NavBar />
+        </header>
+        <div>
+          <Switch>
+            <Privateroute path='/dashboard' component={Dashboard} exact />
+            {/* <Route path='/dashboard' component={Dashboard} exact /> */}
+            <Route path="/" component={HomePage} exact />
+            <Route path="/blogdetail" component={BlogContentFeature} exact />
+            <Route path="/dashboard" component={Dashboard} exact />
+            <Route path="/createNewPost" component={PostBlog} />
+            <Route path="/approval" component={Approval} exact />
+            <Route path="/approval/blogdetail" component={BlogContentDetail} />
+            <Route
+              path="/about"
+              component={() => {
+                window.location.href = "https://www.facebook.com/fptudsc/";
+                return null;
+              }}
+            />
+            <Route path = "/bannedAccountsList" component = {BannedAccount} exact/>
+          </Switch>
+        </div>
+        <footer></footer>
+>>>>>>> b635937cdffadfe73ced559e0ddf070453153fef
       </div>
       <ScrollToTop />
       <footer className="relative left-0 bottom-0 right-0">
