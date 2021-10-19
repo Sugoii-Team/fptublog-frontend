@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.4.1",
+    "@heroicons/react": "^1.0.4",
     "@tailwindcss/typography": "^0.4.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "draft-js": "^0.11.7",
     "firebase": "^9.1.2",
-    "moment": "^2.29.1",
     "react-firebase-hooks": "^3.0.4",
+    "moment": "^2.29.1",
     "react-markdown": "^7.0.1",
     "remark-gfm": "^3.0.0",
     "web-vitals": "^1.1.2"
@@ -20,8 +22,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "myToolkit": "npm install showdown react-mde react-select react-google-login react react-dom @emotion/react @emotion/styled @mui/material @mui/icons-material react-scripts -dev node-sass classnames react-router-dom query-string axios react-hook-form yup @hookform/resolvers @hookform/error-message @reduxjs/toolkit react-redux -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco",
-    "quanToolkit": "npm install moment react-markdown"
+    "myToolkit": "npm install showdown react-mde react-select react-google-login react react-dom @emotion/react @emotion/styled @mui/material @mui/icons-material react-scripts -dev node-sass classnames react-router-dom query-string axios react-hook-form yup @hookform/resolvers @hookform/error-message @reduxjs/toolkit react-redux -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco firebase react-firebase-hooks @firebase/storage",
+    "quanToolkit": "npm install moment react-markdown @headlessui/react @headlessui/react firebase react-firebase-hooks @firebase/storage"
   },
   "eslintConfig": {
     "extends": [
@@ -59,7 +61,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-google-login": "^5.2.2",
-    "react-hook-form": "^7.17.1",
+    "react-hook-form": "^7.17.4",
     "react-mde": "^11.5.0",
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.3.0",

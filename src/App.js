@@ -1,6 +1,8 @@
 import { Route, Switch } from "react-router-dom";
 import NavBar from "./components/Header/navBar";
-import Dashboard from "./pages/AdminDashboard/Dashboard";
+import Privateroute from "./pages/Admin/AdminDashboard/AdminRouter/privateRoute";
+import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
+import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import Approval from "./pages/Approval/Approval";
 import HomePage from "./pages/Newest/HomePage";
 import PostBlog from "./pages/PostBlog/PostBlog";
@@ -15,6 +17,8 @@ function App() {
         </header>
         <div>
           <Switch>
+            <Privateroute path='/dashboard' component={Dashboard} exact />
+            {/* <Route path='/dashboard' component={Dashboard} exact /> */}
             <Route path="/" component={HomePage} exact />
             <Route path="/blogdetail" component={BlogContentFeature} exact />
             <Route path="/dashboard" component={Dashboard} exact />
@@ -28,6 +32,7 @@ function App() {
                 return null;
               }}
             />
+            <Route path = "/bannedAccountsList" component = {BannedAccount} exact/>
           </Switch>
         </div>
         <footer></footer>
