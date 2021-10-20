@@ -18,6 +18,7 @@ function App() {
         <div>
           <Switch>
             <Privateroute path='/dashboard' component={Dashboard} exact />
+            <Privateroute path = "/bannedAccountsList" component = {BannedAccount} exact/>
             {/* <Route path='/dashboard' component={Dashboard} exact /> */}
             <Route path="/" component={HomePage} exact />
             <Route path="/blogdetail" component={BlogContentFeature} exact />
@@ -32,7 +33,6 @@ function App() {
                 return null;
               }}
             />
-            <Route path = "/bannedAccountsList" component = {BannedAccount} exact/>
           </Switch>
         </div>
         <footer></footer>

@@ -12,7 +12,7 @@ export const contains = (role, currentRole) => {
 const Privateroute = ({ component: Component, ...rest }) => {
   const loggedInUser = useSelector((state) => state.user.current);
   const resultComponent = (props) => {
-    var role = loggedInUser?.role;
+    var role = loggedInUser.role;
     if (contains("ADMIN", role)) {
       return <Component {...props} />;
     } else {
