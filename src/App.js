@@ -21,6 +21,10 @@ function App() {
       </header>
       <div className="min-h-screen">
         <Switch>
+          <Privateroute path='/dashboard' component={Dashboard} exact />
+          <Privateroute path="/bannedAccountsList" component={BannedAccount} exact />
+          {/* <Route path="/bannedAccountsList" component={BannedAccount} exact /> */}
+          {/* <Route path='/dashboard' component={Dashboard} exact /> */}
           <Route path="/" component={HomePage} exact />
           <Route path="/blogdetail" component={BlogContentFeature} exact />
           <Route path="/dashboard" component={Dashboard} exact />
@@ -39,11 +43,11 @@ function App() {
             }}
           />
         </Switch>
+        <ScrollToTop />
+        <footer className="relative left-0 bottom-0 right-0">
+          <Footer />
+        </footer>
       </div>
-      <ScrollToTop />
-      <footer className="relative left-0 bottom-0 right-0">
-        <Footer />
-      </footer>
     </div>
   );
 }
