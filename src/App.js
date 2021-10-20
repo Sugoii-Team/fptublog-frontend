@@ -16,7 +16,6 @@ import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
 function App() {
   return (
     <div className="App font-monsterrat">
-<<<<<<< HEAD
       <header>
         <NavBar />
       </header>
@@ -40,33 +39,6 @@ function App() {
             }}
           />
         </Switch>
-=======
-      <div>
-        <header>
-          <NavBar />
-        </header>
-        <div>
-          <Switch>
-            <Privateroute path='/dashboard' component={Dashboard} exact />
-            <Privateroute path = "/bannedAccountsList" component = {BannedAccount} exact/>
-            {/* <Route path='/dashboard' component={Dashboard} exact /> */}
-            <Route path="/" component={HomePage} exact />
-            <Route path="/blogdetail" component={BlogContentFeature} exact />
-            <Route path="/dashboard" component={Dashboard} exact />
-            <Route path="/createNewPost" component={PostBlog} />
-            <Route path="/approval" component={Approval} exact />
-            <Route path="/approval/blogdetail" component={BlogContentDetail} />
-            <Route
-              path="/about"
-              component={() => {
-                window.location.href = "https://www.facebook.com/fptudsc/";
-                return null;
-              }}
-            />
-          </Switch>
-        </div>
-        <footer></footer>
->>>>>>> b635937cdffadfe73ced559e0ddf070453153fef
       </div>
       <ScrollToTop />
       <footer className="relative left-0 bottom-0 right-0">
