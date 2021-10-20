@@ -9,6 +9,10 @@ const BlogStatusApi = {
     const dataPromise = promise.then((response) => response.data);
     return dataPromise;
   },
+  getStatusById(statusId) {
+    const url = `api/blogs/status/${statusId}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default BlogStatusApi;

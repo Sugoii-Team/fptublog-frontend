@@ -8,11 +8,13 @@ import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import gfm from "remark-gfm";
 import MyDialog from "../../../components/Dialog/MyDialog";
+import { Rating } from "@mui/material";
 //Components
 import blogApi from "../../../services/blogApi";
 import lecturerApi from "../../../services/lecturerApi";
 import AsideBlogContent from "./Aside";
 import FBComment from "./FBComent";
+import ratingApi from "../../../services/ratingApi";
 
 BlogContentDetail.propTypes = {
   blog: PropTypes.object,
@@ -27,7 +29,14 @@ BlogContentDetail.defaultProps = {
   conditionToApprove: false,
 };
 
-function BlogContentDetail({ blog, tagOfBlog, statusList }) {
+function BlogContentDetail({
+  blog,
+  tagOfBlog,
+  statusList,
+  ratedValue,
+  totalRated,
+}) {
+  console.log("Total rated ne: ", totalRated);
   const blogId = blog.id;
   const history = useHistory(); // Get blog history path
   const time = moment(blog.createdDateTime).format("MMM Do YY");
@@ -35,35 +44,70 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
   const userData = useSelector((state) => state.user.current);
   const userRole = userData.role;
   const [accountOfAuthor, setAccountOfAuthor] = useState({});
-  /* Get pending status to compare to this blog */
   const [approvedDialog, setApprovedDialog] = useState(false);
-  const pendingStatus = statusList.filter((status) => {
-    return status.name === "pending approved";
-  });
-  const pendingId = pendingStatus[0]?.id; // Get pendingId to compare
-  const conditionToApprove =
-    userRole === "LECTURER" && blog.statusId === pendingId;
-  //Get to change author avatar
+  const [ratingValue, setRatingValue] = useState(0);
+
   const defaultAvatar = "http://placehold.it/70x70";
   const authorAvatar = accountOfAuthor?.avatarUrl;
+
+  const totalEveryoneRate =
+    totalRated.oneStar +
+    totalRated.twoStar +
+    totalRated.threeStar +
+    totalRated.fourStar +
+    totalRated.fiveStar;
+
+  const averageStar =
+    (totalRated.oneStar * 1 +
+      totalRated.twoStar * 2 +
+      totalRated.threeStar * 3 +
+      totalRated.fourStar * 4 +
+      totalRated.fiveStar * 5) /
+    totalEveryoneRate;
+
+  /* Get pending status to compare to this blog */
+  //Filter pending status
+  const pendingStatus = statusList.filter((status) => {
+    return (
+      status.name === "pending approved" ||
+      status.name === "pending deleted" ||
+      status.name === "pending updated"
+    );
+  });
+  //Filter to make sure blog id is in pending state
+  const isInPending = pendingStatus.filter((status) => {
+    return status.id === blog.statusId;
+  });
+  //Only show approve button when loggedin user is Lecture and blog is in pending state
+  const conditionToApprove =
+    userRole === "LECTURER" && isInPending.length !== 0;
+  //Get to change author avatar
+
+  //Rerender rating value everytime rating update
+  useEffect(() => {
+    setRatingValue(parseInt(ratedValue.star));
+  }, [ratedValue]);
 
   // take the author account to take info about author of blog
   useEffect(() => {
     (async () => {
       try {
-        const data = await blogApi.getAuthorById(blog.authorId);
-        setAccountOfAuthor(data.data);
+        if (blog.authorId) {
+          const data = await blogApi.getAuthorById(blog.authorId);
+          setAccountOfAuthor(data.data);
+        }
       } catch (error) {
         console.log("Failed to fetch Author: ", error);
       }
     })();
   }, [blog.authorId]);
 
+  //Handle dialog after blog approve or reject
   const responseFromDialog = (TrueOrFalse) => {
     if (TrueOrFalse) {
-      // if return true then redirect to another page and close dialog
+      // if return true then redirect to approval page and close dialog
       setApprovedDialog(false);
-      history.push("/");
+      history.push("/approval");
     }
   };
 
@@ -72,19 +116,12 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
     //In case blog take time to load, button cannot do anything
     if (blog.id === undefined) {
     } else if (userRole === "LECTURER") {
-      //Filter list status to get status
-      const statusAction = statusList.filter((status) => {
-        return typeOfApproval === status.name;
-      });
-      const statusObj = statusAction[0];
-
       //Prepare data for approval
       const dataPrepare = {
-        statusId: statusObj.id,
-        reviewerId: userData.id,
+        action: typeOfApproval,
       };
 
-      //Update blog
+      //Approve blog
       try {
         const response = await lecturerApi.approveBlog(
           blog.id,
@@ -104,6 +141,19 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
     } else {
       // If user not Lecturer then can't update
       console.log("Permission Error!");
+    }
+  };
+
+  //Send api after user change rate state
+  const handleRatingBlog = async (value) => {
+    try {
+      const prepareData = {
+        star: value,
+      };
+      const respone = await ratingApi.sendRating(blogId, prepareData);
+      console.log("Response rating: ", respone);
+    } catch (error) {
+      console.log("Failed to rate: ", error);
     }
   };
 
@@ -132,7 +182,6 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
                 <Link to="" key={tag.id}>{tag.name}</Link>
               ))}
             </p>
-            <p className="text-md italic ">Created: {time}</p>
           </span>
         </div>
         {/* About the blog content */}
@@ -142,12 +191,26 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
           {/* Title of the blog */}
           <div className="md:col-span-2 ml-20">
             <div className="mb-5">
-              {tagOfBlog.map((tag) => (
-                <Link to="" key={tag.id}>
-                  {tag.name}
-                </Link>
-              ))}
               <h1 className="mt-9 font-bold text-4xl ">{blog.title}</h1>
+              <div className="flex flex-col space-y-2 mt-1">
+                <p className="text-md italic ">Posted: {time}</p>
+                {tagOfBlog.map((tag) => (
+                  <Link to="" key={tag.id}>
+                    {tag.name}
+                  </Link>
+                ))}
+                <div className="flex flex-row">
+                  <Rating
+                    name="read-only"
+                    value={averageStar}
+                    readOnly
+                    precision={0.1}
+                  />
+                  <span className="ml-1 font-light text-gray-500">
+                    ( {totalEveryoneRate} )
+                  </span>
+                </div>
+              </div>
             </div>
             {/* Content of the blog */}
             <span className="text-justify text-3xl ">
@@ -157,13 +220,31 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
                 </ReactMarkdown>
               </article>
             </span>
+            {}
+            <div className="flex flex-col gap-3 my-4">
+              <div className="font-semibold uppercase text-xs flex justify-center">
+                Leave a rate
+              </div>
+              <div className="flex justify-center">
+                <Rating
+                  name="simple-controlled"
+                  value={ratingValue}
+                  onChange={(event, newValue) => {
+                    setRatingValue(newValue);
+                    handleRatingBlog(newValue);
+                  }}
+                  size="large"
+                />
+              </div>
+            </div>
+            {/* Approve Buttons */}
             {conditionToApprove ? (
               <div className="my-5 flex gap-3">
                 <span>
                   {" "}
                   <button
-                    className="bg-red-400 px-5 py-3 text-sm shadow-sm font-medium tracking-wider  text-white rounded-full hover:shadow-2xl hover:bg-red-500"
-                    onClick={() => HandleApprovalBtn("rejected")}
+                    className="bg-red-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-red-500 transition ease-in-out duration-150"
+                    onClick={() => HandleApprovalBtn("reject")}
                   >
                     Reject
                   </button>
@@ -171,14 +252,15 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
                 <span>
                   {" "}
                   <button
-                    className="bg-green-400 px-5 py-3 text-sm shadow-sm font-medium tracking-wider  text-white rounded-full hover:shadow-2xl hover:bg-green-500"
-                    onClick={() => HandleApprovalBtn("approved")}
+                    className="bg-green-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-green-500 transition ease-in-out duration-150"
+                    onClick={() => HandleApprovalBtn("approve")}
                   >
                     Approve
                   </button>
                 </span>
               </div>
             ) : null}
+            {/* Approve Buttons */}
           </div>
 
           {/* <!--Aside area--> */}
@@ -208,7 +290,7 @@ function BlogContentDetail({ blog, tagOfBlog, statusList }) {
         <MyDialog
           isCancel={responseFromDialog}
           title="Sucesss"
-          description="Blog Approved"
+          description="You action is Success"
           icon="success"
         />
       ) : null}
