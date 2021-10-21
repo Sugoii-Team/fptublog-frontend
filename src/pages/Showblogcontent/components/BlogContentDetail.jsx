@@ -179,11 +179,6 @@ function BlogContentDetail({
               {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
               <br></br>
               {accountOfAuthor.description} <br></br>
-              {tagOfBlog.map((tag) => (
-                <Link to="" key={tag.id}>
-                  {tag.name}
-                </Link>
-              ))}
             </p>
           </span>
         </div>
@@ -223,23 +218,25 @@ function BlogContentDetail({
                 </ReactMarkdown>
               </article>
             </span>
-            {}
-            <div className="flex flex-col gap-3 my-4">
-              <div className="font-semibold uppercase text-xs flex justify-center">
-                Leave a rate
+            {userData.id ? (
+              <div className="flex flex-col gap-3 my-4">
+                <div className="font-semibold uppercase text-xs flex justify-center">
+                  Leave a rate
+                </div>
+                <div className="flex justify-center">
+                  <Rating
+                    name="simple-controlled"
+                    value={ratingValue}
+                    onChange={(event, newValue) => {
+                      setRatingValue(newValue);
+                      handleRatingBlog(newValue);
+                    }}
+                    size="large"
+                  />
+                </div>
               </div>
-              <div className="flex justify-center">
-                <Rating
-                  name="simple-controlled"
-                  value={ratingValue}
-                  onChange={(event, newValue) => {
-                    setRatingValue(newValue);
-                    handleRatingBlog(newValue);
-                  }}
-                  size="large"
-                />
-              </div>
-            </div>
+            ) : null}
+
             {/* Approve Buttons */}
             {conditionToApprove ? (
               <div className="my-5 flex gap-3">

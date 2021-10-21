@@ -32,7 +32,7 @@ function App() {
             <Route path="/approval" component={Approval} exact />
             <Route path="/approval/blogdetail" component={BlogContentDetail} />
             <Route path="/ownBlog" component={MyOwnBlogTable} />
-            <Route path="/profile" component={Profile} />
+            <Route path="/profile" component={Profile} exact />
             <Route
               path="/about"
               component={() => {

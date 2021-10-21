@@ -24,14 +24,10 @@ const userApi = {
     var dataPromise = promise.then((respone) => respone);
     return dataPromise;
   },
-  
-  viewProfile(params, token) {
-    const url = "api/test";
-    const headers = { Authorization: token };
-    return axiosClient.get(url, {
-      params,
-      headers,
-    });
+
+  viewProfile(userId) {
+    const url = `api/accounts/${userId}`;
+    return axiosClient.get(url);
   },
 
   getOwnBlog(userId) {

@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import blogApi from "../../services/blogApi";
-import BlogList from "./components/BlogList/BlogList";
-import BlogListSkeleton from "./components/BlogList/BlogListSkeleton";
-import BlogPopular from "./components/PopularPost/BlogPopular";
+import BlogList from "./components/MainItem/BlogList";
+import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
+import BlogPopular from "./components/SideItem/BlogPopular";
+import CategoriesSuggest from "./components/SideItem/CategoriesSuggest";
 
 HomePage.propTypes = {};
 
@@ -33,6 +34,9 @@ function HomePage(props) {
       initial={{ opacity: 0 }}
       transition={{ duration: 0.35 }}
     >
+      <div>
+        <img src="http://placehold.it/1920x600" alt="" />
+      </div>
       <div className="mx-auto w-3/4 mt-10">
         <div className="grid grid-cols-3 gap-4">
           {/* Blog loader */}
@@ -48,6 +52,7 @@ function HomePage(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
+            <CategoriesSuggest />
           </div>
           {/* Side Items */}
         </div>
