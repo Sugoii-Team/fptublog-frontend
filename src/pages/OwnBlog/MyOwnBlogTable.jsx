@@ -5,6 +5,7 @@ import blogApi from "../../services/blogApi";
 import userApi from "../../services/userApi";
 import OwnBlogItems from "./Components/OwnBlogItems";
 import Pagination from "react-paginate";
+import { motion } from "framer-motion";
 
 export default function MyOwnBlogTable(props) {
   const loggedInUser = useSelector((state) => state.user.current);
@@ -87,7 +88,11 @@ export default function MyOwnBlogTable(props) {
   return (
     <>
       {isLoggedIn ? (
-        <div className="flex flex-col w-11/12 mx-auto max-w-full">
+        <motion.div
+          animate={{ y: 0, opacity: 1 }}
+          initial={{ y: -20, opacity: 0 }}
+          className="flex flex-col w-11/12 mx-auto max-w-full"
+        >
           <div className="-my-2 overflow-x-auto ">
             <div className="py-2 align-middle inline-block min-w-full">
               <div className="overflow-hidden sm:rounded-lg">
@@ -152,7 +157,7 @@ export default function MyOwnBlogTable(props) {
             breakLinkClassName={"font-bold uppercase px-4 py-2"}
             activeLinkClassName={"bg-gray-100"}
           />
-        </div>
+        </motion.div>
       ) : (
         <div className="flex justify-center my-9">
           <div className="font-bold text-2xl">Login to use this feature!</div>

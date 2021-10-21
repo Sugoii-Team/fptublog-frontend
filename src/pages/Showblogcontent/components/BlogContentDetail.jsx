@@ -36,7 +36,6 @@ function BlogContentDetail({
   ratedValue,
   totalRated,
 }) {
-  console.log("Total rated ne: ", totalRated);
   const blogId = blog.id;
   const history = useHistory(); // Get blog history path
   const time = moment(blog.createdDateTime).format("MMM Do YY");
@@ -147,11 +146,14 @@ function BlogContentDetail({
   //Send api after user change rate state
   const handleRatingBlog = async (value) => {
     try {
-      const prepareData = {
-        star: value,
-      };
-      const respone = await ratingApi.sendRating(blogId, prepareData);
-      console.log("Response rating: ", respone);
+      if (value === null) {
+        await ratingApi.deleteRating(blogId);
+      } else {
+        const prepareData = {
+          star: value,
+        };
+        await ratingApi.sendRating(blogId, prepareData);
+      }
     } catch (error) {
       console.log("Failed to rate: ", error);
     }
@@ -174,12 +176,13 @@ function BlogContentDetail({
           <span className="inline-block ml-2 text-xl">
             <p className=" font-bold">
               {" "}
-              {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}
-              {" "}
+              {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
               <br></br>
               {accountOfAuthor.description} <br></br>
-              {tagOfBlog.map(tag => (
-                <Link to="" key={tag.id}>{tag.name}</Link>
+              {tagOfBlog.map((tag) => (
+                <Link to="" key={tag.id}>
+                  {tag.name}
+                </Link>
               ))}
             </p>
           </span>
@@ -272,9 +275,9 @@ function BlogContentDetail({
       </div>
 
       {/* Delete buttons */}
-      <div class="grid grid-cols-9 mt-4 mb-8">
-        <div class="text-center grid col-start-6">
-          <button class="p-2 pl-3 pr-3 w-32 transition-colors duration-300 rounded-3xl transform text-white bg-red-200 hover:bg-red-500 border-red-300 text-lg focus:border-4">
+      <div className="grid grid-cols-9 mt-4 mb-8">
+        <div className="text-center grid col-start-6">
+          <button className="p-2 pl-3 pr-3 w-32 transition-colors duration-300 rounded-3xl transform text-white bg-red-200 hover:bg-red-500 border-red-300 text-lg focus:border-4">
             DELETE
           </button>
         </div>

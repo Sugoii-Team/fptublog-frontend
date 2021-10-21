@@ -5,7 +5,7 @@ BlogPopular.propTypes = {};
 function BlogPopular(props) {
   return (
     <div>
-      <div className="border-l-2 h-full">
+      <div className="h-full">
         {/* <!-- First side Items --> */}
         <div className="w-auto">
           <div className="text-center text-lg uppercase font-medium">

@@ -31,6 +31,16 @@ const ratingApi = {
       },
     });
   },
+
+  deleteRating(blogId) {
+    const url = `api/blogs/${blogId}/votes`;
+    return axiosClient.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
 };
 
 export default ratingApi;

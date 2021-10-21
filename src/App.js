@@ -16,45 +16,23 @@ import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
 function App() {
   return (
     <div className="App font-monsterrat">
-<<<<<<< HEAD
-      <header>
-        <NavBar />
-      </header>
-      <div className="min-h-screen">
-        <Switch>
-          <Route path="/" component={HomePage} exact />
-          <Route path="/blogdetail" component={BlogContentFeature} exact />
-          <Route path="/dashboard" component={Dashboard} exact />
-          <Route path="/createNewPost" component={PostBlog} />
-          <Route path="/createNewPost" component={PostBlog} />
-          <Route path="/updateBlog" component={UpdateBlog} exact />
-          <Route path="/approval" component={Approval} exact />
-          <Route path="/approval/blogdetail" component={BlogContentDetail} />
-          <Route path="/ownBlog" component={MyOwnBlogTable} />
-          <Route path="/profile" component={Profile} />
-          <Route
-            path="/about"
-            component={() => {
-              window.location.href = "https://www.facebook.com/fptudsc/";
-              return null;
-            }}
-          />
-        </Switch>
-=======
       <div>
         <header>
           <NavBar />
         </header>
-        <div>
+        <div className="min-h-screen">
           <Switch>
-            <Privateroute path='/dashboard' component={Dashboard} exact />
+            <Privateroute path="/dashboard" component={Dashboard} exact />
             {/* <Route path='/dashboard' component={Dashboard} exact /> */}
             <Route path="/" component={HomePage} exact />
             <Route path="/blogdetail" component={BlogContentFeature} exact />
             <Route path="/dashboard" component={Dashboard} exact />
             <Route path="/createNewPost" component={PostBlog} />
+            <Route path="/updateBlog" component={UpdateBlog} exact />
             <Route path="/approval" component={Approval} exact />
             <Route path="/approval/blogdetail" component={BlogContentDetail} />
+            <Route path="/ownBlog" component={MyOwnBlogTable} />
+            <Route path="/profile" component={Profile} />
             <Route
               path="/about"
               component={() => {
@@ -62,11 +40,10 @@ function App() {
                 return null;
               }}
             />
-            <Route path = "/bannedAccountsList" component = {BannedAccount} exact/>
+            <Route path="/bannedAccountsList" component={BannedAccount} exact />
           </Switch>
         </div>
         <footer></footer>
->>>>>>> b635937cdffadfe73ced559e0ddf070453153fef
       </div>
       <ScrollToTop />
       <footer className="relative left-0 bottom-0 right-0">

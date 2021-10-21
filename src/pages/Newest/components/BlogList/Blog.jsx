@@ -30,7 +30,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div>
-      <div className=" h-auto overflow-hidden inline-flex mb-7">
+      <div className="h-auto overflow-hidden inline-flex mb-7">
         <img
           className="w-60 h-52 min-h-minHForIndexPicture min-w-minWForIndexPicture"
           src={blogImg ? blogImg : defaultImg}
