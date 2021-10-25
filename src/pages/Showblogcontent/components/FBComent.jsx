@@ -47,6 +47,11 @@ function FBComent({ blogId }) {
     await addDoc(collection(db, "comments"), payload);
   };
 
+  //Delete Comment
+  const handleDeleteComment = async (e, commentObj) => {
+    console.log("Comment obj ne: ", e);
+  };
+
   //Get comment from firestore by BlogId
   useEffect(() => {
     const q = query(collection(db, "comments"), where("blogId", "==", blogId));
@@ -67,7 +72,10 @@ function FBComent({ blogId }) {
       <ul>
         {comments.map((comment, index) => (
           <li key={index} className="mb-4">
-            <CommentsFeature commentObj={comment} />
+            <CommentsFeature
+              commentObj={comment}
+              handleDeleteComment={handleDeleteComment}
+            />
           </li>
         ))}
       </ul>

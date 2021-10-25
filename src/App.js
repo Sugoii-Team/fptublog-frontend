@@ -1,7 +1,8 @@
 import { Route, Switch } from "react-router-dom";
-import ScrollToTop from "./components/Button/ScrollToTop";
+import ScrollToTopButton from "./components/Button/ScrollToTopButton";
 import Footer from "./components/Footer/footer";
 import NavBar from "./components/Header/navBar";
+import ScrollToTop from "./components/WindowAction/ScrollToTop";
 import Privateroute from "./pages/Admin/AdminDashboard/AdminRouter/privateRoute";
 import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
@@ -21,6 +22,7 @@ function App() {
           <NavBar />
         </header>
         <div className="min-h-screen">
+          <ScrollToTop />
           <Switch>
             <Privateroute path="/dashboard" component={Dashboard} exact />
             {/* <Route path='/dashboard' component={Dashboard} exact /> */}
@@ -45,7 +47,7 @@ function App() {
         </div>
         <footer></footer>
       </div>
-      <ScrollToTop />
+      <ScrollToTopButton />
       <footer className="relative left-0 bottom-0 right-0">
         <Footer />
       </footer>

@@ -11,7 +11,6 @@ function Profile(props) {
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
   const [loading, setLoading] = useState(true);
-  console.log("user profile ne", userProfile);
 
   const color = {
     frombgColor: "pink",

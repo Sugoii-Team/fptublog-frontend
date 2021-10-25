@@ -5,28 +5,36 @@ import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import CategoriesSuggest from "./components/SideItem/CategoriesSuggest";
+import Pagination from "react-paginate";
 
 HomePage.propTypes = {};
 
 function HomePage(props) {
   const [blogList, setBlogList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limitBlog = 6;
 
   //Get all Blogs
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-        const response = await blogApi.getAll();
+        const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
           setLoading(false);
+          setBlogList(response.data);
+          console.log(response);
         }
-        setBlogList(response.data);
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
       }
     })();
-  }, []);
+  }, [currentPage]);
+
+  const handleOnpageChange = (data) => {
+    setCurrentPage(data.selected + 1); // Page count start at 1
+  };
 
   return (
     <motion.div
@@ -46,7 +54,29 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {loading ? <BlogListSkeleton /> : <BlogList data={blogList} />}
+            {loading ? (
+              <BlogListSkeleton />
+            ) : (
+              <>
+                <BlogList data={blogList} />
+              </>
+            )}
+            <Pagination
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              pageCount={50}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={3}
+              onPageChange={handleOnpageChange}
+              containerClassName={"flex gap-1 justify-center my-4"}
+              pageLinkClassName={
+                "border-r-2 border-l-2 px-5 py-2 font-semibold hover:bg-gray-100 transision ease-in duration-200"
+              }
+              previousLinkClassName={"font-bold uppercase mr-2"}
+              nextLinkClassName={"font-bold uppercase ml-2"}
+              breakLinkClassName={"font-bold uppercase px-4 py-2"}
+              activeLinkClassName={"bg-gray-100"}
+            />
           </div>
           {/* Blog loader */}
           {/* Side Items */}

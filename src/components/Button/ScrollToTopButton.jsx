@@ -1,8 +1,8 @@
 import React from "react";
 
-ScrollToTop.propTypes = {};
+ScrollToTopButton.propTypes = {};
 
-function ScrollToTop(props) {
+function ScrollToTopButton(props) {
   return (
     <div
       className="fixed z-30 bottom-10 right-14 -3/4 border rounded-full px-5 py-5 w-10 h-10 bg-gray-50 shadow-md flex items-center justify-center cursor-pointer animate-bounce"
@@ -28,4 +28,4 @@ function ScrollToTop(props) {
   );
 }
 
-export default ScrollToTop;
+export default ScrollToTopButton;

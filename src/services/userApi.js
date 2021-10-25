@@ -31,7 +31,7 @@ const userApi = {
   },
 
   getOwnBlog(userId) {
-    const url = `api/blogs/authors/${userId}?limit=10&page=1`;
+    const url = `api/blogs/authors/${userId}?limit=50&page=1`;
     return axiosClient.get(url, {
       headers: {
         "Content-Type": "application/json",
