@@ -6,6 +6,7 @@ import userApi from "../../services/userApi";
 import OwnBlogItems from "./Components/OwnBlogItems";
 import Pagination from "react-paginate";
 import { motion } from "framer-motion";
+import OwnBlogSkeleton from "./Components/OwnBlogSkeleton";
 
 export default function MyOwnBlogTable(props) {
   const loggedInUser = useSelector((state) => state.user.current);
@@ -15,6 +16,7 @@ export default function MyOwnBlogTable(props) {
   const [deleteSuccessDialog, setDeleteSuccessDialog] = useState(false); // Set state for this to disable button when sending request
   const [blogList, setBlogList] = useState([]);
   const [reload, setReload] = useState();
+  const [loading, setLoading] = useState(true);
   const isMounted = useRef(true);
 
   // set isMounted to false when we unmount the component
@@ -35,8 +37,9 @@ export default function MyOwnBlogTable(props) {
             setBlogList([]);
           }
           const response = await userApi.getOwnBlog(loggedInUser.id);
-          if (isMounted) {
+          if (isMounted && response.status === 200) {
             setBlogList(response.data);
+            setLoading(false);
           }
           return () => {
             isMounted = false;
@@ -129,14 +132,18 @@ export default function MyOwnBlogTable(props) {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {displayBlog.map((blog, index) => (
-                      <OwnBlogItems
-                        key={index}
-                        blogObj={blog}
-                        onDeleteClick={handleDeleteOwnBlog}
-                        isDisable={isSending}
-                      />
-                    ))}
+                    {loading ? (
+                      <OwnBlogSkeleton />
+                    ) : (
+                      displayBlog.map((blog, index) => (
+                        <OwnBlogItems
+                          key={index}
+                          blogObj={blog}
+                          onDeleteClick={handleDeleteOwnBlog}
+                          isDisable={isSending}
+                        />
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

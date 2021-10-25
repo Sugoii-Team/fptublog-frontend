@@ -9,7 +9,7 @@ const Blog = ({ blog }) => {
 
   //Url config
   const goToBlogDetail = `/blogdetail?${blog.id}`;
-  const goToUserDetail = `/users/${author.id}`;
+  const goToUserDetail = `/profile?${author.id}`;
   //Some field
   const blogImg = blog.thumbnailUrl;
   const defaultImg = "http://placehold.it/240x208";

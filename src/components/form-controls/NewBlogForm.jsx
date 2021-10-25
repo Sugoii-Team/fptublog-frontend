@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
 import Select from "react-select";
+//Addition Library
+import { WithContext as ReactTags } from "react-tag-input";
 //Mark down
 import ReactMde from "react-mde";
 import Showdown from "showdown";
@@ -16,6 +18,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../services/fireBase";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import { CircularProgress } from "@mui/material";
+import tagsApi from "../../services/tagsApi";
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,
@@ -54,10 +58,53 @@ export default function NewBlogForm(props) {
   const [titleDialog, setTitleDialog] = useState(false);
   const [contentDialog, setContentDialog] = useState(false);
   const [sucessPostDialog, setSuccessPostDialog] = useState(false);
+  const [sendingApprove, setSendingApprove] = useState(false);
+  const [inpputedTags, setInpputedTags] = useState([]);
+  var tags = [];
+  const suggestTags = [
+    { id: "JavaScript", text: "JavaScript" },
+    { id: "PHP", text: "PHP" },
+    { id: "AI", text: "AI" },
+  ];
+
   const minContentLength = 300;
   const minLength = 50;
   const maxLength = 200;
   var thumbnailUrl = null;
+
+  /* Tags Handler */
+  const KeyCodes = {
+    comma: 188,
+    enter: [10, 13],
+  };
+
+  const delimiters = [...KeyCodes.enter, KeyCodes.comma];
+
+  const handleDeleteTags = (positon) => {
+    let newTagsWithoutDeletedTags = inpputedTags.filter(
+      (tag, index) => index !== positon
+    );
+    setInpputedTags(newTagsWithoutDeletedTags);
+  };
+
+  const handleAddTags = (tag) => {
+    let newTags = inpputedTags;
+    newTags.push(tag);
+    setInpputedTags(newTags);
+  };
+
+  //Seperate tags from id to send post to back-end
+  function devideTagsToPostAPI() {
+    if (inpputedTags.length > 0) {
+      inpputedTags.forEach((tag) => {
+        let { text } = tag;
+        tags.push({ name: text });
+      });
+      console.log(tags);
+    }
+  }
+
+  /* Tags Handler */
 
   //Rerender Textare when BlogneedUpdate arrived
   useEffect(() => {
@@ -117,6 +164,7 @@ export default function NewBlogForm(props) {
 
   //Function to call api post a blog
   async function callApiToPostBlog() {
+    devideTagsToPostAPI();
     try {
       if (isUpdate) {
         // If update, send api for update
@@ -126,6 +174,7 @@ export default function NewBlogForm(props) {
           content,
           description,
         };
+
         const response = await blogApi.updateBlog(BlogNeedUpdate.id, blog);
         if (response.status === 200) {
           setSuccessPostDialog(true);
@@ -142,17 +191,26 @@ export default function NewBlogForm(props) {
         // else send api to post new blog
         const response = await blogApi.post(blog);
         if (response.status === 200) {
-          setSuccessPostDialog(true);
+          console.log("Response ne: ", response);
+          const tagResponse = await tagsApi.addTagsToBlog(
+            response.data.id,
+            tags
+          );
+          if (tagResponse.status === 200) {
+            setSuccessPostDialog(true);
+          }
         }
       }
     } catch (error) {
       console.log("Failed to post Blog : ", error);
+      setSendingApprove(false);
     }
   }
 
   /* Call api to post */
   const handleSubmit = async (e) => {
     /* Validate some field */
+    setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
     if (title < minLength) {
       setTitleDialog(true);
@@ -184,11 +242,13 @@ export default function NewBlogForm(props) {
       setDesDialog(false);
       setTitleDialog(false);
       setContentDialog(false);
+      setSendingApprove(false);
     }
   };
 
   const responseFromPostBlogDialog = (isCancel) => {
     if (isCancel) {
+      setSendingApprove(false);
       setSuccessPostDialog(false);
       history.push("/ownBlog");
     }
@@ -220,7 +280,7 @@ export default function NewBlogForm(props) {
               </div>
               {/* Categories Select */}
               <div className="my-3">
-                <p className="font-semibold">Categories</p>
+                <p className="font-semibold">Categories:</p>
                 <Select
                   options={options}
                   value={
@@ -235,6 +295,32 @@ export default function NewBlogForm(props) {
                   onChange={(e) => setSelectedCategory(e?.value)}
                 />
               </div>
+              {/* Tags */}
+              <div>
+                <p className="font-semibold">Tags: </p>
+                <ReactTags
+                  classNames={{
+                    tags: "tagsClass",
+                    tagInput: "tagInputClass",
+                    tagInputField: "tagInputFieldClass",
+                    selected: "selectedClass",
+                    tag: "tagClass",
+                    remove: "removeClass",
+                    suggestions: "suggestionsClass",
+                    activeSuggestion: "activeSuggestionClass",
+                    editTagInput: "editTagInputClass",
+                    editTagInputField: "editTagInputField",
+                    clearAll: "clearAllClass",
+                  }}
+                  autofocus={false}
+                  tags={inpputedTags}
+                  suggestions={suggestTags}
+                  handleDelete={handleDeleteTags}
+                  handleAddition={handleAddTags}
+                  delimiters={delimiters}
+                />
+              </div>
+              {/* Tags */}
               {/* thumbNail URL */}
               <div className=" my-2">
                 <p className="font-semibold">Thumbnails:</p>
@@ -271,10 +357,17 @@ export default function NewBlogForm(props) {
                   />
                 </div>
               </div>
-              <div className="flex justify-end my-2">
+              <div className="flex justify-end my-2 relative">
+                {sendingApprove ? (
+                  <span className="absolute right-36 top-1">
+                    {" "}
+                    <CircularProgress size={30} />
+                  </span>
+                ) : null}
                 <button
                   className="py-2 px-4 shadow-md w-32 border border-gray-200 no-underline rounded-md bg-white text-black font-sans font-semibold text-sm border-blue btn-primary hover:text-white hover:bg-black focus:outline-none active:shadow-none "
                   onClick={handleSubmit}
+                  disabled={sendingApprove}
                 >
                   Send Approve
                 </button>

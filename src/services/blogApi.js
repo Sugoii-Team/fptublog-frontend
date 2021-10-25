@@ -5,7 +5,13 @@ const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
 
 const blogApi = {
   getAll(params) {
-    const url = "api/blogs?limit=50&page=1";
+    const { currentPage, limitBlog } = params;
+    const url = `api/blogs?limit=${limitBlog}&page=${currentPage}`;
+    return axiosClient.get(url);
+  },
+
+  getTopRatedBlog(params) {
+    const url = "api/blogs/top_rate?limit=5&page=1";
     return axiosClient.get(url, {
       params,
     });
@@ -70,7 +76,6 @@ const blogApi = {
     // const url = `comment-${id}`;
     const promise = axiosClient.get(url);
     const dataAfterPromise = promise.then((response) => response.data);
-    console.log("Data sau khi promise cua comment: ", typeof dataAfterPromise);
     return dataAfterPromise;
   },
 };

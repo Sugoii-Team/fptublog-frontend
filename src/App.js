@@ -1,7 +1,8 @@
 import { Route, Switch } from "react-router-dom";
-import ScrollToTop from "./components/Button/ScrollToTop";
+import ScrollToTopButton from "./components/Button/ScrollToTopButton";
 import Footer from "./components/Footer/footer";
 import NavBar from "./components/Header/navBar";
+import ScrollToTop from "./components/WindowAction/ScrollToTop";
 import Privateroute from "./pages/Admin/AdminDashboard/AdminRouter/privateRoute";
 import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
@@ -22,6 +23,7 @@ function App() {
           <NavBar />
         </header>
         <div className="min-h-screen">
+          <ScrollToTop />
           <Switch>
             <Privateroute path="/dashboard" component={Dashboard} exact />
             {/* <Route path='/dashboard' component={Dashboard} exact /> */}
@@ -33,7 +35,7 @@ function App() {
             <Route path="/approval" component={Approval} exact />
             <Route path="/approval/blogdetail" component={BlogContentDetail} />
             <Route path="/ownBlog" component={MyOwnBlogTable} />
-            <Route path="/profile" component={Profile} />
+            <Route path="/profile" component={Profile} exact />
             <Route
               path="/about"
               component={() => {
@@ -79,6 +81,13 @@ function App() {
         </footer>
 >>>>>>> a885837dbc8c2c8ba40316ad484dcbe8633960ad
       </div>
+<<<<<<< HEAD
+      <ScrollToTopButton />
+      <footer className="relative left-0 bottom-0 right-0">
+        <Footer />
+      </footer>
+=======
+>>>>>>> main
     </div>
   );
 }

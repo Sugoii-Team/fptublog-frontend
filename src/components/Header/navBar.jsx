@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -50,7 +51,12 @@ function NavBar(props) {
 
   return (
     /* Nav Wrapper */
-    <div className="">
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className=""
+    >
       <div
         className={
           isScrolled
@@ -239,7 +245,11 @@ function NavBar(props) {
       {/* Login Dialog */}
       {showModal ? (
         <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+          <motion.div
+            animate={{ y: 0, opacity: 1 }}
+            initial={{ y: 20, opacity: 0 }}
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
             <div className="relative w-auto my-6 mx-auto max-w-md">
               {/*content*/}
               <div className="border-0 rounded-md shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -261,12 +271,12 @@ function NavBar(props) {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
       {/* Login Dialog */}
-    </div>
+    </motion.div>
   );
 }
 
