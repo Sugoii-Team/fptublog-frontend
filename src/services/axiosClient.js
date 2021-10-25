@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://3687-2402-800-6315-91d5-4863-83b3-e75d-7ee7.ngrok.io/fptu-blog",
+  baseURL: "http://3bf5-2402-800-6314-f05d-ec3e-b115-20d7-200d.ngrok.io/fptu-blog",
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
     // "Content-Type": "application/json",
@@ -35,10 +35,10 @@ axiosClient.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     console.log("Error Response: ", error.response);
-    /* const { config, status, data } = error.response;
-    if (config.url === "api/auth/login" && status === 406) {
+    const { config, status, data } = error.response;
+    if (config.url === "api/auth/login" && (status === 406 || status === 404)) {
       throw new Error(data);
-    } */
+    } 
 
     return Promise.reject(error);
   }

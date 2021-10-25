@@ -3,12 +3,14 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
+import AdminDropDownMenu from "./AdminDropDownMenu";
 import CategoriesShow from "./CategoriesShow";
 import UserDropDownMenu from "./UserDropDownMenu";
 
-NavBar.propTypes = {};
 
-function NavBar(props) {
+function NavBar() {
+  const adminLoggedIn = useSelector((state) => state.admin.current);
+  // console.log("role admin ne: ", adminLoggedIn);
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
   const userImg = loggedInUser.avatarUrl;
@@ -87,7 +89,7 @@ function NavBar(props) {
             </div>
             {/* <!-- User icon  --> */}
 
-            {!isLoggedIn && (
+            {(!isLoggedIn && !(adminLoggedIn.role === "ADMIN") ) && (
               <div
                 className="userIcon cursor-pointer"
                 onClick={handleLoginOnclick}
@@ -110,7 +112,7 @@ function NavBar(props) {
             )}
 
             {/* User field after logged in */}
-            {isLoggedIn && (
+            {(isLoggedIn || adminLoggedIn.role ==="ADMIN") && (
               /* User icon when logged in */
               <div className="cursor-pointer">
                 <div onClick={toggleUserMenu}>
@@ -139,10 +141,16 @@ function NavBar(props) {
                 </div>
 
                 {/* User Dropdown menu */}
-                {isToggleLogginUser ? (
+                {isToggleLogginUser ?
+                  (adminLoggedIn.role === "ADMIN" ? 
+                  <AdminDropDownMenu admin={adminLoggedIn} /> 
+                  : 
                   <UserDropDownMenu userInfo={loggedInUser} />
-                ) : null}
+                  )
+                :
+                null}
                 {/* User Dropdown menu */}
+
               </div>
             )}
             {/* User field after logged in */}
@@ -228,8 +236,8 @@ function NavBar(props) {
                   >
                     <MyGoogleLogin />
                   </div>
-                  <div className="my-4">
-                    <Login onCancelClick = {handleCancelOnclick} />
+                  <div className="my-4" onSubmit = {()=>setShowModal(false)}>
+                    <Login onCancelClick={handleCancelOnclick} />
                   </div>
                 </div>
               </div>
