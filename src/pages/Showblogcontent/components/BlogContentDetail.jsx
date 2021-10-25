@@ -9,20 +9,12 @@ import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import gfm from "remark-gfm";
 import MyDialog from "../../../components/Dialog/MyDialog";
-<<<<<<< HEAD
-=======
 import adminApi from "../../../services/adminApi";
->>>>>>> main
 //Components
 import blogApi from "../../../services/blogApi";
 import lecturerApi from "../../../services/lecturerApi";
 import ratingApi from "../../../services/ratingApi";
-<<<<<<< HEAD
-import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
-import CategoriesSuggest from "../../Newest/components/SideItem/CategoriesSuggest";
-=======
 import AsideBlogContent from "./Aside";
->>>>>>> main
 import FBComment from "./FBComent";
 
 BlogContentDetail.propTypes = {
@@ -47,7 +39,7 @@ function BlogContentDetail({
 }) {
   const blogId = blog.id;
   const history = useHistory(); // Get blog history path
-  const time = moment(blog.createdDateTime).format("LL");
+  const time = moment(blog.createdDateTime).format("MMM Do YY");
   /* Get role in case this blog is need to approving */
   const userData = useSelector((state) => state.user.current);
   const userRole = userData.role;
@@ -86,13 +78,9 @@ function BlogContentDetail({
   const isInPending = pendingStatus.filter((status) => {
     return status.id === blog.statusId;
   });
-
   //Only show approve button when loggedin user is Lecture and blog is in pending state
-  //and this blog not own by it poster
   const conditionToApprove =
-    userRole === "LECTURER" &&
-    isInPending.length !== 0 &&
-    blog.authorId !== userData.id;
+    userRole === "LECTURER" && isInPending.length !== 0;
   //Get to change author avatar
 
   //Rerender rating value everytime rating update
@@ -179,135 +167,64 @@ function BlogContentDetail({
     } catch (error) {
       console.log("Fail to delete a blog", error);
     }
-  }
+  };
 
   return (
     <div>
       <div className="mt-6 p-8 md:p-5 mx-10">
         {/* <!--About the author--> */}
-        <div className="text-xs place-content-center mx-28 grid grid-cols-12">
+        <div className="text-xs ml-4 place-content-center">
           {/* <!--Image of the author--> */}
-          <div className="col-span-1">
+          <span className="inline-block mr-2">
             <img
-              className="rounded-md h-16 w-16 flex items-center justify-center"
+              className="rounded-full h-16 w-16 flex items-center justify-center"
               src={authorAvatar ? authorAvatar : defaultAvatar}
               alt="Author Img"
             />
-          </div>
-          {/* Account Infomation */}
-          <div className="-ml-4 text-lg relative col-span-11 w-full overflow-hidden">
-            <Link
-              to={`profile?${blog.authorId}`}
-              className="absolute top-0 font-bold uppercase hover:text-gray-500"
-            >
+          </span>
+
+          <span className="inline-block ml-2 text-xl">
+            <p className=" font-bold">
+              {" "}
               {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
-            </Link>
-            <div className="absolute top-6 text-xs italic">
-              {/* {accountOfAuthor.description} */}
-              Dead just like the wind, always by my side!
-            </div>
-            <div className="absolute bottom-0 text-base text-purple-600 font-bold uppercase">
-              {/* {accountOfAuthor.description} */}
-              Pro Blogger
-            </div>
-          </div>
+              <br></br>
+              {accountOfAuthor.description} <br></br>
+              {tagOfBlog.map((tag) => (
+                <Link to="" key={tag.id}>
+                  {tag.name}
+                </Link>
+              ))}
+            </p>
+          </span>
         </div>
         {/* About the blog content */}
-        <div>
-          <div className="grid md:grid-cols-3 gap-3 mx-auto w-10/12">
-            {/* content 2 part, aside 1 part */}
-            {/* <!--Content area--> */}
-            {/* Title of the blog */}
-            <div className="md:col-span-2">
-              <div className="mb-5">
-                <h1 className="mt-9 font-bold text-4xl text-left w-full">
-                  {blog.title}
-                </h1>
-                <div className="flex flex-col space-y-2 mt-1">
-                  <p className="text-md italic ">Posted: {time}</p>
-                  {tagOfBlog.map((tag) => (
-                    <Link to="" key={tag.id}>
-                      {tag.name}
-                    </Link>
-                  ))}
-                  <div className="flex flex-row">
-                    <Rating
-                      name="read-only"
-                      value={averageStar}
-                      readOnly
-                      precision={0.1}
-                    />
-                    <span className="ml-1 font-light text-gray-500">
-                      ( {totalEveryoneRate} )
-                    </span>
-                  </div>
-                </div>
-              </div>
-              {/* Content of the blog */}
-              <span className="text-justify text-3xl ">
-                <article className="prose">
-                  <ReactMarkdown remarkPlugins={[gfm]}>
-                    {blog.content}
-                  </ReactMarkdown>
-                </article>
-              </span>
-              {userData.id && isInPending.length < 1 ? (
-                <div className="flex flex-col justify-center gap-3 my-4">
-                  <div className="font-semibold uppercase text-xs mx-auto">
-                    Leave a rate
-                  </div>
-                  <div className="mx-auto">
-                    <Rating
-                      name="simple-controlled"
-                      value={ratingValue}
-                      onChange={(event, newValue) => {
-                        setRatingValue(newValue);
-                        handleRatingBlog(newValue);
-                      }}
-                      size="large"
-                    />
-                  </div>
-                </div>
-              ) : null}
-
-              {/* Approve Buttons */}
-              {conditionToApprove ? (
-                <div className="my-5 flex gap-3">
-                  <span>
-                    {" "}
-                    <button
-                      className="bg-red-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-red-500 transition ease-in-out duration-150"
-                      onClick={() => HandleApprovalBtn("reject")}
-                    >
-                      Reject
-                    </button>
-                  </span>
-                  <span>
-                    {" "}
-                    <button
-                      className="bg-green-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-green-500 transition ease-in-out duration-150"
-                      onClick={() => HandleApprovalBtn("approve")}
-                    >
-                      Approve
-                    </button>
+        <div className="grid md:grid-cols-3 gap-6 justify-center">
+          {/* content 2 part, aside 1 part */}
+          {/* <!--Content area--> */}
+          {/* Title of the blog */}
+          <div className="md:col-span-2 ml-20">
+            <div className="mb-5">
+              <h1 className="mt-9 font-bold text-4xl ">{blog.title}</h1>
+              <div className="flex flex-col space-y-2 mt-1">
+                <p className="text-md italic ">Posted: {time}</p>
+                {tagOfBlog.map((tag) => (
+                  <Link to="" key={tag.id}>
+                    {tag.name}
+                  </Link>
+                ))}
+                <div className="flex flex-row">
+                  <Rating
+                    name="read-only"
+                    value={averageStar}
+                    readOnly
+                    precision={0.1}
+                  />
+                  <span className="ml-1 font-light text-gray-500">
+                    ( {totalEveryoneRate} )
                   </span>
                 </div>
-              ) : null}
-              {/* Approve Buttons */}
-            </div>
-<<<<<<< HEAD
-
-            {/* <!--Aside area--> */}
-            <div className="hidden lg:col-span-1 lg:flex ">
-              <div className="border-l-2 min-h-screen mr-10"></div>
-              {/* <!--Advertise blog area - include 3 blog demo--> */}
-              {/* <AsideBlogContent /> */}
-              <div>
-                <BlogPopular />
-                <CategoriesSuggest />
               </div>
             </div>
-=======
             {/* Content of the blog */}
             <span className="text-justify text-3xl ">
               <article className="prose">
@@ -316,7 +233,7 @@ function BlogContentDetail({
                 </ReactMarkdown>
               </article>
             </span>
-            { }
+            {}
             <div className="flex flex-col gap-3 my-4">
               <div className="font-semibold uppercase text-xs flex justify-center">
                 Leave a rate
@@ -370,26 +287,14 @@ function BlogContentDetail({
           <div className="hidden lg:col-span-1 lg:block">
             {/* <!--Advertise blog area - include 3 blog demo--> */}
             <AsideBlogContent />
->>>>>>> main
           </div>
         </div>
       </div>
 
-<<<<<<< HEAD
       {/* Delete buttons */}
       <div className="grid grid-cols-9 mt-4 mb-8">
         <div className="text-center grid col-start-6">
           <button className="p-2 pl-3 pr-3 w-32 transition-colors duration-300 rounded-3xl transform text-white bg-red-200 hover:bg-red-500 border-red-300 text-lg focus:border-4">
-=======
-      {/* Delete blog buttons */}
-      <div className="grid grid-cols-9 mt-4 mb-8">
-        <div className="text-center grid col-start-6">
-          <button className="ml-5 p-2 pl-3 pr-3 w-24 transition-colors 
-            duration-300 rounded-3xl transform 
-          text-white bg-red-200 hover:bg-red-500 
-          border-red-300 text-sm focus:border-4"
-            onClick={() => handleDeleteBlog(blog.id)} >
->>>>>>> a885837dbc8c2c8ba40316ad484dcbe8633960ad
             DELETE
           </button>
         </div>
