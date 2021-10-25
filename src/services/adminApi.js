@@ -42,10 +42,7 @@ const adminApi = {
         "Content-Type": "application/json",
         Authorization: accessToken,
       }
-    })
-    // const dataPromise = promise.then((response) => response.data);
-    // console.log("datapromise ne: (adminApi.jsx) ",dataPromise);
-    // return dataPromise;
+    });
   },
   
   banUser(id, obj){
@@ -56,7 +53,7 @@ const adminApi = {
         "Content-Type": "application/json",
         Authorization: accessToken,
       }
-    })
+    });
   },
   
   updateUserRole(id,params){
@@ -67,21 +64,19 @@ const adminApi = {
         "Content-Type": "application/json",
         Authorization: accessToken,
       }
-    })
-    // const dataPromise = promise.then((response)=>response.status);
-    // console.log("datapromise ne:",dataPromise);
-    // return dataPromise;
+    });
   },
 
-  deleteBlog(id){
+  //only admin can delete a blog by id
+  deleteBlogById(id){
     const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
-    const url = "";
-    return axiosClient.put(url, {
+    const url = `api/admin/blogs/${id}`;
+    return axiosClient.delete(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       }
-    })
+    });
   }
 };
 

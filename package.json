@@ -11,7 +11,10 @@
     "@testing-library/user-event": "^12.8.3",
     "draft-js": "^0.11.7",
     "firebase": "^9.1.3",
+<<<<<<< HEAD
     "framer-motion": "^4.1.17",
+=======
+>>>>>>> a885837dbc8c2c8ba40316ad484dcbe8633960ad
     "moment": "^2.29.1",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
@@ -27,8 +30,17 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
+<<<<<<< HEAD
     "myToolkit": "npm install react-dnd-html5-backend react-dnd react-tag-input framer-motion react-paginate firebase react-firebase-hooks @firebase/storage showdown react-mde react-select react-google-login react react-dom @emotion/react @emotion/styled @mui/material @mui/icons-material react-scripts -dev node-sass classnames react-router-dom query-string axios react-hook-form yup @hookform/resolvers @hookform/error-message @reduxjs/toolkit react-redux -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco",
+=======
+<<<<<<< HEAD
+    "myToolkit": "npm install framer-motion react-paginate firebase react-firebase-hooks @firebase/storage showdown react-mde react-select react-google-login react react-dom @emotion/react @emotion/styled @mui/material @mui/icons-material react-scripts -dev node-sass classnames react-router-dom query-string axios react-hook-form yup @hookform/resolvers @hookform/error-message @reduxjs/toolkit react-redux -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco",
+>>>>>>> main
     "quanToolkit": "npm install moment react-markdown @headlessui/react @headlessui/react"
+=======
+    "myToolkit": "npm install react-paginate firebase react-firebase-hooks @firebase/storage showdown react-mde react-select react-google-login react react-dom @emotion/react @emotion/styled @mui/material @mui/icons-material react-scripts -dev node-sass classnames react-router-dom query-string axios react-hook-form yup @hookform/resolvers @hookform/error-message @reduxjs/toolkit react-redux -D tailwindcss@npm:@tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9 @craco/craco",
+    "quanToolkit": "npm install moment react-markdown @headlessui/react @headlessui/react firebase react-firebase-hooks @firebase/storage"
+>>>>>>> a885837dbc8c2c8ba40316ad484dcbe8633960ad
   },
   "eslintConfig": {
     "extends": [

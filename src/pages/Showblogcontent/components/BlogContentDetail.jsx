@@ -9,12 +9,20 @@ import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import gfm from "remark-gfm";
 import MyDialog from "../../../components/Dialog/MyDialog";
+<<<<<<< HEAD
+=======
+import adminApi from "../../../services/adminApi";
+>>>>>>> main
 //Components
 import blogApi from "../../../services/blogApi";
 import lecturerApi from "../../../services/lecturerApi";
 import ratingApi from "../../../services/ratingApi";
+<<<<<<< HEAD
 import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
 import CategoriesSuggest from "../../Newest/components/SideItem/CategoriesSuggest";
+=======
+import AsideBlogContent from "./Aside";
+>>>>>>> main
 import FBComment from "./FBComent";
 
 BlogContentDetail.propTypes = {
@@ -164,6 +172,15 @@ function BlogContentDetail({
     }
   };
 
+  //Send blog id to adminApi to delete blog by blog id
+  const handleDeleteBlog = async (id) => {
+    try {
+      const repsonse = await adminApi.deleteBlogById(id);
+    } catch (error) {
+      console.log("Fail to delete a blog", error);
+    }
+  }
+
   return (
     <div>
       <div className="mt-6 p-8 md:p-5 mx-10">
@@ -278,6 +295,7 @@ function BlogContentDetail({
               ) : null}
               {/* Approve Buttons */}
             </div>
+<<<<<<< HEAD
 
             {/* <!--Aside area--> */}
             <div className="hidden lg:col-span-1 lg:flex ">
@@ -289,14 +307,89 @@ function BlogContentDetail({
                 <CategoriesSuggest />
               </div>
             </div>
+=======
+            {/* Content of the blog */}
+            <span className="text-justify text-3xl ">
+              <article className="prose">
+                <ReactMarkdown remarkPlugins={[gfm]}>
+                  {blog.content}
+                </ReactMarkdown>
+              </article>
+            </span>
+            { }
+            <div className="flex flex-col gap-3 my-4">
+              <div className="font-semibold uppercase text-xs flex justify-center">
+                Leave a rate
+              </div>
+              <div className="flex justify-center">
+                <Rating
+                  name="simple-controlled"
+                  value={ratingValue}
+                  onChange={(event, newValue) => {
+                    setRatingValue(newValue);
+                    handleRatingBlog(newValue);
+                  }}
+                  size="large"
+                />
+              </div>
+            </div>
+            {/* Approve Buttons */}
+            {conditionToApprove ? (
+              <div className="my-5 flex gap-3">
+                <span>
+                  {" "}
+                  <button
+                    className="bg-red-400 px-5 py-3 text-sm shadow-lg 
+                    font-medium tracking-wider text-white rounded-lg 
+                    hover:shadow-2xl hover:bg-red-500 transition ease-in-out
+                    duration-150"
+                    onClick={() => HandleApprovalBtn("reject")}
+                  >
+                    Reject
+                  </button>
+                </span>
+                <span>
+                  {" "}
+                  <button
+                    className="bg-green-400 px-5 py-3 text-sm shadow-lg 
+                    font-medium tracking-wider  
+                  text-white rounded-lg hover:shadow-2xl 
+                  hover:bg-green-500 transition ease-in-out 
+                    duration-150"
+                    onClick={() => HandleApprovalBtn("approve")}
+                  >
+                    Approve
+                  </button>
+                </span>
+              </div>
+            ) : null}
+            {/* Approve Buttons */}
+          </div>
+
+          {/* <!--Aside area--> */}
+          <div className="hidden lg:col-span-1 lg:block">
+            {/* <!--Advertise blog area - include 3 blog demo--> */}
+            <AsideBlogContent />
+>>>>>>> main
           </div>
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Delete buttons */}
       <div className="grid grid-cols-9 mt-4 mb-8">
         <div className="text-center grid col-start-6">
           <button className="p-2 pl-3 pr-3 w-32 transition-colors duration-300 rounded-3xl transform text-white bg-red-200 hover:bg-red-500 border-red-300 text-lg focus:border-4">
+=======
+      {/* Delete blog buttons */}
+      <div className="grid grid-cols-9 mt-4 mb-8">
+        <div className="text-center grid col-start-6">
+          <button className="ml-5 p-2 pl-3 pr-3 w-24 transition-colors 
+            duration-300 rounded-3xl transform 
+          text-white bg-red-200 hover:bg-red-500 
+          border-red-300 text-sm focus:border-4"
+            onClick={() => handleDeleteBlog(blog.id)} >
+>>>>>>> a885837dbc8c2c8ba40316ad484dcbe8633960ad
             DELETE
           </button>
         </div>
