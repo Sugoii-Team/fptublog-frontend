@@ -21,14 +21,16 @@ BlogContentDetail.propTypes = {
   blog: PropTypes.object,
   tagOfBlog: PropTypes.array,
   statusList: PropTypes.array,
+  blogDeletedClick:PropTypes.func,
   conditionToApprove: PropTypes.bool,
+  admin: PropTypes.object,
 };
 
 BlogContentDetail.defaultProps = {
   blog: {},
   tagOfBlog: [],
   conditionToApprove: false,
-};
+}
 
 function BlogContentDetail({
   blog,
@@ -36,6 +38,8 @@ function BlogContentDetail({
   statusList,
   ratedValue,
   totalRated,
+  blogDeletedClick,
+  admin,
 }) {
   const blogId = blog.id;
   const history = useHistory(); // Get blog history path
@@ -46,10 +50,21 @@ function BlogContentDetail({
   const [accountOfAuthor, setAccountOfAuthor] = useState({});
   const [approvedDialog, setApprovedDialog] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
-
   const defaultAvatar = "http://placehold.it/70x70";
   const authorAvatar = accountOfAuthor?.avatarUrl;
 
+  //For delete blog function
+  const adminLoggedIn = (admin.role ==="ADMIN");
+  //Handle open-close announment when delete blog
+  const handleDeleteBlogClick = (id) =>{
+    let confirmToDeleteBlog = window.confirm("Are you sure to delete this blog ?")
+    if(confirmToDeleteBlog === true){
+      blogDeletedClick(id);
+    }
+    else return;
+  }
+
+  
   const totalEveryoneRate =
     totalRated.oneStar +
     totalRated.twoStar +
@@ -91,6 +106,7 @@ function BlogContentDetail({
   useEffect(() => {
     setRatingValue(parseInt(ratedValue.star));
   }, [ratedValue]);
+
 
   // take the author account to take info about author of blog
   useEffect(() => {
@@ -293,14 +309,23 @@ function BlogContentDetail({
         </div>
       </div>
 
-      {/* Delete buttons */}
-      <div className="grid grid-cols-9 mt-4 mb-8">
-        <div className="text-center grid col-start-6">
-          <button className="p-2 pl-3 pr-3 w-32 transition-colors duration-300 rounded-3xl transform text-white bg-red-200 hover:bg-red-500 border-red-300 text-lg focus:border-4">
-            DELETE
-          </button>
+      {/* Delete blog buttons */}
+      {/* Hide when admin log out */}
+      {adminLoggedIn ?
+         <div className="grid grid-cols-9 mt-4 mb-8">
+          <div className="text-center grid col-start-6">
+            <button className="ml-5 p-2 pl-3 pr-3 w-24 transition-colors 
+          duration-300 rounded-3xl transform 
+        text-white bg-red-200 hover:bg-red-500 
+        border-red-300 text-sm focus:border-4"
+              onClick={() => handleDeleteBlogClick(blog.id)} >
+              DELETE
+            </button>
+          </div>
         </div>
-      </div>
+         :
+        null
+      }
 
       {/* <!-- Comment Area --> */}
       <div className="col-span-2 mb-16">

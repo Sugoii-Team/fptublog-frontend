@@ -10,7 +10,7 @@ export const contains = (role, currentRole) => {
 }
 
 const Privateroute = ({ component: Component, ...rest }) => {
-  const loggedInUser = useSelector((state) => state.user.current);
+  const loggedInUser = useSelector((state) => state.admin.current);
   console.log("role ne: ",loggedInUser);
   const resultComponent = (props) => {
     var role = loggedInUser.role;

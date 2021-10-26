@@ -3,7 +3,6 @@ import ScrollToTopButton from "./components/Button/ScrollToTopButton";
 import Footer from "./components/Footer/footer";
 import NavBar from "./components/Header/navBar";
 import ScrollToTop from "./components/WindowAction/ScrollToTop";
-import Privateroute from "./pages/Admin/AdminDashboard/AdminRouter/privateRoute";
 import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import Approval from "./pages/Approval/Approval";
@@ -15,6 +14,7 @@ import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import BlogContentDetail from "./pages/Showblogcontent/components/BlogContentDetail";
 import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
 function App() {
+
   return (
     <div className="App font-monsterrat">
       <div>
@@ -24,8 +24,7 @@ function App() {
         <div className="min-h-screen">
           <ScrollToTop />
           <Switch>
-            <Privateroute path="/dashboard" component={Dashboard} exact />
-            {/* <Route path='/dashboard' component={Dashboard} exact /> */}
+            <Route path="/dashboard" component={Dashboard} exact />
             <Route path="/" component={HomePage} exact />
             <Route path="/blogdetail" component={BlogContentFeature} exact />
             <Route path="/dashboard" component={Dashboard} exact />
@@ -35,6 +34,7 @@ function App() {
             <Route path="/approval/blogdetail" component={BlogContentDetail} />
             <Route path="/ownBlog" component={MyOwnBlogTable} />
             <Route path="/profile" component={Profile} exact />
+            <Route path="/bannedAccountsList" component={BannedAccount} exact />
             <Route
               path="/about"
               component={() => {
@@ -42,7 +42,6 @@ function App() {
                 return null;
               }}
             />
-            <Route path="/bannedAccountsList" component={BannedAccount} exact />
           </Switch>
         </div>
         <footer></footer>

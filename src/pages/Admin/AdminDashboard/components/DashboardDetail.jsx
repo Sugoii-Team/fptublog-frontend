@@ -16,18 +16,31 @@ DashboardDetail.propTypes = {
 function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanClick }) {
   const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU";
   const [showSubmitForm, setShowSubmitForm] = useState(false);
+  const [dataNeedUpdate, setDataNeedUpdate] = useState({});
+  let confirmToRemoveOrBan = false;
 
 
   const handleShowSubmitForm = (values) => {
     setShowSubmitForm(values);
   }
 
+  const handleEditClick = (userData) => {
+    setShowSubmitForm(true);
+    setDataNeedUpdate(userData);
+  }
+
   const handleRemoveClick = (user) => {
-    onRemoveClick(user.id);
+    confirmToRemoveOrBan = window.confirm("Are you sure to remove this user ?");
+    if (confirmToRemoveOrBan === true) {
+      onRemoveClick(user.id);
+    } else return;
   };
 
   const handleBanAccountClick = (user) => {
-    onBanClick(user.id);
+    confirmToRemoveOrBan = window.confirm("Are you sure to ban this user ?");
+    if (confirmToRemoveOrBan === true) {
+      onBanClick(user.id);
+    } else return;
   };
 
   const handleDataOfFrom = (data) => {
@@ -105,43 +118,12 @@ function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanCli
                         {user.role}</td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button onClick={() => setShowSubmitForm(true)} className="text-indigo-600 hover:text-indigo-900">
+                        <button onClick={() => handleEditClick(user)} className="text-indigo-600 hover:text-indigo-900">
                           EDIT
                         </button>
 
 
-                        {showSubmitForm ? (
-                          <>
-                            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                              onSubmit={() => handleShowSubmitForm(false)}>
-                              <div className="relative w-auto my-6 mx-auto max-w-md">
-                                {/*content*/}
-                                <div className="border-0 rounded-md shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                  {/*header*/}
-                                  <div className="flex items-start justify-center p-5 border-b border-solid border-blueGray-200 rounded-t">
-                                    <h3 className="text-2xl font-semibold uppercase">UPDATE USER ROLE</h3>
-                                  </div>
-                                  {/*body*/}
-                                  <div className="relative p-6 flex-auto">
-                                    <div
-                                      className="flex justify-center"
-                                    >
-                                      <SubmitForm
-                                        userInfo={user}
-                                        onCancelClick={handleShowSubmitForm}
-                                        dataOfFrom={handleDataOfFrom}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <div>
 
-                                </div>
-                              </div>
-                            </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                          </>
-                        ) : null}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <button onClick={() => handleRemoveClick(user)} className="text-red-400 hover:text-red-600">
@@ -162,7 +144,39 @@ function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanCli
         </div>
       </div>
 
-      
+      {showSubmitForm ? (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+            onSubmit={() => handleShowSubmitForm(false)}>
+            <div className="relative w-auto my-6 mx-auto max-w-md">
+              {/*content*/}
+              <div className="border-0 rounded-md shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-center p-5 border-b border-solid border-blueGray-200 rounded-t">
+                  <h3 className="text-2xl font-semibold uppercase">UPDATE USER ROLE</h3>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 flex-auto">
+                  <div
+                    className="flex justify-center"
+                  >
+                    <SubmitForm
+                      userInfo={dataNeedUpdate}
+                      onCancelClick={handleShowSubmitForm}
+                      dataOfFrom={handleDataOfFrom}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
+
 
     </div>
   )

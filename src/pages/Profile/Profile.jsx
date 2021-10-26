@@ -62,10 +62,9 @@ function Profile(props) {
                       {userProfile.firstName + " " + userProfile.lastName}
                     </span>
                     <p className="text-sm">
-                      {/* Dead just like the wind, Always by my side */}
                       {userProfile.description !== null
                         ? userProfile.description
-                        : "Dead just like the wind, Always by my side"}
+                        : "AYoooooooo <3"}
                     </p>
                   </div>
                   <div className="mt-5 text-purple-600 font-bold uppercase">
@@ -137,8 +136,10 @@ function Profile(props) {
             <p>Full tech stack</p>
           </motion.div>
         </div>
+
+
         {/* right */}
-        <motion.div
+        {/* <motion.div
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: 20, opacity: 0.5 }}
           className="col-span-2"
@@ -156,7 +157,7 @@ function Profile(props) {
             <div className="bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 animate-pulse"></div>
             <div className="bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 animate-pulse"></div>
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </div>
   );

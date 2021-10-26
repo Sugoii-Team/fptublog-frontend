@@ -10,6 +10,7 @@ const adminApi = {
       }
     });
   },
+  
 
   getAllAccounts() {
     const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
