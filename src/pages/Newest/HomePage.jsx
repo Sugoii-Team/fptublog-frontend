@@ -24,7 +24,6 @@ function HomePage(props) {
         if (response.status === 200) {
           setLoading(false);
           setBlogList(response.data);
-          console.log(response);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
