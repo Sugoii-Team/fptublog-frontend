@@ -8,7 +8,11 @@ BannedAccountList.propTypes = {
 function BannedAccountList({ listBannedAccounts }) {
   const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU";
   return (
+    
     <div className = "mt-3 p-10">
+      {listBannedAccounts === 0 ?
+      <p className = "text-center text-2xl my-10">Banned Account list is empty (No one is banned !)</p>
+      :
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -78,6 +82,7 @@ function BannedAccountList({ listBannedAccounts }) {
           </div>
         </div>
       </div>
+      }
     </div>
   );
 }

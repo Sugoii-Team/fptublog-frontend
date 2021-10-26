@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import AnnouncementDialog from '../../../components/AnouncementStatusDialog/AnnouncementDialog';
 import adminApi from '../../../services/adminApi';
@@ -24,16 +24,16 @@ function DashboardPage() {
 
   const [loading, setLoading] = useState(false);
 
+
   const handleUpdateUserRole = async (data) => {
-    const updateUserRole = await adminApi.updateUserRole(data.id, data)
-    // console.log("UpdateUserRole ne: ", updateUserRole);
+    const updateUserRole = await adminApi.updateUserRole(data.id, data);
+    console.log("UpdateUserRole ne: ", updateUserRole);
     if (updateUserRole.status === 200) {
       setStatus(true);
       setResponseObject(updateUserRole);
     }
     setReload({});
-  }
-
+  };
 
   const handleRemoveClick = async (id) => {
     const deleteUser = await adminApi.removeAccountsById(id);
@@ -79,7 +79,6 @@ function DashboardPage() {
       }
     })();
   }, [reload, currentUser]);
-
 
   return (
     <div>

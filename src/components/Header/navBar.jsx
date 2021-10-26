@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Login from "../../services/Auth/components/Login/Login";
@@ -18,6 +19,21 @@ function NavBar() {
   const [showCategories, setShowCategories] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isToggleLogginUser, setisToggleLogginUser] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const [currentScrollPostion, setCurrentScrollPostion] = useState(0);
+
+  //Handle Scroll Event to set up nav bar
+  useEffect(() => {
+    window.onscroll = () => {
+      setCurrentScrollPostion(window.pageYOffset);
+    };
+    if (currentScrollPostion < 10) {
+      setIsScrolled(false);
+    } else {
+      setIsScrolled(true);
+    }
+  }, [currentScrollPostion]);
 
   const handleCategoriesClick = () => {
     setShowCategories(!showCategories);
@@ -29,7 +45,7 @@ function NavBar() {
 
   const handleCancelOnclick = (values) => {
     setShowModal(values);
-  }
+  };
 
   const toggleUserMenu = () => {
     setisToggleLogginUser(!isToggleLogginUser);
@@ -37,8 +53,19 @@ function NavBar() {
 
   return (
     /* Nav Wrapper */
-    <div className="">
-      <div className="border-b-2 border-gray-600 h-14 lg:h-auto lg:border-0">
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className=""
+    >
+      <div
+        className={
+          isScrolled
+            ? "invisible border-b-2 border-gray-600 h-14 lg:h-auto lg:border-0"
+            : "visible border-b-2 border-gray-600 h-14 lg:h-auto lg:border-0"
+        }
+      >
         <div className="flex lg:justify-center p-2 lg:p-7 lg:mt-6 lg:mb-5 h-8 lg:h-1/3 w-full lg:gap-96">
           {/*Social icons */}
           <div className="hidden lg:flex pb-4 pt-2 gap-2">
@@ -179,7 +206,13 @@ function NavBar() {
       </div>
 
       {/* Navigation bar */}
-      <div className="navbarShow hidden lg:flex justify-center text-center lg:justify-around lg:mt-5 border-t-2 border-b-2 border-opacity-50 border-gray-300 w-full shadow-md">
+      <div
+        className={
+          isScrolled
+            ? "navbarShow fixed -top-5 bg-white z-50 hidden lg:flex justify-center text-center lg:justify-around lg:mt-5 border-t-2 border-b-2 border-opacity-50 border-gray-300 w-full shadow-md"
+            : "navbarShow hidden lg:flex justify-center text-center lg:justify-around lg:mt-5 border-t-2 border-b-2 border-opacity-50 border-gray-300 w-full shadow-md"
+        }
+      >
         <ul className="lg:flex lg:p-3 lg:gap-28 uppercase text-sm w-screen lg:w-auto">
           <li className="navItemPadding">
             <Link to="/" className="navItemsHover">
@@ -220,7 +253,11 @@ function NavBar() {
       {/* Login Dialog */}
       {showModal ? (
         <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+          <motion.div
+            animate={{ y: 0, opacity: 1 }}
+            initial={{ y: 20, opacity: 0 }}
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
             <div className="relative w-auto my-6 mx-auto max-w-md">
               {/*content*/}
               <div className="border-0 rounded-md shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -242,12 +279,12 @@ function NavBar() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
       {/* Login Dialog */}
-    </div>
+    </motion.div>
   );
 }
 

@@ -9,7 +9,7 @@ const Blog = ({ blog }) => {
 
   //Url config
   const goToBlogDetail = `/blogdetail?${blog.id}`;
-  const goToUserDetail = `/users/${author.id}`;
+  const goToUserDetail = `/profile?${author.id}`;
   //Some field
   const blogImg = blog.thumbnailUrl;
   const defaultImg = "http://placehold.it/240x208";
@@ -30,7 +30,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div>
-      <div className=" h-auto overflow-hidden inline-flex mb-7">
+      <div className="h-auto overflow-hidden inline-flex mb-7">
         <img
           className="w-60 h-52 min-h-minHForIndexPicture min-w-minWForIndexPicture"
           src={blogImg ? blogImg : defaultImg}

@@ -1,6 +1,7 @@
 import React from "react";
 import TableItems from "./TableItems";
 import PropTypes from "prop-types";
+import { motion } from "framer-motion";
 
 ApprovalTable.propTypes = {
   listReviewBlogs: PropTypes.array.isRequired,
@@ -13,7 +14,11 @@ ApprovalTable.defaultProps = {
 function ApprovalTable(props) {
   const listBlog = props.listReviewBlogs;
   return (
-    <div className="flex flex-col w-11/12 mx-auto">
+    <motion.div
+      animate={{ y: 0, opacity: 1 }}
+      initial={{ y: -20, opacity: 0 }}
+      className="flex flex-col w-11/12 mx-auto"
+    >
       <div className="-my-2 overflow-x-auto">
         <div className="py-2 align-middle inline-block min-w-full">
           <div className="overflow-hidden sm:rounded-lg">
@@ -52,7 +57,7 @@ function ApprovalTable(props) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
