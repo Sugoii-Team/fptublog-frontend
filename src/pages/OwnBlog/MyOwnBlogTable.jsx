@@ -53,18 +53,24 @@ export default function MyOwnBlogTable(props) {
   }, [reload]);
 
   //Delete own blog
-  const handleDeleteOwnBlog = async (blogObj) => {
+  const handleDeleteOwnBlog = async (blogId) => {
     if (isSending) return; // if sending request then do nothing
     setIsSending(true);
-    alert("Deleting...");
-    try {
-      const respone = await blogApi.removeBlog(loggedInUser.id, blogObj);
-      if (respone.status === 200 && isMounted.current) {
-        setDeleteSuccessDialog(true);
-        setIsSending(false); //only set false when component still mounted
+    let check = window.confirm("Are you sure wanted to delete a blog?");
+    if (check) {
+      try {
+        const respone = await blogApi.removeBlog(loggedInUser.id, blogId);
+        if (respone.status === 200 && isMounted.current) {
+          setDeleteSuccessDialog(true);
+          setIsSending(false); //only set false when component still mounted
+        }
+      } catch (error) {
+        console.log("Failed to Delete Blog: ", error);
+        alert("Failed to Delete Blog!", error);
+        setIsSending(false);
       }
-    } catch (error) {
-      console.log("Failed to Delete Blog: ", error);
+    } else {
+      setIsSending(false);
     }
   };
 

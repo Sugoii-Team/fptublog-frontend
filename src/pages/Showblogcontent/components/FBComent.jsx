@@ -31,7 +31,7 @@ function FBComent({ blogId }) {
   const isLoggedin = !!curUser.id;
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState("");
-  const totalComments = comments.length;
+  //const totalComments = comments.length; //fix later
 
   //Save comment to firestore
   const handleSubmitComment = async (e) => {
@@ -113,7 +113,7 @@ function FBComent({ blogId }) {
 
   return (
     <div>
-      <h2 className="text-center text-lg mb-3">{totalComments} Comments</h2>
+      <h2 className="text-center text-lg mb-3">Comments</h2>
 
       {/* Print all comments */}
       <ul>

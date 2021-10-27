@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import adminApi from '../../../services/adminApi';
-import UserListSkeletons from '../Skeletons/UserListSkeletons';
-import BannedAccountList from './components/BannedAccountList';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import adminApi from "../../../services/adminApi";
+import UserListSkeletons from "../Skeletons/UserListSkeletons";
+import BannedAccountList from "./components/BannedAccountList";
 
 function BannedAccount() {
   const [bannedAccountsList, setBannedAccountsList] = useState([]);
@@ -14,7 +14,7 @@ function BannedAccount() {
     (async () => {
       try {
         const response = adminApi.getListBannedAccount();
-        response.then((res) => setBannedAccountsList(res.data))
+        response.then((res) => setBannedAccountsList(res.data));
         setLoading(true);
         console.log(
           "data bannedAccount ne(BannedAccount.jsx): ",
@@ -24,20 +24,21 @@ function BannedAccount() {
         console.log("Failed to load banned account list");
       }
     })();
-  }, []);
+  }, [bannedAccountsList]);
 
   return (
     <div>
-      {currentUser.role === "ADMIN" ?
-        loading ?
-        <BannedAccountList listBannedAccounts={bannedAccountsList} />
-        :
-        <UserListSkeletons />        
-      :
+      {currentUser.role === "ADMIN" ? (
+        loading ? (
+          <BannedAccountList listBannedAccounts={bannedAccountsList} />
+        ) : (
+          <UserListSkeletons />
+        )
+      ) : (
         <p className="text-center text-2xl my-10">
-        You need permission to acces this page (ONLY FOR ADMIN !)
+          You need permission to acces this page (ONLY FOR ADMIN !)
         </p>
-      }
+      )}
     </div>
   );
 }

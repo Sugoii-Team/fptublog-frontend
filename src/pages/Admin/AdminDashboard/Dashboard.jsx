@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
-import AnnouncementDialog from '../../../components/AnouncementStatusDialog/AnnouncementDialog';
-import adminApi from '../../../services/adminApi';
-import UserListSkeletons from '../Skeletons/UserListSkeletons';
-import DashboardDetail from './components/DashboardDetail';
+import { useSelector } from "react-redux";
+import AnnouncementDialog from "../../../components/AnouncementStatusDialog/AnnouncementDialog";
+import adminApi from "../../../services/adminApi";
+import UserListSkeletons from "../Skeletons/UserListSkeletons";
+import DashboardDetail from "./components/DashboardDetail";
 
 DashboardPage.propTypes = {};
 
@@ -23,7 +23,6 @@ function DashboardPage() {
   // console.log(currentUser);
 
   const [loading, setLoading] = useState(false);
-
 
   const handleUpdateUserRole = async (data) => {
     const updateUserRole = await adminApi.updateUserRole(data.id, data);
@@ -60,7 +59,7 @@ function DashboardPage() {
   //handle close and open announcement (successful or failed) dialog
   const handleAnnouncementDialogOKClick = (values) => {
     setStatus(values);
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -78,33 +77,33 @@ function DashboardPage() {
         console.log("Failed to fetch all user accounts: ", error);
       }
     })();
-  }, [reload, currentUser]);
+  }, [reload, currentUser, user.some]);
 
   return (
     <div>
-      {currentUser.role === "ADMIN" ?
-        (loading ?
+      {currentUser.role === "ADMIN" ? (
+        loading ? (
           <DashboardDetail
             userList={user}
             dataOfUserToUpdate={handleUpdateUserRole}
             onRemoveClick={handleRemoveClick}
             onBanClick={handleBanAccountClick}
-          />:
-          <UserListSkeletons /> 
-          
+          />
+        ) : (
+          <UserListSkeletons />
         )
-        :
+      ) : (
         <p className="text-center text-2xl my-10">
           You need permission to acces this page (ONLY FOR ADMIN !)
         </p>
-      }
+      )}
       {/* Show annountment dialog */}
-      {status ?
-        <AnnouncementDialog 
+      {status ? (
+        <AnnouncementDialog
           responseStatus={handleAnnouncementDialogOKClick}
-          responseObject={responseObject} />
-        :
-        null}
+          responseObject={responseObject}
+        />
+      ) : null}
     </div>
   );
 }

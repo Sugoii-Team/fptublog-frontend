@@ -15,22 +15,24 @@ import lecturerApi from "../../../services/lecturerApi";
 import ratingApi from "../../../services/ratingApi";
 import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
 import CategoriesSuggest from "../../Newest/components/SideItem/CategoriesSuggest";
+import AwardForUser from "./AwardForUser";
 import FBComment from "./FBComent";
 
 BlogContentDetail.propTypes = {
   blog: PropTypes.object,
   tagOfBlog: PropTypes.array,
   statusList: PropTypes.array,
-  blogDeletedClick:PropTypes.func,
+  blogDeletedClick: PropTypes.func,
   conditionToApprove: PropTypes.bool,
   admin: PropTypes.object,
+  allAwardAvailable: PropTypes.array,
 };
 
 BlogContentDetail.defaultProps = {
   blog: {},
   tagOfBlog: [],
   conditionToApprove: false,
-}
+};
 
 function BlogContentDetail({
   blog,
@@ -40,45 +42,39 @@ function BlogContentDetail({
   totalRated,
   blogDeletedClick,
   admin,
+  allAwardAvailable,
 }) {
   const blogId = blog.id;
   const history = useHistory(); // Get blog history path
   const time = moment(blog.createdDateTime).format("LL");
   /* Get role in case this blog is need to approving */
-  const userData = useSelector((state) => state.user.current);
-  const userRole = userData.role;
+  const currentUser = useSelector((state) => state.user.current);
+  const userRole = currentUser.role;
   const [accountOfAuthor, setAccountOfAuthor] = useState({});
   const [approvedDialog, setApprovedDialog] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
+  const [averageRate, setAverageRate] = useState(0);
   const defaultAvatar = "http://placehold.it/70x70";
   const authorAvatar = accountOfAuthor?.avatarUrl;
 
   //For delete blog function
-  const adminLoggedIn = (admin.role ==="ADMIN");
+  const adminLoggedIn = admin.role === "ADMIN";
   //Handle open-close announment when delete blog
-  const handleDeleteBlogClick = (id) =>{
-    let confirmToDeleteBlog = window.confirm("Are you sure to delete this blog ?")
-    if(confirmToDeleteBlog === true){
+  const handleDeleteBlogClick = (id) => {
+    let confirmToDeleteBlog = window.confirm(
+      "Are you sure to delete this blog ?"
+    );
+    if (confirmToDeleteBlog === true) {
       blogDeletedClick(id);
-    }
-    else return;
-  }
+    } else return;
+  };
 
-  
   const totalEveryoneRate =
     totalRated.oneStar +
     totalRated.twoStar +
     totalRated.threeStar +
     totalRated.fourStar +
     totalRated.fiveStar;
-
-  const averageStar =
-    (totalRated.oneStar * 1 +
-      totalRated.twoStar * 2 +
-      totalRated.threeStar * 3 +
-      totalRated.fourStar * 4 +
-      totalRated.fiveStar * 5) /
-    totalEveryoneRate;
 
   /* Get pending status to compare to this blog */
   //Filter pending status
@@ -99,7 +95,7 @@ function BlogContentDetail({
   const conditionToApprove =
     userRole === "LECTURER" &&
     isInPending.length !== 0 &&
-    blog.authorId !== userData.id;
+    blog.authorId !== currentUser.id;
   //Get to change author avatar
 
   //Rerender rating value everytime rating update
@@ -107,6 +103,10 @@ function BlogContentDetail({
     setRatingValue(parseInt(ratedValue.star));
   }, [ratedValue]);
 
+  //Rerender Average rate when api arrive
+  useEffect(() => {
+    setAverageRate(blog.avgRate);
+  }, [blog.avgRate]);
 
   // take the author account to take info about author of blog
   useEffect(() => {
@@ -146,7 +146,7 @@ function BlogContentDetail({
         const response = await lecturerApi.approveBlog(
           blog.id,
           dataPrepare,
-          userData.id
+          currentUser.id
         );
         //If update success then redirect to home page
         if (
@@ -224,15 +224,20 @@ function BlogContentDetail({
                 </h1>
                 <div className="flex flex-col space-y-2 mt-1">
                   <p className="text-md italic ">Posted: {time}</p>
-                  {tagOfBlog.map((tag) => (
-                    <Link to="" key={tag.id}>
-                      {tag.name}
-                    </Link>
-                  ))}
+                  <div className="flex flex-row gap-2">
+                    {tagOfBlog.map((tag) => (
+                      <div
+                        key={tag.id}
+                        className="border-2 rounded-md p-1 text-sm italic font-semibold text-blue-800"
+                      >
+                        #{tag.name}
+                      </div>
+                    ))}
+                  </div>
                   <div className="flex flex-row">
                     <Rating
                       name="read-only"
-                      value={averageStar}
+                      value={averageRate ? averageRate : 0}
                       readOnly
                       precision={0.1}
                     />
@@ -250,7 +255,7 @@ function BlogContentDetail({
                   </ReactMarkdown>
                 </article>
               </span>
-              {userData.id && isInPending.length < 1 ? (
+              {currentUser.id && isInPending.length < 1 ? (
                 <div className="flex flex-col justify-center gap-3 my-4">
                   <div className="font-semibold uppercase text-xs mx-auto">
                     Leave a rate
@@ -266,6 +271,18 @@ function BlogContentDetail({
                       size="large"
                     />
                   </div>
+                </div>
+              ) : null}
+
+              {/* Award section, if current loggin user is lecture and author of the blog is student then allowed to
+              give award */}
+              {currentUser.role === "LECTURER" &&
+              accountOfAuthor.role === "STUDENT" ? (
+                <div>
+                  <AwardForUser
+                    allAwardAvailable={allAwardAvailable}
+                    blogAuthor={accountOfAuthor}
+                  />
                 </div>
               ) : null}
 
@@ -311,21 +328,21 @@ function BlogContentDetail({
 
       {/* Delete blog buttons */}
       {/* Hide when admin log out */}
-      {adminLoggedIn ?
-         <div className="grid grid-cols-9 mt-4 mb-8">
+      {adminLoggedIn ? (
+        <div className="grid grid-cols-9 mt-4 mb-8">
           <div className="text-center grid col-start-6">
-            <button className="ml-5 p-2 pl-3 pr-3 w-24 transition-colors 
+            <button
+              className="ml-5 p-2 pl-3 pr-3 w-24 transition-colors 
           duration-300 rounded-3xl transform 
         text-white bg-red-200 hover:bg-red-500 
         border-red-300 text-sm focus:border-4"
-              onClick={() => handleDeleteBlogClick(blog.id)} >
+              onClick={() => handleDeleteBlogClick(blog.id)}
+            >
               DELETE
             </button>
           </div>
         </div>
-         :
-        null
-      }
+      ) : null}
 
       {/* <!-- Comment Area --> */}
       <div className="col-span-2 mb-16">

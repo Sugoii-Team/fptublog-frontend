@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
+import awardApi from "../../services/awardApi";
 import userApi from "../../services/userApi";
 import NameSectionSkeleton from "./NameSectionSkeleton";
 
@@ -10,6 +11,7 @@ Profile.propTypes = {};
 function Profile(props) {
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
+  const [profileAward, setProfileAward] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const color = {
@@ -18,6 +20,7 @@ function Profile(props) {
     completed: 57,
   };
 
+  //Get data of profile
   useEffect(() => {
     (async () => {
       try {
@@ -31,6 +34,24 @@ function Profile(props) {
       }
     })();
   }, [userId]);
+
+  //Get award of profile
+  useEffect(() => {
+    (async () => {
+      try {
+        //If profile is student then get award
+        if (userProfile.role === "STUDENT") {
+          const awardResponse = await awardApi.getAwardOfStudent(userId);
+          setProfileAward(awardResponse.data);
+          if (awardResponse.status === 200) {
+            setLoading(false);
+          }
+        }
+      } catch (error) {
+        console.log("Failed to get profile: ", error);
+      }
+    })();
+  }, [userProfile.role, userId]);
 
   return (
     <div className="my-24 w-11/12 relative mx-auto h-full">
@@ -107,10 +128,10 @@ function Profile(props) {
           <motion.div
             animate={{ y: 0, opacity: 1 }}
             initial={{ y: 20, opacity: 0.5 }}
-            className="border-2 border-gray-100 rounded-lg shadow-lg h-80 mb-3 py-4 px-7"
+            className="border-2 border-gray-100 rounded-lg shadow-lg min-h-0 mb-3 py-4 px-7"
           >
             <h1 className="font-bold text-xl text-center uppercase">Award</h1>
-            <div>
+            <div className="">
               <p className="font-semibold text-md">Experience Point</p>
               <div>
                 <ProgressBar
@@ -119,9 +140,32 @@ function Profile(props) {
                   completed={color.completed}
                 />
               </div>
+              <div className="relative my-8">
+                <div className="absolute bottom-0 left-0 uppercase text-sm font-semibold text-green-600">
+                  Next Level:{" "}
+                </div>
+                <div className="absolute bottom-0 right-0 uppercase text-sm font-semibold text-pink-600">
+                  Supper Blogger{" "}
+                </div>
+              </div>
             </div>
-            <div>
-              <h1 className="text-center font-bold my-3">Badget Gained</h1>
+            <div className="">
+              <h1 className="text-center font-bold uppercase">Badges Gained</h1>
+              <div className="grid grid-cols-6 gap-4">
+                {profileAward?.map((award, index) => (
+                  <div className="col-span-1" key={index}>
+                    <div className="p-1">
+                      <img
+                        src={award?.iconUrl}
+                        className="w-12 mx-auto transition ease-in-out duration-150 transform hover:-translate-y-0.5 hover:scale-105"
+                        alt="award"
+                        title={award?.name}
+                      />
+                      <p className="flex justify-center font-semibold">1</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
           <motion.div
@@ -137,9 +181,8 @@ function Profile(props) {
           </motion.div>
         </div>
 
-
         {/* right */}
-        {/* <motion.div
+        <motion.div
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: 20, opacity: 0.5 }}
           className="col-span-2"
@@ -157,7 +200,7 @@ function Profile(props) {
             <div className="bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 animate-pulse"></div>
             <div className="bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 animate-pulse"></div>
           </div>
-        </motion.div> */}
+        </motion.div>
       </div>
     </div>
   );
