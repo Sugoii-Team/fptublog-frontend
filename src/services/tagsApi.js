@@ -12,6 +12,21 @@ const tagsApi = {
       },
     });
   },
+
+  getTagsOfABlog(blogId) {
+    const url = `api/tags/blogs/${blogId}`;
+    return axiosClient.get(url);
+  },
+
+  updateTagsOfABlog(blogId, updatedTags) {
+    const url = `api/tags/blogs/${blogId}`;
+    return axiosClient.put(url, updatedTags, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
 };
 
 export default tagsApi;

@@ -150,7 +150,7 @@ function CommentsFeature(props) {
       <div className="flex flex-row">
         {/* Comment author's Avatar */}
         <div className="mr-2 ml-4 mt-1">
-          <Link to="">
+          <Link to={`/profile?${commentAuthor.id}`}>
             <img
               className="min-w-minWForCommentAvatar min-h-minHForCommentAvatar max-w-maxWForCommentAvatar max-h-maxHForCommentAvatar my-auto ml-auto mr-3 rounded-md"
               alt="img"
@@ -162,7 +162,10 @@ function CommentsFeature(props) {
         <div className="w-full">
           <div className="comment-content">
             {/* Comment's author name */}
-            <Link to="#" className="font-semibold text-md">
+            <Link
+              to={`/profile?${commentAuthor.id}`}
+              className="font-semibold text-md"
+            >
               {commentAuthor.firstName + " " + commentAuthor.lastName}
             </Link>
             {/* Posted Date */}
@@ -196,10 +199,10 @@ function CommentsFeature(props) {
             {/* Comment's Content and editing*/}
           </div>
           {/* Bottom */}
-          {isLoggedIn ? (
+          {isLoggedIn || currentUser.role === "ADMIN" ? (
             <div className="flex flex-row cursor-pointer">
               {/* Delete icon */}
-              {currentUser.id === commentObj.authorId ? (
+              {commentObj.authorId || currentUser.role === "ADMIN" ? (
                 <>
                   <div
                     className="py-1 mr-1 transform hover:text-red-500 hover:scale-110"

@@ -14,7 +14,6 @@ import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import BlogContentDetail from "./pages/Showblogcontent/components/BlogContentDetail";
 import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
 function App() {
-
   return (
     <div className="App font-monsterrat">
       <div>
@@ -44,7 +43,6 @@ function App() {
             />
           </Switch>
         </div>
-        <footer></footer>
       </div>
       <ScrollToTopButton />
       <footer className="relative left-0 bottom-0 right-0">
