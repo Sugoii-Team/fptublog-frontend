@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TableItems from "./TableItems";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
@@ -13,6 +13,11 @@ ApprovalTable.defaultProps = {
 
 function ApprovalTable(props) {
   const listBlog = props.listReviewBlogs;
+  const [pageNumber, setPageNumber] = useState(0);
+  const blogWattingApprovePerPage = 7;
+  const pagesVisited = pageNumber * blogWattingApprovePerPage;
+  const displayBlog = listBlog.slice(pagesVisited, pagesVisited+blogWattingApprovePerPage);
+
   return (
     <motion.div
       animate={{ y: 0, opacity: 1 }}
@@ -49,7 +54,7 @@ function ApprovalTable(props) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {listBlog.map((blog, index) => (
+                {displayBlog.map((blog, index) => (
                   <TableItems key={index} blogObj={blog} />
                 ))}
               </tbody>
