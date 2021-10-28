@@ -14,7 +14,6 @@ function SubmitForm({ userInfo, onCancelClick, dataOfFrom}) {
 
 
   const onHandleSubmit = (data) => {
-    console.log(data);
     dataOfFrom(data);
   }
 
