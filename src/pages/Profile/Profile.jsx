@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import lecturerApi from "../../services/lecturerApi";
 import awardApi from "../../services/awardApi";
+import lecturerApi from "../../services/lecturerApi";
 import userApi from "../../services/userApi";
 import NameSectionSkeleton from "./NameSectionSkeleton";
 import Select from "react-select";
@@ -13,6 +15,7 @@ import moment from "moment";
 Profile.propTypes = {};
 
 function Profile(props) {
+  const currentUser = useSelector((state) => state.user.current);
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
   const [profileAward, setProfileAward] = useState([]);
@@ -124,6 +127,41 @@ function Profile(props) {
     })();
   }, [userId]);
 
+  const handleBanStudentClick = async () => {
+    const confirm = window.confirm("Are you sure wanted to ban this Student?");
+    if (confirm) {
+      try {
+        let lecturerId = currentUser.id;
+        let studentId = userProfile.id;
+        const banResponse = await lecturerApi.banStudent(lecturerId, studentId);
+        if (banResponse.status === 200) {
+          alert("Ban student sucess!");
+        }
+      } catch (error) {
+        console.log("Failed to ban student!", error);
+        alert("Failed to ban student!");
+      }
+    }
+  };
+
+  //Get award of profile
+  useEffect(() => {
+    (async () => {
+      try {
+        //If profile is student then get award
+        if (userProfile.role === "STUDENT") {
+          const awardResponse = await awardApi.getAwardOfStudent(userId);
+          setProfileAward(awardResponse.data);
+          if (awardResponse.status === 200) {
+            setLoading(false);
+          }
+        }
+      } catch (error) {
+        console.log("Failed to get profile: ", error);
+      }
+    })();
+  }, [userProfile.role, userId]);
+
 
   //get Student information base on userProfile id
   const handleTakeStudentInformation = async (id) => {
@@ -145,6 +183,7 @@ function Profile(props) {
     setFieldOfLecturer(lecturerField.data);
     setListOfField(listOfField.data);
   }
+
 
   return (
     <div className="my-24 w-11/12 relative mx-auto h-full">
@@ -211,6 +250,23 @@ function Profile(props) {
                     <div className="text-blue-500">Share</div>
                   </div>
                 </div>
+
+                <div className="flex flex-row gap-4 text-sm cursor-pointer">
+                  {currentUser.id !== undefined &&
+                  currentUser.role === "LECTURER" &&
+                  userProfile.role === "STUDENT" ? (
+                    <div
+                      className="text-red-500"
+                      onClick={() => handleBanStudentClick()}
+                    >
+                      Ban Student
+                    </div>
+                  ) : null}
+
+                  <div className="text-green-500">Like</div>
+                  <div className="text-blue-500">Share</div>
+                </div>
+
               </div>
             </div>
           )}
@@ -256,7 +312,9 @@ function Profile(props) {
                         alt="award"
                         title={award?.name}
                       />
-                      <p className="flex justify-center font-semibold">1</p>
+                      <p className="flex justify-center font-semibold">
+                        {award.count}
+                      </p>
                     </div>
                   </div>
                 ))}

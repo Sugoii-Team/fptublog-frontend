@@ -23,6 +23,7 @@ function BlogContentFeature(props) {
   const [tagOfBlog, setTagOfBlog] = useState();
   const [status, setStatus] = useState([]);
   const [allAwardAvailable, setAllAwardAvailable] = useState([]);
+  //const [isLoading, setIsLoading] = useState(false);
 
   const [deletedStatus, setDeletedStatus] = useState(false);
   const [repsonseObject, setRepsonseObject] = useState({});
@@ -34,7 +35,7 @@ function BlogContentFeature(props) {
         const data = await blogApi.get(location);
         setBlogDetail(data);
       } catch (error) {
-        setBlogDeleted(true);
+        //setBlogDeleted(true);
         console.log("Cannot load content of blog", error);
       }
     })();
@@ -91,9 +92,7 @@ function BlogContentFeature(props) {
   return (
     <div>
       {blogDeleted ? (
-        <p className="text-center text-3xl mt-5">
-          This blog has been deleted !
-        </p>
+        <div></div>
       ) : (
         <BlogContentDetail
           admin={admin}
