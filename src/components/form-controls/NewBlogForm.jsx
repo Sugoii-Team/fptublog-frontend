@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { CircularProgress } from "@mui/material";
 import tagsApi from "../../services/tagsApi";
+import fieldApi from "../../services/fieldApi";
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,
@@ -47,7 +48,9 @@ export default function NewBlogForm(props) {
   /* State for some field */
   const [title, setTitle] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedField, setSelectedField] = useState("");
   const [categories, setCategories] = useState([]);
+  const [allField, setAllField] = useState([]);
   const [thisBlogCategoy, setThisBlogCategoy] = useState({});
   const [thumbNail, setThumbNail] = useState(null);
   const [content, setContent] = useState("");
@@ -59,6 +62,7 @@ export default function NewBlogForm(props) {
   const [contentDialog, setContentDialog] = useState(false);
   const [sucessPostDialog, setSuccessPostDialog] = useState(false);
   const [sendingApprove, setSendingApprove] = useState(false);
+  const [onFieldChanging, setOnFieldChanging] = useState(false);
   const [inpputedTags, setInpputedTags] = useState([]);
   var tagsReadyToCallApi = [];
   const suggestTags = [
@@ -80,6 +84,7 @@ export default function NewBlogForm(props) {
 
   const delimiters = [...KeyCodes.enter, KeyCodes.comma];
 
+  //Delete a tags on form
   const handleDeleteTags = (positon) => {
     let newTagsWithoutDeletedTag = inpputedTags.filter(
       (tag, index) => index !== positon
@@ -87,7 +92,7 @@ export default function NewBlogForm(props) {
     setInpputedTags(newTagsWithoutDeletedTag);
   };
 
-  //Add more tags
+  //Add more tags on form
   const handleAddTags = (tag) => {
     let newTags = inpputedTags;
     newTags.push(tag);
@@ -126,28 +131,61 @@ export default function NewBlogForm(props) {
     }
   }, [BlogNeedUpdate, TagsOfBlog]);
 
+  /* Get List of Fields */
+  useEffect(() => {
+    (async () => {
+      try {
+        const responseField = await fieldApi.getAllField();
+        setAllField(responseField.data);
+      } catch (error) {
+        console.log("Failed to get categories: ", error);
+      }
+    })();
+  }, []);
+
+  /* Filer for selector */
+  const fieldOption = allField.map((field) => {
+    return { value: field.id, label: field.name };
+  });
+  const handleCallCategoriesOnFieldChange = (selectedFieldId) => {
+    setSelectedField(selectedFieldId);
+    setOnFieldChanging(true);
+  };
+
   /* Get list of categories */
   useEffect(() => {
     (async () => {
       try {
-        const responseCategories = await categoryApi.getCategories();
+        //Call field only when field is selected
+        if (selectedField !== "") {
+          const responseCategories = await categoryApi.getCategoryByFieldId(
+            selectedField
+          );
+          if (responseCategories.status === 200) {
+            setCategories(responseCategories.data);
+            setOnFieldChanging(false);
+          }
+        }
+        //Get specify categories when user update
         if (BlogNeedUpdate?.categoryId) {
           const rpBlogCate = await categoryApi.getCategoryById(
             BlogNeedUpdate?.categoryId
           );
           setThisBlogCategoy(rpBlogCate.data);
         }
-        setCategories(responseCategories.data);
       } catch (error) {
         console.log("Failed to get categories: ", error);
       }
     })();
-  }, [BlogNeedUpdate?.categoryId]);
+  }, [BlogNeedUpdate?.categoryId, onFieldChanging, selectedField]);
 
   /* Create an categories options for Selector */
-  const options = categories.map((category) => {
-    return { value: category.id, label: category.name };
-  });
+  var options;
+  if (categories.length > 0) {
+    options = categories.map((category) => {
+      return { value: category.id, label: category.name };
+    });
+  }
 
   //Upload to firestore and get image url
   const uploadAndGetUrl = () => {
@@ -294,6 +332,20 @@ export default function NewBlogForm(props) {
                   onInput={(e) => setTitle(e?.target.value)}
                 />
               </div>
+              {/* Field Select */}
+              {BlogNeedUpdate === undefined ? (
+                <div className="my-3">
+                  <p className="font-semibold">Field:</p>
+                  <Select
+                    options={fieldOption}
+                    isDisabled={onFieldChanging}
+                    onChange={(e) =>
+                      handleCallCategoriesOnFieldChange(e?.value)
+                    }
+                  />
+                </div>
+              ) : null}
+
               {/* Categories Select */}
               <div className="my-3">
                 <p className="font-semibold">Categories:</p>

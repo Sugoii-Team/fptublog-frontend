@@ -25,6 +25,16 @@ const lecturerApi = {
       },
     });
   },
+
+  banStudent(lectureId, studentId) {
+    const url = `api/lecturers/${lectureId}/banningstudent/${studentId}`;
+    return axiosClient.put(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
 };
 
 export default lecturerApi;
