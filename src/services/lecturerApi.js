@@ -25,6 +25,56 @@ const lecturerApi = {
       },
     });
   },
+
+  getLecturerById (id) {
+    const url = `api/lecturers/${id}`;
+    return axiosClient.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      }, 
+    });
+  },
+
+  getFieldOfLecturer (id) {
+    const url = `api/lecturers/${id}/fields`;
+    return axiosClient.get(url, {
+      herders: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  getListOfField (){
+    const url = 'api/fields';
+    return axiosClient.get(url, {
+      herders: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+    }
+  });
+  },
+
+  updateLecturerProfile(id, data){
+    const url = `api/accounts/${id}`;
+    return axiosClient.put(url, data, {
+      headers : {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      }
+    })
+  },
+
+  updateLecturerField (id,data){
+    const url = `api/lecturers/${id}/fields`;
+    return axiosClient.put(url, data, {
+      headers : {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      }
+    })
+  },
 };
 
 export default lecturerApi;
