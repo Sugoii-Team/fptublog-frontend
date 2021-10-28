@@ -35,7 +35,7 @@ const converter = new Showdown.Converter({
 });
 
 export default function NewBlogForm(props) {
-  const { Ftitle, BlogNeedUpdate, isUpdate } = props;
+  const { Ftitle, BlogNeedUpdate, isUpdate, TagsOfBlog } = props;
   /* Get current user for check if there is no user
   then can't post blog */
   const getUserState = useSelector((state) => state.user.current);
@@ -60,7 +60,7 @@ export default function NewBlogForm(props) {
   const [sucessPostDialog, setSuccessPostDialog] = useState(false);
   const [sendingApprove, setSendingApprove] = useState(false);
   const [inpputedTags, setInpputedTags] = useState([]);
-  var tags = [];
+  var tagsReadyToCallApi = [];
   const suggestTags = [
     { id: "JavaScript", text: "JavaScript" },
     { id: "PHP", text: "PHP" },
@@ -81,12 +81,13 @@ export default function NewBlogForm(props) {
   const delimiters = [...KeyCodes.enter, KeyCodes.comma];
 
   const handleDeleteTags = (positon) => {
-    let newTagsWithoutDeletedTags = inpputedTags.filter(
+    let newTagsWithoutDeletedTag = inpputedTags.filter(
       (tag, index) => index !== positon
     );
-    setInpputedTags(newTagsWithoutDeletedTags);
+    setInpputedTags(newTagsWithoutDeletedTag);
   };
 
+  //Add more tags
   const handleAddTags = (tag) => {
     let newTags = inpputedTags;
     newTags.push(tag);
@@ -98,21 +99,32 @@ export default function NewBlogForm(props) {
     if (inpputedTags.length > 0) {
       inpputedTags.forEach((tag) => {
         let { text } = tag;
-        tags.push({ name: text });
+        tagsReadyToCallApi.push({ name: text });
       });
-      console.log(tags);
     }
   }
 
   /* Tags Handler */
 
-  //Rerender Textare when BlogneedUpdate arrived
+  //Update value of everyfield when blogUpdateObj arrived
   useEffect(() => {
     if (BlogNeedUpdate) {
+      setTitle(BlogNeedUpdate.title);
+      setDescription(BlogNeedUpdate.description);
       setContent(BlogNeedUpdate.content);
       setSelectedCategory(BlogNeedUpdate.categoryId); // Set category because update not allowed to set category
+      //Fix tags properties name to fit Input-tag library
+      if (TagsOfBlog.length > 0) {
+        const remadeTags = TagsOfBlog.map((tag) => {
+          return {
+            id: tag.id,
+            text: tag.name,
+          };
+        });
+        setInpputedTags(remadeTags);
+      }
     }
-  }, [BlogNeedUpdate]);
+  }, [BlogNeedUpdate, TagsOfBlog]);
 
   /* Get list of categories */
   useEffect(() => {
@@ -174,9 +186,13 @@ export default function NewBlogForm(props) {
           content,
           description,
         };
-
         const response = await blogApi.updateBlog(BlogNeedUpdate.id, blog);
-        if (response.status === 200) {
+        const newBlogResponseId = response.data.id;
+        const tagsrespose = await tagsApi.updateTagsOfABlog(
+          newBlogResponseId,
+          tagsReadyToCallApi
+        );
+        if (response.status === 200 && tagsrespose.status === 200) {
           setSuccessPostDialog(true);
         }
       } else {
@@ -191,10 +207,9 @@ export default function NewBlogForm(props) {
         // else send api to post new blog
         const response = await blogApi.post(blog);
         if (response.status === 200) {
-          console.log("Response ne: ", response);
           const tagResponse = await tagsApi.addTagsToBlog(
             response.data.id,
-            tags
+            tagsReadyToCallApi
           );
           if (tagResponse.status === 200) {
             setSuccessPostDialog(true);
@@ -203,6 +218,7 @@ export default function NewBlogForm(props) {
       }
     } catch (error) {
       console.log("Failed to post Blog : ", error);
+      window.alert("Failed to post blog, please try again!");
       setSendingApprove(false);
     }
   }
@@ -281,19 +297,21 @@ export default function NewBlogForm(props) {
               {/* Categories Select */}
               <div className="my-3">
                 <p className="font-semibold">Categories:</p>
-                <Select
-                  options={options}
-                  value={
-                    BlogNeedUpdate
-                      ? {
-                          label: thisBlogCategoy.name,
-                          value: thisBlogCategoy.id,
-                        }
-                      : null
-                  }
-                  isDisabled={BlogNeedUpdate ? true : false}
-                  onChange={(e) => setSelectedCategory(e?.value)}
-                />
+                {BlogNeedUpdate ? (
+                  <Select
+                    value={{
+                      label: thisBlogCategoy.name,
+                      value: thisBlogCategoy.id,
+                    }}
+                    isDisabled={true}
+                  />
+                ) : (
+                  <Select
+                    options={options}
+                    isDisabled={BlogNeedUpdate ? true : false}
+                    onChange={(e) => setSelectedCategory(e?.value)}
+                  />
+                )}
               </div>
               {/* Tags */}
               <div>

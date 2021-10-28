@@ -65,10 +65,7 @@ const blogApi = {
 
   getTagOfBlogById(id) {
     const url = `api/tags/blogs/${id}`;
-    // const url = `tag-${id}`
-    const promise = axiosClient.get(url);
-    const dataAfterPromise = promise.then((response) => response.data);
-    return dataAfterPromise;
+    return axiosClient.get(url);
   },
 
   getCommentOfBlogById(id) {
