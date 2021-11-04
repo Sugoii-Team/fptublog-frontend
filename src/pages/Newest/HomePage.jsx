@@ -41,9 +41,9 @@ function HomePage(props) {
       initial={{ opacity: 0 }}
       transition={{ duration: 0.35 }}
     >
-      <div>
+      {/* <div>
         <img src="http://placehold.it/1920x600" alt="" />
-      </div>
+      </div> */}
       <div className="mx-auto w-3/4 mt-10">
         <div className="grid grid-cols-3 gap-4">
           {/* Blog loader */}

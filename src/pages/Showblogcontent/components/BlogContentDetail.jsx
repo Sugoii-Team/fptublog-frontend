@@ -276,7 +276,9 @@ function BlogContentDetail({
 
               {/* Award section, if current loggin user is lecture and author of the blog is student then allowed to
               give award */}
-              {currentUser.role === "LECTURER" &&
+              {currentUser.id &&
+              isInPending.length < 1 &&
+              currentUser.role === "LECTURER" &&
               accountOfAuthor.role === "STUDENT" ? (
                 <div>
                   <AwardForUser
