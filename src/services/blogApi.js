@@ -17,6 +17,12 @@ const blogApi = {
     });
   },
 
+  getBlogBySearchValue(params) {
+    const { currentPage, limitBlog, searchValue } = params;
+    const url = `api/blogs?limit=${limitBlog}&page=${currentPage}&title=${searchValue}`;
+    return axiosClient.get(url);
+  },
+
   get(id) {
     const url = `/api/blogs/${id}`;
     const promise = axiosClient.get(url);

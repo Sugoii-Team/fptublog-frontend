@@ -1,25 +1,29 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
 import AdminDropDownMenu from "./AdminDropDownMenu";
 import CategoriesShow from "./CategoriesShow";
 import UserDropDownMenu from "./UserDropDownMenu";
 
+NavBar.propTypes = {};
 
-function NavBar() {
+function NavBar(props) {
   const adminLoggedIn = useSelector((state) => state.admin.current);
   // console.log("role admin ne: ", adminLoggedIn);
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
   const userImg = loggedInUser.avatarUrl;
 
+  const history = useHistory();
   const [showCategories, setShowCategories] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isToggleLogginUser, setisToggleLogginUser] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const [currentScrollPostion, setCurrentScrollPostion] = useState(0);
 
@@ -34,6 +38,11 @@ function NavBar() {
       setIsScrolled(true);
     }
   }, [currentScrollPostion]);
+
+  //Send search value to url
+  const handleSearch = () => {
+    history.push(`/searchResult?${searchValue}`);
+  };
 
   const handleCategoriesClick = () => {
     setShowCategories(!showCategories);
@@ -96,27 +105,89 @@ function NavBar() {
           </div>
 
           {/* <!-- User --> */}
-          <div className="flex gap-2 pt-2 ml-auto lg:ml-0">
-            {/* <!-- Search icon --> */}
-            <div className="cursor-pointer">
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+          <div className="flex gap-2 pt-2 ml-auto lg:ml-0 relative">
+            {/* <!-- Search Section --> */}
+            <div className="">
+              {isSearching ? (
+                <div className="flex flex-row">
+                  {/* This help reduce component jumping when text box appear */}
+                  <div className="invisible"> OO</div>
+                  <motion.div
+                    animate={{ x: 0, opacity: 1 }}
+                    initial={{ x: 30, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="border-2 border-gray-600 rounded-sm shadow-sm absolute -left-48"
+                  >
+                    {/* Search Box */}
+                    <div className="relative flex flex-row">
+                      {/* Input TextBox */}
+                      <input
+                        type="text"
+                        className="px-1"
+                        onInput={(e) => setSearchValue(e?.target.value)}
+                      />
+                      {/* Search Icon in Text Box*/}
+                      <svg
+                        className="h-4 w-4 cursor-pointer absolute right-4 hover:text-blue-500 inset-y-1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        onClick={() => handleSearch()}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                      {/* Cancel Icon in Text Box */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 absolute right-0 cursor-pointer hover:text-red-500 inset-y-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        onClick={() => {
+                          setIsSearching(false);
+                          setSearchValue("");
+                        }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </div>
+                  </motion.div>
+                </div>
+              ) : (
+                <>
+                  {/* Search Icon */}
+                  <svg
+                    className="h-6 w-6 cursor-pointer"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    onClick={() => setIsSearching(true)}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </>
+              )}
             </div>
-            {/* <!-- User icon  --> */}
 
-            {(!isLoggedIn && !(adminLoggedIn.role === "ADMIN") ) && (
+            {/* <!-- User icon  --> */}
+            {!isLoggedIn && !(adminLoggedIn.role === "ADMIN") && (
               <div
                 className="userIcon cursor-pointer"
                 onClick={handleLoginOnclick}
@@ -139,7 +210,7 @@ function NavBar() {
             )}
 
             {/* User field after logged in */}
-            {(isLoggedIn || adminLoggedIn.role ==="ADMIN") && (
+            {(isLoggedIn || adminLoggedIn.role === "ADMIN") && (
               /* User icon when logged in */
               <div className="cursor-pointer">
                 <div onClick={toggleUserMenu}>
@@ -168,16 +239,15 @@ function NavBar() {
                 </div>
 
                 {/* User Dropdown menu */}
-                {isToggleLogginUser ?
-                  (adminLoggedIn.role === "ADMIN" ? 
-                  <AdminDropDownMenu admin={adminLoggedIn} /> 
-                  : 
-                  <UserDropDownMenu userInfo={loggedInUser} />
+                {isToggleLogginUser ? (
+                  adminLoggedIn.role === "ADMIN" ? (
+                    <AdminDropDownMenu admin={adminLoggedIn} />
+                  ) : (
+                    <UserDropDownMenu userInfo={loggedInUser} />
                   )
-                :
-                null}
-                {/* User Dropdown menu */}
+                ) : null}
 
+                {/* User Dropdown menu */}
               </div>
             )}
             {/* User field after logged in */}
@@ -273,7 +343,7 @@ function NavBar() {
                   >
                     <MyGoogleLogin />
                   </div>
-                  <div className="my-4" onSubmit = {()=>setShowModal(false)}>
+                  <div className="my-4" onSubmit={() => setShowModal(false)}>
                     <Login onCancelClick={handleCancelOnclick} />
                   </div>
                 </div>

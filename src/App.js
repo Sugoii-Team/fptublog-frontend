@@ -11,6 +11,7 @@ import HomePage from "./pages/Newest/HomePage";
 import MyOwnBlogTable from "./pages/OwnBlog/MyOwnBlogTable";
 import PostBlog from "./pages/PostBlog/PostBlog";
 import Profile from "./pages/Profile/Profile";
+import SearchResult from "./pages/SearchResult/SearchResult";
 import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import BlogContentDetail from "./pages/Showblogcontent/components/BlogContentDetail";
 import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
@@ -36,6 +37,7 @@ function App() {
             <Route path="/profile" component={Profile} exact />
             <Route path="/bannedAccountsList" component={BannedAccount} exact />
             <Route path="/commentsManage" component={CommentManage} exact />
+            <Route path="/searchResult" component={SearchResult} exact />
             <Route
               path="/about"
               component={() => {
