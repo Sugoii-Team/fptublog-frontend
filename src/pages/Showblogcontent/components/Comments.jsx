@@ -202,7 +202,8 @@ function CommentsFeature(props) {
           {isLoggedIn || currentUser.role === "ADMIN" ? (
             <div className="flex flex-row cursor-pointer">
               {/* Delete icon */}
-              {commentObj.authorId || currentUser.role === "ADMIN" ? (
+              {commentObj.authorId === currentUser.id ||
+              currentUser.role === "ADMIN" ? (
                 <>
                   <div
                     className="py-1 mr-1 transform hover:text-red-500 hover:scale-110"

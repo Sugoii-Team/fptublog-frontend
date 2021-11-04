@@ -48,7 +48,7 @@ function AdminDropDownMenu({ admin }) {
             tabIndex="-1"
             id="menu-item-0"
           >
-            Dash Board
+            Member Management
           </Link>
           <Link
             to="/bannedAccountsList"
@@ -58,6 +58,15 @@ function AdminDropDownMenu({ admin }) {
             id="menu-item-0"
           >
             Banned Account
+          </Link>
+          <Link
+            to="/commentsManage"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            View Comments
           </Link>
         </div>
 

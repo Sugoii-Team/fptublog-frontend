@@ -266,16 +266,19 @@ export default function NewBlogForm(props) {
     /* Validate some field */
     setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
-    if (title < minLength) {
+    if (title.length < minLength) {
       setTitleDialog(true);
       e.preventDefault();
     } else if (!selectedCategory) {
       setDialog(true);
       e.preventDefault();
-    } else if (description > maxLength && description < minLength) {
+    } else if (
+      description.length > maxLength ||
+      description.length < minLength
+    ) {
       setDesDialog(true);
       e.preventDefault();
-    } else if (content < minContentLength) {
+    } else if (content.length < minContentLength) {
       setContentDialog(true);
       e.preventDefault();
     } else {
@@ -333,37 +336,47 @@ export default function NewBlogForm(props) {
                 />
               </div>
               {/* Field Select */}
-              {BlogNeedUpdate === undefined ? (
-                <div className="my-3">
+              <div className="w-full grid grid-cols-2 gap-2">
+                <div className="my-3 col-span-1">
                   <p className="font-semibold">Field:</p>
-                  <Select
-                    options={fieldOption}
-                    isDisabled={onFieldChanging}
-                    onChange={(e) =>
-                      handleCallCategoriesOnFieldChange(e?.value)
-                    }
-                  />
+                  {BlogNeedUpdate === undefined ? (
+                    <Select
+                      options={fieldOption}
+                      isDisabled={onFieldChanging}
+                      onChange={(e) =>
+                        handleCallCategoriesOnFieldChange(e?.value)
+                      }
+                    />
+                  ) : (
+                    <Select
+                      options={fieldOption}
+                      isDisabled={onFieldChanging}
+                      onChange={(e) =>
+                        handleCallCategoriesOnFieldChange(e?.value)
+                      }
+                    />
+                  )}
                 </div>
-              ) : null}
 
-              {/* Categories Select */}
-              <div className="my-3">
-                <p className="font-semibold">Categories:</p>
-                {BlogNeedUpdate ? (
-                  <Select
-                    value={{
-                      label: thisBlogCategoy.name,
-                      value: thisBlogCategoy.id,
-                    }}
-                    isDisabled={true}
-                  />
-                ) : (
-                  <Select
-                    options={options}
-                    isDisabled={BlogNeedUpdate ? true : false}
-                    onChange={(e) => setSelectedCategory(e?.value)}
-                  />
-                )}
+                {/* Categories Select */}
+                <div className="my-3 col-span-1">
+                  <p className="font-semibold">Categories:</p>
+                  {BlogNeedUpdate ? (
+                    <Select
+                      value={{
+                        label: thisBlogCategoy.name,
+                        value: thisBlogCategoy.id,
+                      }}
+                      isDisabled={true}
+                    />
+                  ) : (
+                    <Select
+                      options={options}
+                      isDisabled={BlogNeedUpdate ? true : false}
+                      onChange={(e) => setSelectedCategory(e?.value)}
+                    />
+                  )}
+                </div>
               </div>
               {/* Tags */}
               <div>
@@ -465,7 +478,7 @@ export default function NewBlogForm(props) {
         <MyDialog
           isCancel={responseFromDialog}
           title="Warning"
-          description="Description need at least 50 chars and below 200 chars!!"
+          description="Description length from 50 to 200 chars only!!"
           icon="warning"
         />
       ) : null}

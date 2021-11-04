@@ -5,6 +5,7 @@ import NavBar from "./components/Header/navBar";
 import ScrollToTop from "./components/WindowAction/ScrollToTop";
 import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
+import CommentManage from "./pages/Admin/CommentsManage/CommentManage";
 import Approval from "./pages/Approval/Approval";
 import HomePage from "./pages/Newest/HomePage";
 import MyOwnBlogTable from "./pages/OwnBlog/MyOwnBlogTable";
@@ -34,6 +35,7 @@ function App() {
             <Route path="/ownBlog" component={MyOwnBlogTable} />
             <Route path="/profile" component={Profile} exact />
             <Route path="/bannedAccountsList" component={BannedAccount} exact />
+            <Route path="/commentsManage" component={CommentManage} exact />
             <Route
               path="/about"
               component={() => {
