@@ -19,7 +19,7 @@ function MyGoogleLogin(props) {
       const action = login(token);
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
-
+      // console.log(resultAction.payload.headers.authorization)
       //Set timeout to logout
       const minute = 30;
       setTimeout(() => {

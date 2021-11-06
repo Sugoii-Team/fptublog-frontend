@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://e45a-2402-800-6347-1f3-c697-a50-43b5-6b42.ngrok.io/fptu-blog",
+  // baseURL: "http://d3f5-1-52-200-145.ngrok.io/fptu-blog",
+  baseURL: "http://13.229.122.64:8080/fptu-blog",
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
-    // "Content-Type": "application/json",
   },
 });
 
@@ -22,7 +22,6 @@ axiosClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 // Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response) {

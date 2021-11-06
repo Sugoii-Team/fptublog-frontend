@@ -80,15 +80,33 @@ function UserDropDownMenu(props) {
               Posted Blog
             </Link>
             {userRole === "LECTURER" ? (
-              <Link
-                to="/approval"
-                className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                role="menuitem"
-                tabIndex="-1"
-                id="menu-item-2"
-              >
-                Approve Blog
-              </Link>
+              <div>
+                <Link
+                  to="/approval"
+                  className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                  role="menuitem"
+                  tabIndex="-1"
+                  id="menu-item-2"
+                >
+                  Approve Blog
+                </Link>
+                <Link 
+                  to="/mentorDashboard"
+                  className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                  role="menuitem"
+                  tabIndex="-1"
+                  id="menu-item-2">
+                  Student Management
+                </Link>
+                <Link  
+                  to="/studentBannedDashboard"
+                  className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                  role="menuitem"
+                  tabIndex="-1"
+                  id="menu-item-2">
+                  Banned Student List
+                </Link>
+              </div>
             ) : null}
           </div>
           <div className="py-1" role="none">

@@ -6,6 +6,8 @@ import ScrollToTop from "./components/WindowAction/ScrollToTop";
 import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import Approval from "./pages/Approval/Approval";
+import MentorDashboard from "./pages/Mentor/MentorDashboardDetail/MentorDashboard";
+import StudentBannedDashboard from "./pages/Mentor/StudentsBannedDashboard/StudentBannedDashboard";
 import HomePage from "./pages/Newest/HomePage";
 import MyOwnBlogTable from "./pages/OwnBlog/MyOwnBlogTable";
 import PostBlog from "./pages/PostBlog/PostBlog";
@@ -34,6 +36,8 @@ function App() {
             <Route path="/ownBlog" component={MyOwnBlogTable} />
             <Route path="/profile" component={Profile} exact />
             <Route path="/bannedAccountsList" component={BannedAccount} exact />
+            <Route path="/mentorDashboard" component = {MentorDashboard} exact />
+            <Route path="/studentBannedDashboard" component = {StudentBannedDashboard} exact />
             <Route
               path="/about"
               component={() => {

@@ -75,6 +75,50 @@ const lecturerApi = {
       }
     })
   },
+
+  banStudentByStudentId(lecturerId, studentId, message){
+    const url = `api/lecturers/${lecturerId}/banningstudent/${studentId}`;
+    // console.log(accessToken)
+    var data = {
+      "message": message,
+    }
+    return axiosClient.post(url,data, {
+      headers: {
+        "Content-Type":"application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  unbanStudentByStudentId(lecturerId, studentId){           
+    const url = `api/lecturers/${lecturerId}/unbanningstudent/${studentId}`;
+    return axiosClient.post(url, {
+      headers: {
+        "Content-Type":"application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  getStudentList(){
+    const url = 'api/students';
+    return axiosClient.get(url, {
+      herders:{
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+  
+  getBannedStudentList(){
+    const url = 'api/accounts/banned';
+    return axiosClient.get(url, {
+      headers : {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      }
+    })
+  },
 };
 
 export default lecturerApi;

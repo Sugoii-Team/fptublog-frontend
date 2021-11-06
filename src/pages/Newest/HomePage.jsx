@@ -6,6 +6,7 @@ import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import CategoriesSuggest from "./components/SideItem/CategoriesSuggest";
 import Pagination from "react-paginate";
+import { useLocation } from "react-router";
 
 HomePage.propTypes = {};
 
@@ -13,6 +14,9 @@ function HomePage(props) {
   const [blogList, setBlogList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [categories, setCategories] = useState([]);
+  const location = useLocation();
+
   const limitBlog = 6;
 
   //Get all Blogs
@@ -20,16 +24,29 @@ function HomePage(props) {
     (async () => {
       try {
         setLoading(true);
-        const response = await blogApi.getAll({ currentPage, limitBlog });
-        if (response.status === 200) {
+        const categoriesReponse = await blogApi.getCategoriesToSuggest();
+        if (location.state === undefined) {
+          const response = await blogApi.getAll({ currentPage, limitBlog });
+          if (response.status === 200) {
+            setBlogList(response.data);
+            setLoading(false);
+            setCategories(categoriesReponse.data);
+          }
+        }
+        else if (location.state !== undefined) {
+          const categoryState = location.state.category;
+          // console.log("location state ne: ", categoryState.category);
+          const blogByField = blogApi.getBlogsByFieldId(categoryState.category.fieldId);
+          // console.log("blog by field ne: ", blogByField);
+          setBlogList(blogByField);
           setLoading(false);
-          setBlogList(response.data);
+          setCategories(categoriesReponse.data);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
       }
     })();
-  }, [currentPage]);
+  }, [currentPage, location.state]);
 
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
@@ -53,7 +70,7 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {loading ? (
+            {(loading && blogList === null) ? (
               <BlogListSkeleton />
             ) : (
               <>
@@ -81,7 +98,11 @@ function HomePage(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            <CategoriesSuggest />
+            {categories.some ?
+              <CategoriesSuggest categoriesList={categories} />
+              :
+              null
+            }
           </div>
           {/* Side Items */}
         </div>
