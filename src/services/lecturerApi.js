@@ -92,7 +92,7 @@ const lecturerApi = {
 
   unbanStudentByStudentId(lecturerId, studentId){           
     const url = `api/lecturers/${lecturerId}/unbanningstudent/${studentId}`;
-    return axiosClient.post(url, {
+    return axiosClient.patch(url, {
       headers: {
         "Content-Type":"application/json",
         Authorization: accessToken,

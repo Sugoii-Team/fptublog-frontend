@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import Pagination from "react-paginate";
+import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
+import fieldApi from "../../services/fieldAPI";
 import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
-import CategoriesSuggest from "./components/SideItem/CategoriesSuggest";
-import Pagination from "react-paginate";
-import { useLocation } from "react-router";
+import FieldSuggest from "./components/SideItem/FieldSuggest";
+
 
 HomePage.propTypes = {};
 
@@ -14,7 +16,7 @@ function HomePage(props) {
   const [blogList, setBlogList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [categories, setCategories] = useState([]);
+  const [fields, setFields] = useState([]);
   const location = useLocation();
 
   const limitBlog = 6;
@@ -23,30 +25,24 @@ function HomePage(props) {
   useEffect(() => {
     (async () => {
       try {
+        const topField = await fieldApi.getTopFieldToSuggest();
+        // console.log("top field ne: ", topField.data);
+
         setLoading(true);
-        const categoriesReponse = await blogApi.getCategoriesToSuggest();
-        if (location.state === undefined) {
-          const response = await blogApi.getAll({ currentPage, limitBlog });
-          if (response.status === 200) {
-            setBlogList(response.data);
-            setLoading(false);
-            setCategories(categoriesReponse.data);
-          }
-        }
-        else if (location.state !== undefined) {
-          const categoryState = location.state.category;
-          // console.log("location state ne: ", categoryState.category);
-          const blogByField = blogApi.getBlogsByFieldId(categoryState.category.fieldId);
-          // console.log("blog by field ne: ", blogByField);
-          setBlogList(blogByField);
+        const response = await blogApi.getAll({ currentPage, limitBlog });
+        if (response.status === 200) {
+          setBlogList(response.data);
           setLoading(false);
-          setCategories(categoriesReponse.data);
+          setFields(topField.data);
+          console.log("blog list ne: ", response.data);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
       }
     })();
   }, [currentPage, location.state]);
+
+
 
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
@@ -70,9 +66,10 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {(loading && blogList === null) ? (
+            {(loading || blogList === null || blogList.length === 0) ? (
               <BlogListSkeleton />
             ) : (
+              // console.log("loading, bloglist", loading, blogList)
               <>
                 <BlogList data={blogList} />
               </>
@@ -98,8 +95,8 @@ function HomePage(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            {categories.some ?
-              <CategoriesSuggest categoriesList={categories} />
+            {fields.some ?
+              <FieldSuggest fieldList={fields} />
               :
               null
             }

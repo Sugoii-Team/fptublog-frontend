@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import ScrollToTopButton from "./components/Button/ScrollToTopButton";
 import Footer from "./components/Footer/footer";
@@ -6,6 +7,7 @@ import ScrollToTop from "./components/WindowAction/ScrollToTop";
 import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import Approval from "./pages/Approval/Approval";
+import BlogByFieldHomePage from "./pages/BlogBasedOnCategory/BlogByFieldHomePage";
 import MentorDashboard from "./pages/Mentor/MentorDashboardDetail/MentorDashboard";
 import StudentBannedDashboard from "./pages/Mentor/StudentsBannedDashboard/StudentBannedDashboard";
 import HomePage from "./pages/Newest/HomePage";
@@ -15,12 +17,27 @@ import Profile from "./pages/Profile/Profile";
 import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import BlogContentDetail from "./pages/Showblogcontent/components/BlogContentDetail";
 import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
+import fieldApi from "./services/fieldAPI";
 function App() {
+
+  const [fieldList, setFieldList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const fieldListReponse = await fieldApi.getAllFields();
+        setFieldList(fieldListReponse.data)
+      } catch (error) {
+        console.log("Fail to load field list (nav bar component)", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="App font-monsterrat">
       <div>
         <header>
-          <NavBar />
+          <NavBar fieldList = {fieldList} />
         </header>
         <div className="min-h-screen">
           <ScrollToTop />
@@ -38,6 +55,7 @@ function App() {
             <Route path="/bannedAccountsList" component={BannedAccount} exact />
             <Route path="/mentorDashboard" component = {MentorDashboard} exact />
             <Route path="/studentBannedDashboard" component = {StudentBannedDashboard} exact />
+            <Route path="/blogBaseOnField" component={BlogByFieldHomePage} exact/>
             <Route
               path="/about"
               component={() => {

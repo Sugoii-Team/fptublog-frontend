@@ -22,7 +22,7 @@ function Profile(props) {
 
 
   const [listPopularBlog, setListPopularBlog] = useState([]);
-  console.log("list blog ne : ", listPopularBlog);
+  // console.log("list blog ne : ", listPopularBlog);
 
   const defaultThumnail = "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
 
@@ -55,7 +55,7 @@ function Profile(props) {
       try {
         const response = await userApi.viewProfile(userId);
         const popularBlog = await userApi.getPopularBlogOfUser(response.data.id);
-        console.log("repose ne", response);
+        // console.log("repose ne", response);
         setUserProfile(response.data);
         setListPopularBlog(popularBlog.data);
         if (response.status === 200 && popularBlog.status === 200) {
