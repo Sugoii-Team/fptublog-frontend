@@ -6,6 +6,7 @@ import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
 import AdminDropDownMenu from "./AdminDropDownMenu";
 import CategoriesShow from "./CategoriesShow";
+import Notification from "../Notifications/Notification";
 import UserDropDownMenu from "./UserDropDownMenu";
 
 NavBar.propTypes = {};
@@ -21,6 +22,7 @@ function NavBar(props) {
   const [showCategories, setShowCategories] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isToggleLogginUser, setisToggleLogginUser] = useState(false);
+  const [isToggleNotification, setIsToggleNotification] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -79,44 +81,25 @@ function NavBar(props) {
           {/*Social icons */}
           <div className="hidden lg:flex pb-4 pt-2 gap-2">
             <svg
-              className="w-5 h-5 fill-current"
+              className="w-6 h-6 fill-current"
               role="img"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
             >
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
             </svg>
-            <svg
-              className="w-5 h-5 fill-current"
-              role="img"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-            </svg>
-          </div>
-          {/* Social icons */}
 
-          {/* <!-- Brand --> */}
-          <div className="mr-auto lg:mr-0">
-            <Link to="/" className="flex text-4xl uppercase font-bold">
-              FPTU Blog
-            </Link>
-          </div>
-
-          {/* <!-- User --> */}
-          <div className="flex gap-2 pt-2 ml-auto lg:ml-0 relative">
             {/* <!-- Search Section --> */}
-            <div className="">
+            <div className="relative">
               {isSearching ? (
                 <div className="flex flex-row">
                   {/* This help reduce component jumping when text box appear */}
                   <div className="invisible"> OO</div>
                   <motion.div
                     animate={{ x: 0, opacity: 1 }}
-                    initial={{ x: 30, opacity: 0 }}
+                    initial={{ x: -15, opacity: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="border-2 border-gray-600 rounded-sm shadow-sm absolute -left-48"
+                    className="border-2 border-gray-600 rounded-sm shadow-sm absolute left-1"
                   >
                     {/* Search Box */}
                     <div className="relative flex flex-row">
@@ -185,6 +168,35 @@ function NavBar(props) {
                 </>
               )}
             </div>
+          </div>
+
+          {/* <!-- Brand --> */}
+          <div className="mr-auto lg:mr-0">
+            <Link to="/" className="flex text-4xl uppercase font-bold">
+              FPTU Blog
+            </Link>
+          </div>
+
+          {/* <!-- User --> */}
+          <div className="flex gap-2 pt-2 ml-auto lg:ml-0 relative">
+            {/* Notification Icon */}
+            <div>
+              <div className="relative">
+                <span className="absolute rounded-full h-2 w-2 right-0 top-0 bg-red-500"></span>
+                <span className="absolute rounded-full h-2 w-2 right-0 top-0 animate-ping bg-red-500"></span>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 cursor-pointer"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                onClick={() => setIsToggleNotification(!isToggleNotification)}
+              >
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+              </svg>
+              {isToggleNotification ? <Notification /> : null}
+            </div>
+            {/* Social icons */}
 
             {/* <!-- User icon  --> */}
             {!isLoggedIn && !(adminLoggedIn.role === "ADMIN") && (

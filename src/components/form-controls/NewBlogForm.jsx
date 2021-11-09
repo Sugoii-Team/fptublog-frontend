@@ -71,6 +71,7 @@ export default function NewBlogForm(props) {
     { id: "AI", text: "AI" },
   ];
 
+  const minTitleLength = 30;
   const minContentLength = 300;
   const minLength = 50;
   const maxLength = 200;
@@ -266,7 +267,7 @@ export default function NewBlogForm(props) {
     /* Validate some field */
     setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
-    if (title.length < minLength) {
+    if (title.length < minTitleLength) {
       setTitleDialog(true);
       e.preventDefault();
     } else if (!selectedCategory) {
@@ -486,7 +487,7 @@ export default function NewBlogForm(props) {
         <MyDialog
           isCancel={responseFromDialog}
           title="Warning"
-          description="Title need at least 50 chars!!"
+          description={`Title need at least ${minTitleLength} chars!!`}
           icon="warning"
         />
       ) : null}
