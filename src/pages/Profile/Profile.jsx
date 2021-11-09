@@ -35,6 +35,7 @@ function Profile(props) {
   const [listPopularBlog, setListPopularBlog] = useState([]);
 
   //const [optionObject, setOptionObject] = useState({});
+
   const defaultThumnail =
     "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
 
@@ -118,7 +119,6 @@ function Profile(props) {
         );
         setUserProfile(response.data);
         setListPopularBlog(popularBlog.data);
-        console.log("popular blog ne:", popularBlog.data);
         if (response.status === 200 && popularBlog.status === 200) {
           setLoading(false);
         }
@@ -374,7 +374,7 @@ function Profile(props) {
                     disabled={true}
                   />
                   <p className="text-red-500 text-xs italic">
-                    You can not change this field !
+                    You can not change this field!
                   </p>
                 </div>
               </div>
@@ -488,7 +488,10 @@ function Profile(props) {
               Blogger's POST
             </h1>
             {listPopularBlog.map((popularBlog) => (
-              <div className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-1">
+              <div
+                key={popularBlog.id}
+                className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-1"
+              >
                 <div className="grid col-span-2 mx-6 my-8">
                   <img
                     className="h-24 w-24 rounded-lg flex items-center justify-center"
