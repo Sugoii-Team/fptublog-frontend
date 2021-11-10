@@ -132,7 +132,11 @@ function CommentsFeature(props) {
     if (isInputAnything.length < 1) {
       alert("Please fill something!");
     } else {
-      handleReplySubmit({ content: replyContent, replyTo: commentObj.id });
+      handleReplySubmit({
+        content: replyContent,
+        replyTo: commentObj.id,
+        commentAuthor: commentObj.authorId,
+      });
       setOnReplying(!onReplying);
       setOnReplyOfReply(false); // Set this to prevent misunderstand in logic
     }

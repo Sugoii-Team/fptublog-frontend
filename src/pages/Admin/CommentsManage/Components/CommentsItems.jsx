@@ -4,20 +4,24 @@ import {
   doc,
   onSnapshot,
   query,
+  setDoc,
   where,
 } from "@firebase/firestore";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import InputDialog from "../../../../components/Dialog/InputDialog";
+import StorageKey from "../../../../constant/storage-keys";
 import { db } from "../../../../services/fireBase";
 import userApi from "../../../../services/userApi";
 
 CommentsItems.propTypes = {};
 
-function CommentsItems({ commentObj }) {
+function CommentsItems({ commentObj, currentUser }) {
   const [commentAuthor, setCommentAuthor] = useState({});
   const [replyComments, setReplyComments] = useState([]);
   const [isDisable, setIsDisable] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const defaultAvatar = "http://placehold.it/70x70";
   const authorAvatar = commentAuthor.avatarUrl;
@@ -52,7 +56,7 @@ function CommentsItems({ commentObj }) {
   }, [commentObj.id, commentObj.replyTo]);
 
   //Delete Comment
-  const handleDeleteComment = async () => {
+  const handleDeleteComment = async (reasonMessage) => {
     if (commentObj) {
       let check = window.confirm(
         "Are you sure wanted to delete comment? This action will also cause to reply of this comment!"
@@ -67,12 +71,27 @@ function CommentsItems({ commentObj }) {
           });
         }
         setIsDisable(false);
+
+        let currentDate = moment().valueOf();
+        //Create notification when reply comments
+        const newNotiDocRef = doc(collection(db, "notifications")); // Create new doc to generate id
+        const notiPayload = {
+          id: newNotiDocRef.id, // Give field id by doc's id
+          forUserId: commentObj.authorId, //for first comment author
+          fromUserId: StorageKey.ADMIN, //this is from admin
+          message: reasonMessage,
+          referenceId: commentObj.blogId, // Get blog Id to show which blog got comment deleted
+          status: StorageKey.unviewStatus,
+          date: currentDate,
+          type: StorageKey.deleteComment, // Get constrain value from storage key
+        };
+        await setDoc(newNotiDocRef, notiPayload); // Update doc with some field
       }
     }
   };
 
   //Parse timestamp to date
-  const currentDate = moment(commentObj.postedDateTime)
+  const dateOfComments = moment(commentObj.postedDateTime)
     .startOf("minutes")
     .fromNow();
 
@@ -104,7 +123,7 @@ function CommentsItems({ commentObj }) {
         <p className="text-sm max-w-md">{commentObj?.content}</p>
       </td>
       <td className="px-6 py-4 border rounded-md shadow-md">
-        <p className="text-sm max-w-md">{currentDate}</p>
+        <p className="text-sm max-w-md">{dateOfComments}</p>
       </td>
       <td className="py-3 px-6 text-center border rounded-md shadow-md">
         <div className="flex item-center justify-center cursor-pointer">
@@ -112,7 +131,7 @@ function CommentsItems({ commentObj }) {
           <button
             className="w-4 mr-2 transform hover:text-red-500 hover:scale-110"
             disabled={isDisable}
-            onClick={() => handleDeleteComment()}
+            onClick={() => setIsDeleting(true)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -130,6 +149,12 @@ function CommentsItems({ commentObj }) {
           </button>
         </div>
       </td>
+      {isDeleting ? (
+        <InputDialog
+          isCancel={() => setIsDeleting(false)}
+          onSubmitReason={handleDeleteComment}
+        />
+      ) : null}
     </tr>
   );
 }

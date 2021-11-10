@@ -16,6 +16,7 @@ import {
 import { db } from "../../../services/fireBase";
 import CommentsFeature from "./Comments";
 import moment from "moment";
+import StorageKey from "../../../constant/storage-keys";
 
 FBComent.propTypes = {
   blogId: PropTypes.string.isRequired,
@@ -25,7 +26,7 @@ FBComent.defaultProps = {
   blogId: "",
 };
 
-function FBComent({ blogId }) {
+function FBComent({ blogId, authorId }) {
   //Generate Field
   const curUser = useSelector((state) => state.user.current);
   const isLoggedin = !!curUser.id;
@@ -50,6 +51,23 @@ function FBComent({ blogId }) {
       replyTo: null, //New comment no need to reply
     };
     await setDoc(newDocRef, payload); // Update doc with some field
+
+    //Create notification when submit comments
+    if (curUser.id !== authorId) {
+      // If commenter id is different from blog poster then send noti
+      const newNotiDocRef = doc(collection(db, "notifications")); // Create new doc to generate id
+      const notiPayload = {
+        id: newNotiDocRef.id, // Give field id by doc's id
+        forUserId: authorId, //for blog poster
+        fromUserId: curUser.id,
+        message: content,
+        referenceId: blogId, // Get blog Id to show which blog got comment
+        status: StorageKey.unviewStatus,
+        date: currentDate,
+        type: StorageKey.commentBlog, // Get constrain value from storage key
+      };
+      await setDoc(newNotiDocRef, notiPayload); // Update doc with some field
+    }
   };
 
   //Get comment from firestore by BlogId and no reply
@@ -84,6 +102,20 @@ function FBComent({ blogId }) {
         replyTo: value.replyTo, // Value from below components
       };
       await setDoc(newDocRef, payload); // Update doc with some field
+
+      //Create notification when reply comments
+      const newNotiDocRef = doc(collection(db, "notifications")); // Create new doc to generate id
+      const notiPayload = {
+        id: newNotiDocRef.id, // Give field id by doc's id
+        forUserId: value.commentAuthor, //for first comment author
+        fromUserId: curUser.id,
+        message: value.content,
+        referenceId: blogId, // Get blog Id to show which blog got reply
+        status: StorageKey.unviewStatus,
+        date: currentDate,
+        type: StorageKey.replyComment, // Get constrain value from storage key
+      };
+      await setDoc(newNotiDocRef, notiPayload); // Update doc with some field
     }
   };
 

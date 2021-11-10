@@ -29,7 +29,7 @@ function CommentManage(props) {
     });
   }, []);
 
-  console.log("Loading ne", loading);
+  console.log("bo warning cua loading", loading);
   return (
     <>
       {currentUser.role === "ADMIN" ? (
@@ -69,7 +69,11 @@ function CommentManage(props) {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {commentList.map((comment) => (
-                      <CommentsItems key={comment.id} commentObj={comment} />
+                      <CommentsItems
+                        key={comment.id}
+                        commentObj={comment}
+                        currentUser={currentUser}
+                      />
                     ))}
                   </tbody>
                 </table>
