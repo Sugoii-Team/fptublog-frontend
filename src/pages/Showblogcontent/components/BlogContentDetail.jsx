@@ -387,7 +387,7 @@ function BlogContentDetail({
 
       {/* <!-- Comment Area --> */}
       <div className="col-span-2 mb-16">
-        <FBComment blogId={blogId} />
+        <FBComment blogId={blogId} authorId={blog.authorId} />
       </div>
       {/* <!-- Comment Area /- --> */}
       {/* Dialog Area */}

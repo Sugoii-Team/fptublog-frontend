@@ -1,4 +1,10 @@
-import { collection, onSnapshot, query, where } from "@firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "@firebase/firestore";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -15,7 +21,8 @@ function Notification(props) {
     if (isLoggedin) {
       const q = query(
         collection(db, "notifications"),
-        where("forUserId", "==", currentUser.id)
+        where("forUserId", "==", currentUser.id),
+        orderBy("date", "desc")
       );
       onSnapshot(q, (querySnapshot) => {
         const notifications = [];

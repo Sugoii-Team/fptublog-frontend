@@ -10,6 +10,7 @@ function InputDialog(props) {
   const { isCancel, onSubmitReason } = props;
   const [reasonsContent, setReasonContent] = useState("");
 
+  //If submit then send reason content to above components
   const handleSendReason = () => {
     onSubmitReason(reasonsContent);
   };
