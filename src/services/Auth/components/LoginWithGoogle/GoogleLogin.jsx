@@ -21,23 +21,32 @@ function MyGoogleLogin(props) {
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
       // console.log(resultAction.payload.headers.authorization)
+      const response = unwrapResult(resultAction);
       //Set timeout to logout
       const minute = 30;
       setTimeout(() => {
         dispatch(logout());
       }, minute * 1000 * 60);
       //show something after request sucessful
-      console.log("Log in success");
+      if (response.status === 200) {
+        alert("Loggin success!");
+        window.location.reload();
+      }
     } catch (error) {
       /* If account not existed then register */
       if (error.message === "Account is not existed") {
         const action = register(token);
         const resultAction = await dispatch(action);
-        unwrapResult(resultAction);
+        const response = unwrapResult(resultAction);
         const minute = 30;
         setTimeout(() => {
           dispatch(logout());
         }, minute * 1000 * 60);
+
+        if (response.status === 200) {
+          alert("Loggin success!");
+          window.location.reload();
+        }
       }
       console.log("Failed to Login: ", error.message);
     }

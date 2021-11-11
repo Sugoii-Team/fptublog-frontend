@@ -31,16 +31,15 @@ const userApi = {
     return axiosClient.get(url);
   },
 
-  getPopularBlogOfUser(authorId){
+  getPopularBlogOfUser(authorId) {
     const url = `api/blogs/authors/${authorId}?limit=5&page=1&sort_by=avg_rate&order_by=desc`;
     return axiosClient.get(url, {
-      headers:{
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
-
 
   getOwnBlog(userId) {
     const url = `api/blogs/authors/${userId}?limit=50&page=1`;
@@ -53,46 +52,44 @@ const userApi = {
   },
 
   getMajorList() {
-    const url = 'api/majors';
+    const url = "api/majors";
     return axiosClient.get(url, {
-      headers:{
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
 
-  getStudentById (id) {
+  getStudentById(id) {
     const url = `api/students/${id}`;
     return axiosClient.get(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }, 
+      },
     });
   },
 
   getStudentMajorByMajorId(majorId) {
     const url = `api/majors/${majorId}`;
     return axiosClient.get(url, {
-      headers:{
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
 
-  
-  updateStudentProfile(id, data){
+  updateStudentProfile(id, data) {
     const url = `api/students/${id}`;
     return axiosClient.put(url, data, {
-      headers : {
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
-    })
+      },
+    });
   },
-  
 };
 
 export default userApi;

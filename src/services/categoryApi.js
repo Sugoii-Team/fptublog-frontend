@@ -18,6 +18,12 @@ const categoryApi = {
       },
     });
   },
+
+  getCategoryByFieldId(fieldId) {
+    const url = `api/fields/${fieldId}/categories`;
+    return axiosClient.get(url);
+  },
+
   add(data) {
     const url = "/categories";
     return axiosClient.post(url, data);

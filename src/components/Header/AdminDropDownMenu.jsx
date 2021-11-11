@@ -12,7 +12,7 @@ AdminDropDownMenu.defaultProps = {
   admin: {},
 };
 
-function AdminDropDownMenu({admin}) {
+function AdminDropDownMenu({ admin }) {
   const userRole = admin.role;
   const dispatch = useDispatch();
   const handleLogOutClick = () => {
@@ -29,7 +29,6 @@ function AdminDropDownMenu({admin}) {
         aria-labelledby="menu-button"
         tabIndex="-1"
       >
-
         <div className="py-1" role="none">
           <Link
             to="/profile"
@@ -38,16 +37,42 @@ function AdminDropDownMenu({admin}) {
             tabIndex="-1"
             id="menu-item-0"
           >
-            Hello{" "}
-            <span className="font-semibold">
-              {userRole}
-            </span>
+            Hello <span className="font-semibold">{userRole}</span>
           </Link>
         </div>
-        
+        <div className="py-1" role="none">
+          <Link
+            to="/dashboard"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            Member Management
+          </Link>
+          <Link
+            to="/bannedAccountsList"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            Banned Account
+          </Link>
+          <Link
+            to="/commentsManage"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            View Comments
+          </Link>
+        </div>
+
         <div className="py-1" role="none">
           <div
-            className="text-gray-700 block px-4 py-2 text-sm"
+            className="text-red-400 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
             role="menuitem"
             tabIndex="-1"
             id="menu-item-6"

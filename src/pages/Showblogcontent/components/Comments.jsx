@@ -132,7 +132,11 @@ function CommentsFeature(props) {
     if (isInputAnything.length < 1) {
       alert("Please fill something!");
     } else {
-      handleReplySubmit({ content: replyContent, replyTo: commentObj.id });
+      handleReplySubmit({
+        content: replyContent,
+        replyTo: commentObj.id,
+        commentAuthor: commentObj.authorId,
+      });
       setOnReplying(!onReplying);
       setOnReplyOfReply(false); // Set this to prevent misunderstand in logic
     }
@@ -202,7 +206,8 @@ function CommentsFeature(props) {
           {isLoggedIn || currentUser.role === "ADMIN" ? (
             <div className="flex flex-row cursor-pointer">
               {/* Delete icon */}
-              {commentObj.authorId || currentUser.role === "ADMIN" ? (
+              {commentObj.authorId === currentUser.id ||
+              currentUser.role === "ADMIN" ? (
                 <>
                   <div
                     className="py-1 mr-1 transform hover:text-red-500 hover:scale-110"

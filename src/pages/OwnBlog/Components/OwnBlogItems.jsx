@@ -71,26 +71,26 @@ function OwnBlogItems({ blogObj, onDeleteClick, isDisable }) {
 
   return (
     <tr>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-4 whitespace-nowrap border rounded-md shadow-md">
         <div className="text-sm text-gray-900 font-semibold ">
           {trimmedTitle}
         </div>
         <div className="text-sm text-gray-900">{trimmedTitle}</div>
       </td>
-      <td className="px-6 py-4">
+      <td className="px-6 py-4 border rounded-md shadow-md">
         <p className="text-sm max-w-md">{blogObj.description}</p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-4 whitespace-nowrap border rounded-md shadow-md">
         {loading ? (
           <Skeleton variant="text" width={120} height={25} />
         ) : (
           <span className={styleOfStatus}>{blogStatus.name}</span>
         )}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border rounded-md shadow-md">
         Categories here
       </td>
-      <td className="py-3 px-6 text-center">
+      <td className="py-3 px-6 text-center border rounded-md shadow-md">
         <div className="flex item-center justify-center cursor-pointer">
           {/* View Icon */}
           <Link

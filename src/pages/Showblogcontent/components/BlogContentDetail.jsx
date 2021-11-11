@@ -8,7 +8,11 @@ import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import gfm from "remark-gfm";
+import InputDialog from "../../../components/Dialog/InputDialog";
 import MyDialog from "../../../components/Dialog/MyDialog";
+//Firebase
+import { collection, doc, setDoc } from "@firebase/firestore";
+import { db } from "../../../services/fireBase";
 //Components
 import blogApi from "../../../services/blogApi";
 import lecturerApi from "../../../services/lecturerApi";
@@ -17,6 +21,7 @@ import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
 import FieldSuggest from "../../Newest/components/SideItem/FieldSuggest";
 import AwardForUser from "./AwardForUser";
 import FBComment from "./FBComent";
+import StorageKey from "../../../constant/storage-keys";
 
 BlogContentDetail.propTypes = {
   blog: PropTypes.object,
@@ -52,6 +57,7 @@ function BlogContentDetail({
   const userRole = currentUser.role;
   const [accountOfAuthor, setAccountOfAuthor] = useState({});
   const [approvedDialog, setApprovedDialog] = useState(false);
+  const [isReject, setIsReject] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
   const [averageRate, setAverageRate] = useState(0);
   const defaultAvatar = "http://placehold.it/70x70";
@@ -135,6 +141,7 @@ function BlogContentDetail({
   const HandleApprovalBtn = async (typeOfApproval) => {
     //In case blog take time to load, button cannot do anything
     if (blog.id === undefined) {
+      //Undefined then do nothing
     } else if (userRole === "LECTURER") {
       //Prepare data for approval
       const dataPrepare = {
@@ -178,6 +185,32 @@ function BlogContentDetail({
     } catch (error) {
       console.log("Failed to rate: ", error);
     }
+  };
+
+  //Cancel button for dialog
+  const handleCancelDialog = () => {
+    setIsReject(false);
+  };
+
+  //Handle submit reject reason
+  const handleSubmitRejectReason = async (message) => {
+    handleCancelDialog();
+    //Get current date to post
+    let currentDate = moment().valueOf();
+    const newDocRef = doc(collection(db, "notifications")); // Create new doc to generate id
+    const payload = {
+      id: newDocRef.id, // Give field id by doc's id
+      forUserId: blog.authorId,
+      fromUserId: currentUser.id,
+      message,
+      referenceId: blog.id, // reject blog so set ref id is blog id
+      status: StorageKey.unviewStatus,
+      date: currentDate,
+      type: StorageKey.rejectblog, // Get constrain value from storage key
+    };
+    await setDoc(newDocRef, payload); // Update doc with some field
+    //After create noti then reject the blog
+    HandleApprovalBtn("reject");
   };
 
   return (
@@ -276,7 +309,9 @@ function BlogContentDetail({
 
               {/* Award section, if current loggin user is lecture and author of the blog is student then allowed to
               give award */}
-              {currentUser.role === "LECTURER" &&
+              {currentUser.id &&
+              isInPending.length < 1 &&
+              currentUser.role === "LECTURER" &&
               accountOfAuthor.role === "STUDENT" ? (
                 <div>
                   <AwardForUser
@@ -293,7 +328,7 @@ function BlogContentDetail({
                     {" "}
                     <button
                       className="bg-red-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-red-500 transition ease-in-out duration-150"
-                      onClick={() => HandleApprovalBtn("reject")}
+                      onClick={() => setIsReject(true)}
                     >
                       Reject
                     </button>
@@ -310,6 +345,12 @@ function BlogContentDetail({
                 </div>
               ) : null}
               {/* Approve Buttons */}
+              {isReject ? (
+                <InputDialog
+                  isCancel={handleCancelDialog}
+                  onSubmitReason={handleSubmitRejectReason}
+                />
+              ) : null}
             </div>
 
             {/* <!--Aside area--> */}
@@ -346,7 +387,7 @@ function BlogContentDetail({
 
       {/* <!-- Comment Area --> */}
       <div className="col-span-2 mb-16">
-        <FBComment blogId={blogId} />
+        <FBComment blogId={blogId} authorId={blog.authorId} />
       </div>
       {/* <!-- Comment Area /- --> */}
       {/* Dialog Area */}
