@@ -7,6 +7,7 @@ import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import CommentManage from "./pages/Admin/CommentsManage/CommentManage";
 import Approval from "./pages/Approval/Approval";
+import GiveAwardTable from "./pages/GiveAward/GiveAwardTable";
 import HomePage from "./pages/Newest/HomePage";
 import MyOwnBlogTable from "./pages/OwnBlog/MyOwnBlogTable";
 import PostBlog from "./pages/PostBlog/PostBlog";
@@ -38,6 +39,7 @@ function App() {
             <Route path="/bannedAccountsList" component={BannedAccount} exact />
             <Route path="/commentsManage" component={CommentManage} exact />
             <Route path="/searchResult" component={SearchResult} exact />
+            <Route path="/giveAward" component={GiveAwardTable} exact />
             <Route
               path="/about"
               component={() => {
