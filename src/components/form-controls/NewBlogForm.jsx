@@ -16,6 +16,7 @@ import categoryApi from "../../services/categoryApi";
 //FireBase
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../services/fireBase";
+//Another
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { CircularProgress } from "@mui/material";
@@ -27,7 +28,7 @@ NewBlogForm.propTypes = {
   BlogNeedUpdate: PropTypes.object,
   isUpdate: PropTypes.bool,
 };
-
+//Converter for richtext input
 const converter = new Showdown.Converter({
   tables: true,
   simplifiedAutoLink: true,
@@ -71,9 +72,9 @@ export default function NewBlogForm(props) {
     { id: "AI", text: "AI" },
   ];
 
-  const minTitleLength = 30;
+  const minTitleLength = 5;
   const minContentLength = 300;
-  const minLength = 50;
+  const minLength = 5;
   const maxLength = 200;
   var thumbnailUrl = null;
 
@@ -157,7 +158,7 @@ export default function NewBlogForm(props) {
   useEffect(() => {
     (async () => {
       try {
-        //Call field only when field is selected
+        //Call categories only when field is selected
         if (selectedField !== "") {
           const responseCategories = await categoryApi.getCategoryByFieldId(
             selectedField
@@ -215,7 +216,7 @@ export default function NewBlogForm(props) {
 
   //Function to call api post a blog
   async function callApiToPostBlog() {
-    devideTagsToPostAPI();
+    devideTagsToPostAPI(); //Summary all tags inputted to post
     try {
       if (isUpdate) {
         // If update, send api for update
@@ -225,16 +226,22 @@ export default function NewBlogForm(props) {
           content,
           description,
         };
+        // Calling updating api
         const response = await blogApi.updateBlog(BlogNeedUpdate.id, blog);
+        // Because update blog return new blog id so get new blogId from response to set tags
         const newBlogResponseId = response.data.id;
+        //when update success then send tags
         const tagsrespose = await tagsApi.updateTagsOfABlog(
           newBlogResponseId,
           tagsReadyToCallApi
         );
+        //After all is completed show dialog to user
         if (response.status === 200 && tagsrespose.status === 200) {
           setSuccessPostDialog(true);
         }
       } else {
+        //else send api to post new blog
+        //preparing payload
         const blog = {
           authorId: userId,
           title,
@@ -243,14 +250,16 @@ export default function NewBlogForm(props) {
           description,
           categoryId: selectedCategory,
         };
-        // else send api to post new blog
+        //sending api to post blog
         const response = await blogApi.post(blog);
         if (response.status === 200) {
+          //If posted blog completed add tags to that blog
           const tagResponse = await tagsApi.addTagsToBlog(
             response.data.id,
             tagsReadyToCallApi
           );
           if (tagResponse.status === 200) {
+            //After add tags succesfully show dialog post blog success to user
             setSuccessPostDialog(true);
           }
         }
@@ -258,11 +267,11 @@ export default function NewBlogForm(props) {
     } catch (error) {
       console.log("Failed to post Blog : ", error);
       window.alert("Failed to post blog, please try again!");
-      setSendingApprove(false);
+      setSendingApprove(false); //Set false to cancel approve buntton disabled
     }
   }
 
-  /* Call api to post */
+  /* Constrain some field */
   const handleSubmit = async (e) => {
     /* Validate some field */
     setSendingApprove(true); // Set this to disable approve button and show loading
@@ -284,7 +293,7 @@ export default function NewBlogForm(props) {
       e.preventDefault();
     } else {
       if (thumbNail) {
-        //If file chosen then upload it then call api
+        //If image file chosen then upload it and call api
         uploadAndGetUrl();
       } else {
         //Else upload without image
@@ -304,6 +313,7 @@ export default function NewBlogForm(props) {
     }
   };
 
+  /* After post success then push to another components */
   const responseFromPostBlogDialog = (isCancel) => {
     if (isCancel) {
       setSendingApprove(false);
@@ -479,7 +489,7 @@ export default function NewBlogForm(props) {
         <MyDialog
           isCancel={responseFromDialog}
           title="Warning"
-          description="Description length from 50 to 200 chars only!!"
+          description={`Description length from ${minLength} to ${maxLength} chars only!!`}
           icon="warning"
         />
       ) : null}
