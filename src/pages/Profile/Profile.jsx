@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
@@ -10,14 +9,11 @@ import userApi from "../../services/userApi";
 import NameSectionSkeleton from "./NameSectionSkeleton";
 import LecturerOption from "./Option/LecturerOption";
 import StudentOption from "./Option/StudentOption";
-import Select from "react-select";
-import moment from "moment";
-import { Link } from "react-router-dom";
 
 Profile.propTypes = {};
 
 function Profile(props) {
-  const currentUser = useSelector((state) => state.user.current);
+  const currentUser = useSelector((state) => state.user.current)
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
   const [profileAward, setProfileAward] = useState([]);
@@ -63,17 +59,14 @@ function Profile(props) {
 
     }
     else return;
-  };
-
+  }
 
 
   useEffect(() => {
     (async () => {
       try {
         const response = await userApi.viewProfile(userId);
-        const popularBlog = await userApi.getPopularBlogOfUser(
-          response.data.id
-        );
+        const popularBlog = await userApi.getPopularBlogOfUser(response.data.id);
         setUserProfile(response.data);
         setListPopularBlog(popularBlog.data);
         if (response.status === 200 && popularBlog.status === 200) {
@@ -85,40 +78,6 @@ function Profile(props) {
     })();
   }, [userId]);
 
-  const handleBanStudentClick = async () => {
-    const confirm = window.confirm("Are you sure wanted to ban this Student?");
-    if (confirm) {
-      try {
-        let lecturerId = currentUser.id;
-        let studentId = userProfile.id;
-        const banResponse = await lecturerApi.banStudent(lecturerId, studentId);
-        if (banResponse.status === 200) {
-          alert("Ban student sucess!");
-        }
-      } catch (error) {
-        console.log("Failed to ban student!", error);
-        alert("Failed to ban student!");
-      }
-    }
-  };
-
-  //Get award of profile
-  useEffect(() => {
-    (async () => {
-      try {
-        //If profile is student then get award
-        if (userProfile.role === "STUDENT") {
-          const awardResponse = await awardApi.getAwardOfStudent(userId);
-          setProfileAward(awardResponse.data);
-          if (awardResponse.status === 200) {
-            setLoading(false);
-          }
-        }
-      } catch (error) {
-        console.log("Failed to get profile: ", error);
-      }
-    })();
-  }, [userProfile.role, userId]);
 
   return (
     <div>
@@ -260,7 +219,9 @@ function Profile(props) {
               </motion.div>
           
           :
+
           null
+          
           }
 
               {/* ///////////////////////////////////////////////////////////////// */}
