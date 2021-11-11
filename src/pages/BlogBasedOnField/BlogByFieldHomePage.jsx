@@ -4,8 +4,8 @@ import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
 import fieldApi from "../../services/fieldApi";
-import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
+import BlogsBelongToFieldList from "./components/MainItem/BlogsBelongToFieldList";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
@@ -71,7 +71,7 @@ function BlogByFieldHomePage(props) {
             {(loading || blogList === null || blogList.length === 0) ? (
               (blogByFieldIsEmpty === true) ? 
               <div className="mt-10">
-                <p className="text-center text-2xl">This field have not had blogs!</p>
+                <p className="text-center text-2xl">This field not have blogs!</p>
                 <p className="text-center text-2xl">Let post your own blog in for this field.</p>
               </div>
               :
@@ -79,7 +79,7 @@ function BlogByFieldHomePage(props) {
             ) : (
               // console.log("loading, bloglist", loading, blogList)
               <>
-                <BlogList data={blogList} />
+                <BlogsBelongToFieldList data={blogList} />
               </>
             )}
             {
