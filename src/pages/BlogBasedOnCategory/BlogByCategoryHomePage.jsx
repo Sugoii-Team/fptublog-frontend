@@ -24,7 +24,7 @@ function BlogByCategoryHomePage(props) {
   const fieldState = location.state.field;
   const categoryState = location.state.category;
   console.log("category ne: ", categoryState);
-  const limitBlog = 6;
+  // const limitBlog = 6;
 
   //Get blog of field
   useEffect(() => {

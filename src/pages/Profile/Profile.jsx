@@ -83,7 +83,7 @@ function Profile(props) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userId]);
+  }, [userId, userProfile.role]);
 
 
   return (
@@ -157,7 +157,7 @@ function Profile(props) {
                           <p>Posted</p>
                         </div>
                         <div>
-                          <p className="text-2xl font-bold text-black">{studentUser.avgRate}</p>
+                          <p className="text-2xl font-bold text-black">{userProfile.avgRate}</p>
                           <p>Average Rate</p>
                         </div>
                         <div>

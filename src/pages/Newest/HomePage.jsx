@@ -26,8 +26,6 @@ function HomePage(props) {
     (async () => {
       try {
         const topField = await fieldApi.getTopFieldToSuggest();
-        // console.log("top field ne: ", topField.data);
-
         setLoading(true);
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
@@ -68,7 +66,6 @@ function HomePage(props) {
               :
               <BlogListSkeleton />
             ) : (
-              // console.log("loading, bloglist", loading, blogList)
               <>
                 <BlogList data={blogList} />
               </>

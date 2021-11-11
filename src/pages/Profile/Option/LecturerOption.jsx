@@ -83,103 +83,181 @@ function LecturerOption({ userProfile }) {
 
   return (
     <form onSubmit={handleSubmit(handleLecturerDataToUpdate)}>
-      {/* first name and last name row */}
-      <div className="flex flex-wrap -mx-3 mb-6">
-        {/* first name */}
-        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-          <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
-            First Name
-          </label>
-          <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text"  {...register("firstName")} placeholder={lecturerUser.firstName} />
-          {/* <p className ="text-red-500 text-xs italic">Please fill out this field.</p> */}
-        </div>
-        {/* last name */}
-        <div className="w-full md:w-1/2 px-3">
-          <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
-            Last Name
-          </label>
-          <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" {...register("lastName")} placeholder={lecturerUser.lastName} />
-        </div>
-      </div>
-
-      {/* Email */}
-      <div className="flex flex-wrap -mx-3 mb-6">
-        <div className="w-full px-3">
-          <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
-            Email
-          </label>
-          <input className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder={lecturerUser.email} disabled={true} />
-          <p className="text-red-500 text-xs italic">You can not change this field !</p>
-        </div>
-      </div>
-
-      {/* Alternative email */}
-      <div className="flex flex-wrap -mx-3 mb-6">
-        <div className="w-full px-3">
-          <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
-            ALTERNATIVE EMAIL
-          </label>
-          <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("alternativeEmail")} placeholder={lecturerUser.alternativeEmail} />
-          <p className="text-red-500 text-xs italic">Please check this infomation carefully before update !</p>
-        </div>
-      </div>
-
-      {/* Description */}
-      <div className="flex flex-wrap -mx-3 mb-6">
-        <div className="w-full px-3">
-          <div>
-            <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
-              DESCRIPTION
-            </label>
-            {lecturerUser.description != null ?
-              <textarea className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("description")} placeholder={userProfile.description} >
-              </textarea>
-              :
-              <textarea className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input your description to update." {...register("description")} />
-            }
-          </div>
-        </div>
-      </div>
-
-      {userProfile.role === "LECTURER" ?
-        <div className="flex flex-wrap -mx-3 mb-6">
-          <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
-              FIELD OF LECTURER:
-            </label>
-            <div className="border-4 rounded-md mt-3">
-              {options !== null ?
-                options.map((option, idx) =>
-                  <div key={idx} className="ml-11 text-xl my-3 center" >
-                    {fieldOfLecturer &&
-                      <div>
-                        <input type="checkbox"
-                          value={option.value}
-                          defaultChecked={handleChecked(option)}
-                          {...register("field")} />
-                        <span className="ml-7">{option.label}</span>
-                      </div>}
-                  </div>)
-                :
-                null
-              }
+      {currentUser.id === userProfile.id ?
+        <div>
+          {/* first name and last name row */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            {/* first name */}
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                First Name
+              </label>
+              <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text"  {...register("firstName")} placeholder={lecturerUser.firstName} />
+              {/* <p className ="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
-
-            {/* <Controller
-              name="Checkbox"
-              // control={control}
-              render={({ field }) => (
-                <Checkbox
-                  onChange={(e) => field.onChange(e.target.checked)}
-                  checked={field.value}
-                />
-              )}
-            /> */}
+            {/* last name */}
+            <div className="w-full md:w-1/2 px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                Last Name
+              </label>
+              <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" {...register("lastName")} placeholder={lecturerUser.lastName} />
+            </div>
           </div>
+
+          {/* Email */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                Email
+              </label>
+              <input className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder={lecturerUser.email} disabled={true} />
+              <p className="text-red-500 text-xs italic">You can not change this field !</p>
+            </div>
+          </div>
+
+          {/* Alternative email */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                ALTERNATIVE EMAIL
+              </label>
+              <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("alternativeEmail")} placeholder={lecturerUser.alternativeEmail} />
+              <p className="text-red-500 text-xs italic">Please check this infomation carefully before update !</p>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3">
+              <div>
+                <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                  DESCRIPTION
+                </label>
+                {lecturerUser.description != null ?
+                  <textarea className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("description")} placeholder={userProfile.description} >
+                  </textarea>
+                  :
+                  <textarea className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input your description to update." {...register("description")} />
+                }
+              </div>
+            </div>
+          </div>
+
+          {userProfile.role === "LECTURER" ?
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                  FIELD OF LECTURER:
+                </label>
+                <div className="border-4 rounded-md mt-3">
+                  {options !== null ?
+                    options.map((option, idx) =>
+                      <div key={idx} className="ml-11 text-xl my-3 center" >
+                        {fieldOfLecturer &&
+                          <div>
+                            <input type="checkbox"
+                              value={option.value}
+                              defaultChecked={handleChecked(option)}
+                              {...register("field")} />
+                            <span className="ml-7">{option.label}</span>
+                          </div>}
+                      </div>)
+                    :
+                    null
+                  }
+                </div>
+              </div>
+            </div>
+            :
+            null
+          }
         </div>
         :
-        null
-      }
+        <div>
+          {/* first name and last name row */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            {/* first name */}
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                First Name
+              </label>
+              
+              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{lecturerUser.firstName}</p>
+            </div>
+            {/* last name */}
+            <div className="w-full md:w-1/2 px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                Last Name
+              </label>
+              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{lecturerUser.lastName}</p> 
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                Email
+              </label>
+              <p className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.email}</p>
+            </div>
+          </div>
+
+          {/* Alternative email */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                ALTERNATIVE EMAIL
+              </label>
+              {/* <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("alternativeEmail")} placeholder={lecturerUser.alternativeEmail} /> */}
+              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.alternativeEmail}</p>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3">
+              <div>
+                <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                  DESCRIPTION
+                </label>
+                <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{userProfile.description}</p>
+              </div>
+            </div>
+          </div>
+
+          {userProfile.role === "LECTURER" ?
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
+                  FIELD OF LECTURER:
+                </label>
+                <div className="border-4 rounded-md mt-3">
+                  {options !== null ?
+                    options.map((option, idx) =>
+                      <div key={idx} className="ml-11 text-xl my-3 center" >
+                        {fieldOfLecturer &&
+                          <div>
+                            <input type="checkbox"
+                              value={option.value}
+                              defaultChecked={handleChecked(option)}
+                              {...register("field")} />
+                            <span className="ml-7">{option.label}</span>
+                          </div>}
+                      </div>)
+                    :
+                    null
+                  }
+                </div>
+              </div>
+            </div>
+            :
+            null
+          }
+        </div>
+
+    }
+
 
       {currentUser.id === userProfile.id ?
         <div className="flex flex-row-reverse">
