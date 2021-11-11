@@ -3,16 +3,16 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
+import fieldApi from "../../services/fieldApi";
 import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
 
-BlogByFieldHomePage.propTypes = {};
+BlogByCategoryHomePage.propTypes = {};
 
-function BlogByFieldHomePage(props) {
+function BlogByCategoryHomePage(props) {
   const location = useLocation();
   const [blogList, setBlogList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,8 @@ function BlogByFieldHomePage(props) {
 
   //get field which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
+  const categoryState = location.state.category;
+  console.log("category ne: ", categoryState);
   const limitBlog = 6;
 
   //Get blog of field
@@ -35,23 +37,27 @@ function BlogByFieldHomePage(props) {
         // if location.state != undefined => get field from state => then get blogs belong to that field by field id 
         if (location.state !== undefined) {
           setLoading(true);
-          const blogByField = await blogApi.getBlogsByFieldId(fieldState.field.id);
-          console.log("blog field ne: ", blogByField.data);
-          if(blogByField.data.length > 0){
+          // const blogByField = await blogApi.getBlogsByFieldId(fieldState.field.id);
+          const blogsByCategory = await blogApi.getBlogsBelongToCategoryByCategoryId(categoryState.category.id);
+          if(blogsByCategory.data.length > 0 && blogsByCategory.status === 200){
             setLoading(false);
-            setBlogList(blogByField.data);
+            setBlogList(blogsByCategory.data);
             setBlogByFieldIsEmpty(false);
           }
         } else setBlogByFieldIsEmpty(true);
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
+        setBlogList(null);
+        setBlogByFieldIsEmpty(true);
       }
     })();
-  }, [currentPage, fieldState.field.id, location.state]);
+  }, [currentPage, fieldState.field.id, location.state, categoryState.category.id]);
 
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
+
+  console.log("blog list ne: ", blogList);
 
   return (
     <motion.div
@@ -65,10 +71,10 @@ function BlogByFieldHomePage(props) {
           <div className="col-span-2 w-auto">
             <div className="mb-4">
               <div className="text-lg font-medium uppercase">
-                <span className="border-b-2 border-gray-300">Blogs about {fieldState.field.name} field:</span>
+                <span className="border-b-2 border-gray-300">Blogs about {categoryState.category.name} category:</span>
               </div>
             </div>
-            {(loading || blogList === null || blogList.length === 0) ? (
+            {(loading || blogList === null || blogList.length === 0 ) ? (
               (blogByFieldIsEmpty === true) ? 
               <div className="mt-10">
                 <p className="text-center text-2xl">This field have not had blogs!</p>
@@ -121,4 +127,4 @@ function BlogByFieldHomePage(props) {
   );
 }
 
-export default BlogByFieldHomePage;
+export default BlogByCategoryHomePage;

@@ -25,10 +25,15 @@ function BannedAccount() {
   return (
     <div>
       {currentUser.role === "ADMIN" ? (
-        loading ? (
+        (loading && bannedAccountsList.length > 0) ? (
           <BannedAccountList listBannedAccounts={bannedAccountsList} />
         ) : (
-          <UserListSkeletons />
+          bannedAccountsList.length === 0 ?
+            <p className="text-center text-2xl my-10">
+              Not have student banned
+            </p>
+            :
+            <UserListSkeletons />
         )
       ) : (
         <p className="text-center text-2xl my-10">

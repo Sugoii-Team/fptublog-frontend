@@ -90,7 +90,11 @@ const blogApi = {
   getBlogsByFieldId(fieldId){
     const url = `api/fields/${fieldId}/blogs?limit=3&page=1`;
     return axiosClient.get(url);
-  }
+  },
+  getBlogsBelongToCategoryByCategoryId(categoryId){
+    const url = `api/categories/${categoryId}/blogs`;
+    return axiosClient.get(url);
+  },
 };
 
 export default blogApi;

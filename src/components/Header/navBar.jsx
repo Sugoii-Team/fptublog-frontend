@@ -9,9 +9,8 @@ import CategoriesShow from "./CategoriesShow";
 import UserDropDownMenu from "./UserDropDownMenu";
 
 
-function NavBar() {
+function NavBar({fieldList, categoriesList}) {
   const adminLoggedIn = useSelector((state) => state.admin.current);
-  // console.log("role admin ne: ", adminLoggedIn);
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
   const userImg = loggedInUser.avatarUrl;
@@ -35,8 +34,8 @@ function NavBar() {
     }
   }, [currentScrollPostion]);
 
-  const handleCategoriesClick = () => {
-    setShowCategories(!showCategories);
+  const handleCategoriesClick = (values) => {
+    setShowCategories(values);
   };
 
   const handleLoginOnclick = () => {
@@ -222,9 +221,9 @@ function NavBar() {
           <li className="navItemPadding">
             <span
               className="navItemsHover cursor-pointer"
-              onClick={handleCategoriesClick}
+              onClick={()=>handleCategoriesClick(!showCategories)}
             >
-              Categories
+              Fields
             </span>
           </li>
           <li className="navItemPadding">
@@ -247,7 +246,7 @@ function NavBar() {
       {/* Navigation bar */}
 
       {/* Category show */}
-      {showCategories ? <CategoriesShow /> : null}
+      {showCategories ? <CategoriesShow fieldList = {fieldList} categoriesList= {categoriesList} setShowCategories = {handleCategoriesClick}/> : null}
       {/* Category show */}
 
       {/* Login Dialog */}

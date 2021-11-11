@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
+import awardApi from "../../services/awardApi";
 import userApi from "../../services/userApi";
 import NameSectionSkeleton from "./NameSectionSkeleton";
 import LecturerOption from "./Option/LecturerOption";
@@ -27,21 +28,22 @@ function Profile(props) {
     setStudentUser(data);
   };
 
+  console.log("profile award", profileAward);
+
   const color = {
     frombgColor: "pink",
     tobgColor: "purple",
-    completed: ((studentUser.experiencePoint/4000)*100).toFixed(2),
+    completed: ((studentUser.experiencePoint/4000)*100).toFixed(0),
   };
 
   const experience = () => {
-    console.log(studentUser.experiencePoint);
-    if(0<studentUser.experiencePoint && studentUser.experiencePoint<1000){
+    if(0 <= studentUser.experiencePoint && studentUser.experiencePoint<1000){
       return "ROOKIE";
     } else if (1000 <= studentUser.experiencePoint && studentUser.experiencePoint < 2000){
       return "NEWBIE";
-    }else if (2000 <= studentUser.experiencePoint && studentUser.experiencePoint  < 3000){
+    }else if (2000 <= studentUser.experiencePoint && studentUser.experiencePoint < 3000){
       return "BLOGGER";
-    } else{
+    } else if (studentUser.experiencePoint >= 3000){
       return "PRO BLOGGER";
     }
   };
@@ -61,10 +63,15 @@ function Profile(props) {
     else return;
   }
 
-
+  
   useEffect(() => {
     (async () => {
       try {
+        //Get award of profile
+        if (userProfile.role === "STUDENT") {
+          const awardResponse = await awardApi.getAwardOfStudent(userId);
+          setProfileAward(awardResponse.data);
+        }
         const response = await userApi.viewProfile(userId);
         const popularBlog = await userApi.getPopularBlogOfUser(response.data.id);
         setUserProfile(response.data);
@@ -150,8 +157,8 @@ function Profile(props) {
                           <p>Posted</p>
                         </div>
                         <div>
-                          <p className="text-2xl font-bold text-black">0</p>
-                          <p>Liked</p>
+                          <p className="text-2xl font-bold text-black">{studentUser.avgRate}</p>
+                          <p>Average Rate</p>
                         </div>
                         <div>
                           <p className="text-2xl font-bold text-black">0</p>
@@ -199,7 +206,8 @@ function Profile(props) {
                   </div>
                 </div>
                 <div className="">
-                  <h1 className="text-center font-bold uppercase">Experience Point</h1>
+                  <h1 className="text-center font-bold uppercase">Badges Gained</h1>
+                  {profileAward.length > 0 ? 
                   <div className="grid grid-cols-6 gap-4">
                     {profileAward?.map((award, index) => (
                       <div className="col-span-1" key={index}>
@@ -215,6 +223,9 @@ function Profile(props) {
                       </div>
                     ))}
                   </div>
+                    :
+                    <p className="uppercase text-center">You not have badges Gained</p>
+                  }
                 </div>
               </motion.div>
           

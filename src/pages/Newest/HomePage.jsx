@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
+import fieldApi from "../../services/fieldApi";
 import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
@@ -62,7 +62,10 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {(loading || blogList === null || blogList.length === 0) ? (
+            {(loading || blogList === null) ? (
+              blogList.length === 0 ?
+              null
+              :
               <BlogListSkeleton />
             ) : (
               // console.log("loading, bloglist", loading, blogList)

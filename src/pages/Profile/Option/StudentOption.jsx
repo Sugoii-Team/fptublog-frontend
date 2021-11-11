@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
+import { useSelector } from 'react-redux';
 import Select from "react-select";
 import userApi from '../../../services/userApi';
 
 StudentOption.propTypes = {
 };
 
-function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
+function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile}) {
 
+  const currentUser = useSelector((state) => state.user.current)
+  console.log("current user ne: ", currentUser );
   const [studentUser, setStudentUser] = useState({});
   const [majorOfStudent, setMajorOfStudent] = useState({});
   const [listOfMajor, setListOfMajor] = useState([]);
@@ -163,11 +166,15 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
         null
       }
 
+      {currentUser.id === userProfile.id ? 
       <div className="flex flex-row-reverse">
         <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full" type="submit">
           Save
         </button>
       </div>
+      :
+      null
+    }
     </form>
   );
 }

@@ -1,26 +1,26 @@
+import { CircularProgress } from "@mui/material";
+//FireBase
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { motion } from "framer-motion";
+import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+//Mark down
+import ReactMde from "react-mde";
+import "react-mde/lib/styles/css/react-mde-all.css";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import Select from "react-select";
 //Addition Library
 import { WithContext as ReactTags } from "react-tag-input";
-//Mark down
-import ReactMde from "react-mde";
 import Showdown from "showdown";
-import "react-mde/lib/styles/css/react-mde-all.css";
-import "./postBlog.css";
 //Components and API
 import MyDialog from "../../components/Dialog/MyDialog";
 import blogApi from "../../services/blogApi";
 import categoryApi from "../../services/categoryApi";
-//FireBase
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../services/fireBase";
-import PropTypes from "prop-types";
-import { motion } from "framer-motion";
-import { CircularProgress } from "@mui/material";
-import tagsApi from "../../services/tagsApi";
 import fieldApi from "../../services/fieldApi";
+import { storage } from "../../services/fireBase";
+import tagsApi from "../../services/tagsApi";
+import "./postBlog.css";
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,
@@ -461,7 +461,7 @@ export default function NewBlogForm(props) {
         </motion.div>
       ) : (
         <div className="flex justify-center my-9">
-          <div className="font-bold text-2xl">
+          <div className="text-center text-2xl">
             You must be logged in before Post a Blog
           </div>
         </div>

@@ -5,7 +5,7 @@ import blogApi from "../../services/blogApi";
 import BlogList from "../Newest/components/MainItem/BlogList";
 import BlogListSkeleton from "../Newest/components/MainItem/BlogListSkeleton";
 import BlogPopular from "../Newest/components/SideItem/BlogPopular";
-import CategoriesSuggest from "../Newest/components/SideItem/CategoriesSuggest";
+import FieldSuggest from "../Newest/components/SideItem/FieldSuggest";
 
 SearchResult.propTypes = {};
 
@@ -81,7 +81,7 @@ function SearchResult(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            <CategoriesSuggest />
+            <FieldSuggest />
           </div>
           {/* Side Items */}
         </div>
