@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import blogApi from "../../../services/blogApi";
+import BlogStatusApi from "../../../services/blogStatusApi";
 
 TableItems.propTypes = {
   blog: PropTypes.object.isRequired,
@@ -11,12 +12,38 @@ TableItems.defaultProps = {
   blog: {},
 };
 
-function TableItems(props) {
-  const blog = props.blogObj;
+function TableItems({ blog }) {
   const [author, setAuthor] = useState({});
+  const [blogStatus, setBlogStatus] = useState({});
   const blogDetailUrl = `/blogdetail?${blog.id}`;
   var trimmedTitle = blog.title.slice(0, 50) + "...";
+  var colorForSpecStatus = "yellow";
+  var styleOfStatus;
 
+  /* Update color by status */
+  switch (blogStatus.name) {
+    case "approved": {
+      colorForSpecStatus = "green";
+      break;
+    }
+    case "delete":
+    case "pending deleted":
+    case "banned": {
+      colorForSpecStatus = "red";
+      break;
+    }
+    case "pending approved":
+    case "pending updated":
+    case "draft": {
+      colorForSpecStatus = "yellow";
+      break;
+    }
+    default: {
+    }
+  }
+  styleOfStatus = `px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${colorForSpecStatus}-100 text-${colorForSpecStatus}-800 capitalize`;
+
+  //Get blog author
   useEffect(() => {
     (async () => {
       try {
@@ -25,6 +52,23 @@ function TableItems(props) {
       } catch (error) {}
     })();
   }, [blog.authorId]);
+
+  //Get blog Status
+  useEffect(() => {
+    (async () => {
+      if (blog !== undefined) {
+        try {
+          const response = BlogStatusApi.getStatusById(blog.statusId);
+          response.then((response) => {
+            setBlogStatus(response.data);
+          });
+        } catch (error) {
+          console.log("Failed to get Status", error);
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <tr>
@@ -43,9 +87,7 @@ function TableItems(props) {
         <p className="text-sm max-w-md">{blog.description}</p>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-700">
-          Pending
-        </span>
+        <span className={styleOfStatus}>{blogStatus.name}</span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         <div className="flex item-center justify-center cursor-pointer">

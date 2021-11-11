@@ -19,9 +19,7 @@ import { db } from "../../../services/fireBase";
 import lecturerApi from "../../../services/lecturerApi";
 import ratingApi from "../../../services/ratingApi";
 import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
-import CategoriesSuggest from "../../Newest/components/SideItem/CategoriesSuggest";
 import FieldSuggest from "../../Newest/components/SideItem/FieldSuggest";
-import AwardForUser from "./AwardForUser";
 import FBComment from "./FBComent";
 
 BlogContentDetail.propTypes = {

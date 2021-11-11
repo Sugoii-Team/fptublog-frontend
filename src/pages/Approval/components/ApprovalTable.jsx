@@ -17,11 +17,14 @@ function ApprovalTable(props) {
   const [pageNumber, setPageNumber] = useState(0);
   const blogWattingApprovePerPage = 7;
   const pagesVisited = pageNumber * blogWattingApprovePerPage;
-  const displayBlog = listBlog.slice(pagesVisited, pagesVisited+blogWattingApprovePerPage);
+  const displayBlog = listBlog.slice(
+    pagesVisited,
+    pagesVisited + blogWattingApprovePerPage
+  );
   const pageCount = Math.ceil(listBlog.length / blogWattingApprovePerPage);
-  const changePage = ({selected}) => {
+  const changePage = ({ selected }) => {
     setPageNumber(selected);
-  } 
+  };
 
   return (
     <motion.div
@@ -60,16 +63,15 @@ function ApprovalTable(props) {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {displayBlog.map((blog, index) => (
-                  <TableItems key={index} blogObj={blog} />
+                  <TableItems key={index} blog={blog} />
                 ))}
               </tbody>
             </table>
-            <ReactPaginate 
-            
-              previousLabel = {"Previous"}
-              nextLabel = {"Next"}
-              pageCount = {pageCount}
-              onPageChange = {changePage}
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              pageCount={pageCount}
+              onPageChange={changePage}
               containerClassName={"flex gap-1 justify-center my-4"}
               pageLinkClassName={
                 "border-r-2 border-l-2 px-5 py-2 font-semibold hover:bg-gray-100 transision ease-in duration-200"
@@ -78,7 +80,6 @@ function ApprovalTable(props) {
               nextLinkClassName={"font-bold uppercase ml-2"}
               breakLinkClassName={"font-bold uppercase px-4 py-2"}
               activeLinkClassName={"bg-gray-100"}
-
             />
           </div>
         </div>

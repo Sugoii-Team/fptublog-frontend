@@ -9,7 +9,6 @@ import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
-
 HomePage.propTypes = {};
 
 function HomePage(props) {
@@ -34,14 +33,12 @@ function HomePage(props) {
           setBlogList(response.data);
           setLoading(false);
           setFields(topField.data);
-          console.log("blog list ne: ", response.data);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
       }
     })();
   }, [currentPage, location.state]);
-
 
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
@@ -62,7 +59,7 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {(loading || blogList === null || blogList.length === 0) ? (
+            {loading || blogList === null || blogList.length === 0 ? (
               <BlogListSkeleton />
             ) : (
               // console.log("loading, bloglist", loading, blogList)
@@ -91,11 +88,7 @@ function HomePage(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            {fields.some ?
-              <FieldSuggest fieldList={fields} />
-              :
-              null
-            }
+            {fields.some ? <FieldSuggest fieldList={fields} /> : null}
           </div>
           {/* Side Items */}
         </div>

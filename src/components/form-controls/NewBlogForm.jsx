@@ -21,7 +21,7 @@ import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { CircularProgress } from "@mui/material";
 import tagsApi from "../../services/tagsApi";
-import fieldApi from "../../services/fieldApi";
+import fieldApi from "../../services/fieldAPI";
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,
@@ -45,7 +45,6 @@ export default function NewBlogForm(props) {
   const history = useHistory();
   /* const isLoggedIn = true; */
   const userId = getUserState.id;
-
   /* State for some field */
   const [title, setTitle] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -54,6 +53,7 @@ export default function NewBlogForm(props) {
   const [allField, setAllField] = useState([]);
   const [thisBlogCategoy, setThisBlogCategoy] = useState({});
   const [thumbNail, setThumbNail] = useState(null);
+  const [isThumbNailSelected, setIsThumbNailSelected] = useState(false);
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
   const [selectedTab, setSelectedTab] = useState("write");
@@ -137,7 +137,7 @@ export default function NewBlogForm(props) {
   useEffect(() => {
     (async () => {
       try {
-        const responseField = await fieldApi.getAllField();
+        const responseField = await fieldApi.getAllFields();
         setAllField(responseField.data);
       } catch (error) {
         console.log("Failed to get categories: ", error);
@@ -274,6 +274,9 @@ export default function NewBlogForm(props) {
   /* Constrain some field */
   const handleSubmit = async (e) => {
     /* Validate some field */
+    if (!isThumbNailSelected && BlogNeedUpdate?.thumbnailUrl !== null) {
+      thumbnailUrl = BlogNeedUpdate?.thumbnailUrl;
+    }
     setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
     if (title.length < minTitleLength) {
@@ -292,11 +295,12 @@ export default function NewBlogForm(props) {
       setContentDialog(true);
       e.preventDefault();
     } else {
-      if (thumbNail) {
+      //if thumbnail is selected and thumbnail obj is not null then upload img before post blog
+      if (thumbNail && isThumbNailSelected) {
         //If image file chosen then upload it and call api
         uploadAndGetUrl();
       } else {
-        //Else upload without image
+        //Else upload without image or img existed from updating blog
         callApiToPostBlog();
       }
     }
@@ -361,7 +365,7 @@ export default function NewBlogForm(props) {
                   ) : (
                     <Select
                       options={fieldOption}
-                      isDisabled={onFieldChanging}
+                      isDisabled={true}
                       onChange={(e) =>
                         handleCallCategoriesOnFieldChange(e?.value)
                       }
@@ -418,10 +422,19 @@ export default function NewBlogForm(props) {
               {/* thumbNail URL */}
               <div className=" my-2">
                 <p className="font-semibold">Thumbnails:</p>
+                {BlogNeedUpdate?.thumbnailUrl ? (
+                  <p className="text-green-400">
+                    Thumbnails has been selected, you can skip this
+                  </p>
+                ) : null}
                 <input
                   className="border border-gray-300 w-full p-2 rounded-md"
                   type="file"
-                  onChange={(e) => setThumbNail(e.target.files[0])}
+                  onChange={(e) => {
+                    setThumbNail(e.target.files[0]);
+                    /* Set this in case update a blog can skip pick new thumbnail */
+                    setIsThumbNailSelected(true);
+                  }}
                 />
               </div>
               {/* Description Field */}
