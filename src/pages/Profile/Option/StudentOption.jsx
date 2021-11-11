@@ -179,7 +179,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 Last Name
               </label>
-              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{userProfile.firstName}</p>
+              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{userProfile.lastName}</p>
             </div>
           </div>
 

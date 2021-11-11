@@ -28,7 +28,7 @@ function Profile(props) {
     setStudentUser(data);
   };
 
-  console.log("profile award", profileAward);
+  // console.log("profile award", profileAward);
 
   const color = {
     frombgColor: "pink",

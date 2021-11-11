@@ -32,7 +32,6 @@ function HomePage(props) {
           setBlogList(response.data);
           setLoading(false);
           setFields(topField.data);
-          console.log("blog list ne: ", response.data);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);

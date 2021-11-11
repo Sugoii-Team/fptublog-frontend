@@ -18,29 +18,40 @@ function CategoriesShow({ fieldList, categoriesList, setShowCategories }) {
     >
       {fieldList.map((field, idx) => (
         <div key={idx} className="text-sm ml-10">
-            <div>
-              <div className="text-left px-4 relative text-secondary font-bold mt-10" key={idx}>
-                <span className="borderForCategories text-lg">{field.name}</span>
-              </div>
-              {categoriesList.map((category, idx) => (
-                (category.fieldId === field.id) ?
-                  <Link to = {{
-                    pathname: '/blogBaseOnCategory',
-                    state:{
-                      field : {field}, 
-                      category : {category}
-                    }
-                  }} key={idx} className = "mt-2 ml-7 text-sm block"
-                  onClick = {()=>handleOnFieldClick(false)}>
-                   
-                  {category.name}
-                    
-                  </Link>
-                  :
-                  null
-              ))}
-
+          <div>
+            <div className="text-left px-4 relative text-secondary font-bold mt-10" key={idx}>
+              <span className="borderForCategories text-lg">
+                <Link to={{
+                  pathname: '/blogBaseOnField',
+                  state: {
+                    field: { field }
+                  }
+                }}
+                onClick={() => handleOnFieldClick(false)}
+                >
+                  {field.name}
+                </Link>
+              </span>
             </div>
+            {categoriesList.map((category, idx) => (
+              (category.fieldId === field.id) ?
+                <Link to={{
+                  pathname: '/blogBaseOnCategory',
+                  state: {
+                    field: { field },
+                    category: { category }
+                  }
+                }} key={idx} className="mt-2 ml-7 text-sm block"
+                  onClick={() => handleOnFieldClick(false)}>
+
+                  {category.name}
+
+                </Link>
+                :
+                null
+            ))}
+
+          </div>
         </div>
 
       ))}
