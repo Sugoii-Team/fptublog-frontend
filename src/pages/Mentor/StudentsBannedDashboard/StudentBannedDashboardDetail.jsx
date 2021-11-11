@@ -1,52 +1,33 @@
 import PropTypes from "prop-types";
-import React, { useState } from 'react';
-import SubmitForm from "./UpdateUserDialog/SubmitForm/SubmitForm";
+import React from 'react';
 
 
-DashboardDetail.propTypes = {
+StudentBannedDashboardDetail.propTypes = {
   userList: PropTypes.array,
-  dataOfUserToUpdate: PropTypes.func,
-
-  onRemoveClick: PropTypes.func,
-  onBanClick: PropTypes.func,
+  // onRemoveClick: PropTypes.func,
+  onUnbanClick: PropTypes.func,
 };
 
 
 
-function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanClick }) {
+function StudentBannedDashboardDetail({ userList, onUnbanClick }) {
   const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU";
-  const [showSubmitForm, setShowSubmitForm] = useState(false);
-  const [dataNeedUpdate, setDataNeedUpdate] = useState({});
   let confirmToRemoveOrBan = false;
 
 
-  const handleShowSubmitForm = (values) => {
-    setShowSubmitForm(values);
-  }
+  // const handleRemoveClick = (user) => {
+  //   confirmToRemoveOrBan = window.confirm("Are you sure to remove this user ?");
+  //   if (confirmToRemoveOrBan === true) {
+  //     onRemoveClick(user.id);
+  //   } else return;
+  // };
 
-  const handleEditClick = (userData) => {
-    setShowSubmitForm(true);
-    setDataNeedUpdate(userData);
-  }
-
-  const handleRemoveClick = (user) => {
-    confirmToRemoveOrBan = window.confirm("Are you sure to remove this user ?");
-    if (confirmToRemoveOrBan === true) {
-      onRemoveClick(user.id);
-    } else return;
-  };
-
-  const handleBanAccountClick = (user) => {
+  const handleUnbanAccountClick = (user) => {
     confirmToRemoveOrBan = window.confirm("Are you sure to ban this user ?");
     if (confirmToRemoveOrBan === true) {
-      onBanClick(user.id);
+      onUnbanClick(user.id);
     } else return;
   };
-
-  const handleDataOfFrom = (data) => {
-    // console.log(data);
-    dataOfUserToUpdate(data);
-  }
 
 
   return (
@@ -76,18 +57,12 @@ function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanCli
                     >
                       Role
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Update
-                    </th>
-                    <th
+                    {/* <th
                       scope="col"
                       className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
                       Remove Account
-                    </th>
+                    </th> */}
                     <th
                       scope="col"
                       className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -102,7 +77,7 @@ function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanCli
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <img className="h-10 w-10 rounded-full" src={user.avatarUrl ? user.avatarUrl : image} alt="" />
+                            <img className="h-10 w-10 rounded-full" src={user.image ? user.image : image} alt="" />
                           </div>
                           <div className="ml-4 px-6">
                             <div className="font-medium text-gray-900">{user.firstName} {user.lastName}</div>
@@ -115,24 +90,17 @@ function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanCli
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {user.role}</td>
-
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button onClick={() => handleEditClick(user)} className="text-indigo-600 hover:text-indigo-900">
-                          EDIT
-                        </button>
-
-
-
+                        {user.role}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <button onClick={() => handleRemoveClick(user)} className="text-red-400 hover:text-red-600">
                           REMOVE
                         </button>
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button onClick={() => handleBanAccountClick(user)} className="text-yellow-300 hover:text-red-600">
-                          BAN
+                        <button onClick={() => handleUnbanAccountClick(user)} className="text-yellow-300 hover:text-red-600">
+                          UNBAN
                         </button>
                       </td>
                     </tr>
@@ -144,42 +112,9 @@ function DashboardDetail({ userList, dataOfUserToUpdate, onRemoveClick, onBanCli
         </div>
       </div>
 
-      {showSubmitForm ? (
-        <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-            onSubmit={() => handleShowSubmitForm(false)}>
-            <div className="relative w-auto my-6 mx-auto max-w-md">
-              {/*content*/}
-              <div className="border-0 rounded-md shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-center p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-2xl font-semibold uppercase">UPDATE USER ROLE</h3>
-                </div>
-                {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <div
-                    className="flex justify-center"
-                  >
-                    <SubmitForm
-                      userInfo={dataNeedUpdate}
-                      onCancelClick={handleShowSubmitForm}
-                      dataOfFrom={handleDataOfFrom}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div>
-
-              </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
-      ) : null}
-
 
     </div>
   )
 }
 
-export default DashboardDetail;
+export default StudentBannedDashboardDetail;

@@ -16,10 +16,6 @@ function BannedAccount() {
         const response = adminApi.getListBannedAccount();
         response.then((res) => setBannedAccountsList(res.data));
         setLoading(true);
-        console.log(
-          "data bannedAccount ne(BannedAccount.jsx): ",
-          bannedAccountsList
-        );
       } catch (error) {
         console.log("Failed to load banned account list");
       }

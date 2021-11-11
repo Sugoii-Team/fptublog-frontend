@@ -81,6 +81,16 @@ const blogApi = {
     const dataAfterPromise = promise.then((response) => response.data);
     return dataAfterPromise;
   },
+
+  getCategoriesToSuggest(){
+    const url = 'api/categories';
+    return axiosClient.get(url);
+  },
+
+  getBlogsByFieldId(fieldId){
+    const url = `api/fields/${fieldId}/blogs?limit=3&page=1`;
+    return axiosClient.get(url);
+  }
 };
 
 export default blogApi;

@@ -15,11 +15,13 @@ function MyGoogleLogin(props) {
     /*   console.log(response);
     console.log(response.profileObj); */
     var token = "id_token=" + response.tokenId;
+    console.log("token ne: ", token);
     try {
       const action = login(token);
       const resultAction = await dispatch(action);
+      unwrapResult(resultAction);
+      // console.log(resultAction.payload.headers.authorization)
       const response = unwrapResult(resultAction);
-
       //Set timeout to logout
       const minute = 30;
       setTimeout(() => {

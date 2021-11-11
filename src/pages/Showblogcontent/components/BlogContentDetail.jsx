@@ -20,6 +20,8 @@ import lecturerApi from "../../../services/lecturerApi";
 import ratingApi from "../../../services/ratingApi";
 import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
 import CategoriesSuggest from "../../Newest/components/SideItem/CategoriesSuggest";
+import FieldSuggest from "../../Newest/components/SideItem/FieldSuggest";
+import AwardForUser from "./AwardForUser";
 import FBComment from "./FBComent";
 
 BlogContentDetail.propTypes = {
@@ -360,7 +362,7 @@ function BlogContentDetail({
               {/* <AsideBlogContent /> */}
               <div>
                 <BlogPopular />
-                <CategoriesSuggest />
+                <FieldSuggest />
               </div>
             </div>
           </div>
