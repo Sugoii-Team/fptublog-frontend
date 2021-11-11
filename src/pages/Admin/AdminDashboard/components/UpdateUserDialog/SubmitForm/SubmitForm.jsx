@@ -77,7 +77,7 @@ function SubmitForm({ userInfo, onCancelClick, dataOfFrom}) {
             </div>
           </div>
 
-          <div className="flex-auto  space-x-7  mt-4">
+          <div className="flex-auto space-x-14 mt-4 mx-24">
             <button type="button" className="bg-blue-200 hover:bg-blue-400 text-gray-700 font-bold py-2 px-4 rounded-full" onClick={() => handleCancleClick(false)}>
               Cancel
             </button>

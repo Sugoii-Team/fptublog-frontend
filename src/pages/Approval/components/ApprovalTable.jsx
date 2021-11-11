@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TableItems from "./TableItems";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import ReactPaginate from "react-paginate";
 
 ApprovalTable.propTypes = {
   listReviewBlogs: PropTypes.array.isRequired,
@@ -17,6 +18,10 @@ function ApprovalTable(props) {
   const blogWattingApprovePerPage = 7;
   const pagesVisited = pageNumber * blogWattingApprovePerPage;
   const displayBlog = listBlog.slice(pagesVisited, pagesVisited+blogWattingApprovePerPage);
+  const pageCount = Math.ceil(listBlog.length / blogWattingApprovePerPage);
+  const changePage = ({selected}) => {
+    setPageNumber(selected);
+  } 
 
   return (
     <motion.div
@@ -59,6 +64,22 @@ function ApprovalTable(props) {
                 ))}
               </tbody>
             </table>
+            <ReactPaginate 
+            
+              previousLabel = {"Previous"}
+              nextLabel = {"Next"}
+              pageCount = {pageCount}
+              onPageChange = {changePage}
+              containerClassName={"flex gap-1 justify-center my-4"}
+              pageLinkClassName={
+                "border-r-2 border-l-2 px-5 py-2 font-semibold hover:bg-gray-100 transision ease-in duration-200"
+              }
+              previousLinkClassName={"font-bold uppercase mr-2"}
+              nextLinkClassName={"font-bold uppercase ml-2"}
+              breakLinkClassName={"font-bold uppercase px-4 py-2"}
+              activeLinkClassName={"bg-gray-100"}
+
+            />
           </div>
         </div>
       </div>

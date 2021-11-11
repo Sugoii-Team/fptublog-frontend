@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import Pagination from "react-paginate";
+import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
+import fieldApi from "../../services/fieldAPI";
 import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
-import CategoriesSuggest from "./components/SideItem/CategoriesSuggest";
-import Pagination from "react-paginate";
+import FieldSuggest from "./components/SideItem/FieldSuggest";
+
 
 HomePage.propTypes = {};
 
@@ -13,23 +16,32 @@ function HomePage(props) {
   const [blogList, setBlogList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [fields, setFields] = useState([]);
+  const location = useLocation();
+
   const limitBlog = 6;
 
   //Get all Blogs
   useEffect(() => {
     (async () => {
       try {
+        const topField = await fieldApi.getTopFieldToSuggest();
+        // console.log("top field ne: ", topField.data);
+
         setLoading(true);
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
-          setLoading(false);
           setBlogList(response.data);
+          setLoading(false);
+          setFields(topField.data);
+          console.log("blog list ne: ", response.data);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
       }
     })();
-  }, [currentPage]);
+  }, [currentPage, location.state]);
+
 
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
@@ -41,9 +53,6 @@ function HomePage(props) {
       initial={{ opacity: 0 }}
       transition={{ duration: 0.35 }}
     >
-      {/* <div>
-        <img src="http://placehold.it/1920x600" alt="" />
-      </div> */}
       <div className="mx-auto w-3/4 mt-10">
         <div className="grid grid-cols-3 gap-4">
           {/* Blog loader */}
@@ -53,9 +62,10 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {loading ? (
+            {(loading || blogList === null || blogList.length === 0) ? (
               <BlogListSkeleton />
             ) : (
+              // console.log("loading, bloglist", loading, blogList)
               <>
                 <BlogList data={blogList} />
               </>
@@ -81,7 +91,11 @@ function HomePage(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            <CategoriesSuggest />
+            {fields.some ?
+              <FieldSuggest fieldList={fields} />
+              :
+              null
+            }
           </div>
           {/* Side Items */}
         </div>

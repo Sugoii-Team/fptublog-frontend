@@ -4,7 +4,6 @@ const axiosClient = axios.create({
   baseURL: "http://7490-42-119-156-204.ap.ngrok.io/fptu-blog",
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
-    // "Content-Type": "application/json",
   },
 });
 
@@ -22,7 +21,6 @@ axiosClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 // Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response) {

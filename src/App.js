@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import ScrollToTopButton from "./components/Button/ScrollToTopButton";
 import Footer from "./components/Footer/footer";
@@ -7,6 +8,9 @@ import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import CommentManage from "./pages/Admin/CommentsManage/CommentManage";
 import Approval from "./pages/Approval/Approval";
+import BlogByFieldHomePage from "./pages/BlogBasedOnField/BlogByFieldHomePage";
+import MentorDashboard from "./pages/Mentor/MentorDashboardDetail/MentorDashboard";
+import StudentBannedDashboard from "./pages/Mentor/StudentsBannedDashboard/StudentBannedDashboard";
 import HomePage from "./pages/Newest/HomePage";
 import MyOwnBlogTable from "./pages/OwnBlog/MyOwnBlogTable";
 import PostBlog from "./pages/PostBlog/PostBlog";
@@ -15,12 +19,31 @@ import SearchResult from "./pages/SearchResult/SearchResult";
 import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import BlogContentDetail from "./pages/Showblogcontent/components/BlogContentDetail";
 import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
+import categoryApi from "./services/categoryApi";
+import fieldApi from "./services/fieldAPI";
 function App() {
+
+  const [fieldList, setFieldList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const fieldListReponse = await fieldApi.getAllFields();
+        const categoriesReponse = await categoryApi.getCategories();
+        setFieldList(fieldListReponse.data);
+        setCategoriesList(categoriesReponse.data);
+      } catch (error) {
+        console.log("Fail to load field list (nav bar component)", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="App font-monsterrat">
       <div>
         <header>
-          <NavBar />
+          <NavBar fieldList = {fieldList} categoriesList = {categoriesList}/>
         </header>
         <div className="min-h-screen">
           <ScrollToTop />
@@ -36,6 +59,10 @@ function App() {
             <Route path="/ownBlog" component={MyOwnBlogTable} />
             <Route path="/profile" component={Profile} exact />
             <Route path="/bannedAccountsList" component={BannedAccount} exact />
+            <Route path="/mentorDashboard" component = {MentorDashboard} exact />
+            <Route path="/studentBannedDashboard" component = {StudentBannedDashboard} exact />
+            <Route path="/blogBaseOnField" component={BlogByFieldHomePage} exact/>
+            {/* <Route path="/blogBaseOnCategory" component={BlogByCategoryHomePage} exact/> */}
             <Route path="/commentsManage" component={CommentManage} exact />
             <Route path="/searchResult" component={SearchResult} exact />
             <Route

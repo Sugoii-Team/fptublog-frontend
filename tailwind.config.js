@@ -37,6 +37,7 @@ module.exports = {
         minHForIndexPicture: "13rem",
         minHForCommentAvatar: "3rem",
         minHForSidePic: "80px",
+        
       },
 
       maxHeight: {
@@ -49,6 +50,7 @@ module.exports = {
         minWForIndexPicture: "15rem",
         minWForCommentAvatar: "3rem",
         minWForSidePic: "100px",
+        minWidthForBlogInProfilePage: "10rem",
       },
 
       maxWidth: {
