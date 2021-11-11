@@ -4,14 +4,13 @@ import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
-import fieldApi from "../../services/fieldAPI";
+import Notification from "../Notifications/Notification";
 import AdminDropDownMenu from "./AdminDropDownMenu";
 import CategoriesShow from "./CategoriesShow";
-import Notification from "../Notifications/Notification";
 import UserDropDownMenu from "./UserDropDownMenu";
 
 NavBar.propTypes = {};
-function NavBar({fieldList, categoriesList}) {
+function NavBar({ fieldList, categoriesList }) {
   const adminLoggedIn = useSelector((state) => state.admin.current);
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
@@ -42,12 +41,11 @@ function NavBar({fieldList, categoriesList}) {
 
   const handleCategoriesClick = (values) => {
     setShowCategories(values);
-    
+  };
   //Send search value to url
   const handleSearch = () => {
     history.push(`/searchResult?${searchValue}`);
   };
-
 
   const handleLoginOnclick = () => {
     setShowModal(!showModal);
@@ -303,7 +301,7 @@ function NavBar({fieldList, categoriesList}) {
           <li className="navItemPadding">
             <span
               className="navItemsHover cursor-pointer"
-              onClick={()=>handleCategoriesClick(!showCategories)}
+              onClick={() => handleCategoriesClick(!showCategories)}
             >
               Fields
             </span>
@@ -328,7 +326,13 @@ function NavBar({fieldList, categoriesList}) {
       {/* Navigation bar */}
 
       {/* Category show */}
-      {showCategories ? <CategoriesShow fieldList = {fieldList} categoriesList= {categoriesList} setShowCategories = {handleCategoriesClick}/> : null}
+      {showCategories ? (
+        <CategoriesShow
+          fieldList={fieldList}
+          categoriesList={categoriesList}
+          setShowCategories={handleCategoriesClick}
+        />
+      ) : null}
       {/* Category show */}
 
       {/* Login Dialog */}
