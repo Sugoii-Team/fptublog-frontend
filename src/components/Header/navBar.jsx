@@ -10,7 +10,7 @@ import CategoriesShow from "./CategoriesShow";
 import UserDropDownMenu from "./UserDropDownMenu";
 
 
-function NavBar({fieldList}) {
+function NavBar({fieldList, categoriesList}) {
   const adminLoggedIn = useSelector((state) => state.admin.current);
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
@@ -22,8 +22,6 @@ function NavBar({fieldList}) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const [currentScrollPostion, setCurrentScrollPostion] = useState(0);
-
-
 
   //Handle Scroll Event to set up nav bar
   useEffect(() => {
@@ -37,8 +35,8 @@ function NavBar({fieldList}) {
     }
   }, [currentScrollPostion]);
 
-  const handleCategoriesClick = () => {
-    setShowCategories(!showCategories);
+  const handleCategoriesClick = (values) => {
+    setShowCategories(values);
   };
 
   const handleLoginOnclick = () => {
@@ -224,7 +222,7 @@ function NavBar({fieldList}) {
           <li className="navItemPadding">
             <span
               className="navItemsHover cursor-pointer"
-              onClick={handleCategoriesClick}
+              onClick={()=>handleCategoriesClick(!showCategories)}
             >
               Fields
             </span>
@@ -249,7 +247,7 @@ function NavBar({fieldList}) {
       {/* Navigation bar */}
 
       {/* Category show */}
-      {showCategories ? <CategoriesShow fieldList = {fieldList} /> : null}
+      {showCategories ? <CategoriesShow fieldList = {fieldList} categoriesList= {categoriesList} setShowCategories = {handleCategoriesClick}/> : null}
       {/* Category show */}
 
       {/* Login Dialog */}

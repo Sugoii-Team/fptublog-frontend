@@ -43,7 +43,6 @@ function HomePage(props) {
   }, [currentPage, location.state]);
 
 
-
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
@@ -54,9 +53,6 @@ function HomePage(props) {
       initial={{ opacity: 0 }}
       transition={{ duration: 0.35 }}
     >
-      <div>
-        <img src="http://placehold.it/1920x600" alt="" />
-      </div>
       <div className="mx-auto w-3/4 mt-10">
         <div className="grid grid-cols-3 gap-4">
           {/* Blog loader */}

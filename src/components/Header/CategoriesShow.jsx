@@ -1,48 +1,49 @@
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
-import fieldApi from "../../services/fieldAPI";
+import React from "react";
+import { Link } from "react-router-dom";
 
 CategoriesShow.propTypes = {};
 
-function CategoriesShow({fieldList}) {
-  
-  console.log("field list ne: ", fieldList);
+function CategoriesShow({ fieldList, categoriesList, setShowCategories }) {
+
+  const handleOnFieldClick = (values) => {
+    setShowCategories(values);
+  }
 
   return (
     <motion.div
       animate={{ y: 0, opacity: 1 }}
       initial={{ y: 20, opacity: 0 }}
-      className="bg-gray-50 w-full h-96 border-b-2 border-gray-300 shadow-lg absolute z-40"
+      className="bg-gray-50 w-full min-h-96 border-b-2 border-gray-300 shadow-lg z-40 absolute grid grid-flow-row grid-cols-4 auto-rows-auto px-6 pt-4 pb-6"
     >
-      <div className="flex justify-center ">
-        <div className="pl-10 grid grid-cols-5 pt-10 w-3/4 text-sm text-secondary font-bold ">
-          {fieldList.map((field, idx) => (
-            <div className="text-left mt-10 px-4" key={idx}>
-              <div className="borderForCategories">{field.name}</div>
-            </div>
-          ))}
-          {/* <div className="text-left ">
-            <div className="borderForCategories">Software Engineer</div>
+      {fieldList.map((field, idx) => (
+        <div key={idx} className="text-sm ml-10">
             <div>
-              <ul className="grid grid-rows-4text-sm font-normal">
-                <li className="mt-2">Java Script</li>
-                <li className="mt-2">PHP</li>
-                <li className="mt-2">Web Design For Everybody</li>
-              </ul>
+              <div className="text-left px-4 relative text-secondary font-bold mt-10" key={idx}>
+                <span className="borderForCategories text-lg">{field.name}</span>
+              </div>
+              {categoriesList.map((category, idx) => (
+                (category.fieldId === field.id) ?
+                  <Link to = {{
+                    pathname: '/blogBaseOnCategory',
+                    state:{
+                      field : {field}, 
+                      category : {category}
+                    }
+                  }} key={idx} className = "mt-2 ml-7 text-sm block"
+                  onClick = {()=>handleOnFieldClick(false)}>
+                   
+                  {category.name}
+                    
+                  </Link>
+                  :
+                  null
+              ))}
+
             </div>
-          </div>
-          
-          <div className="text-left">
-            <div className="borderForCategories">Software Engineer</div>
-          </div>
-          <div className="text-left">
-            <div className="borderForCategories">Software Engineer</div>
-          </div>
-          <div className="text-left">
-            <div className="borderForCategories">Software Engineer</div>
-          </div> */}
         </div>
-      </div>
+
+      ))}
     </motion.div>
   );
 }

@@ -17,19 +17,33 @@ function Profile(props) {
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
   const [profileAward, setProfileAward] = useState([]);
-  // const [status, setStatus] = useState(false);
   const [loading, setLoading] = useState(true);
-
-
   const [listPopularBlog, setListPopularBlog] = useState([]);
-  // console.log("list blog ne : ", listPopularBlog);
-
+  const [studentUser, setStudentUser] = useState({});
   const defaultThumnail = "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
+
+  //Get student profile to get experience point to show on profile page
+  const handleStudentProfile = (data) => {
+    setStudentUser(data);
+  };
 
   const color = {
     frombgColor: "pink",
     tobgColor: "purple",
-    completed: 57,
+    completed: ((studentUser.experiencePoint/4000)*100).toFixed(2),
+  };
+
+  const experience = () => {
+    console.log(studentUser.experiencePoint);
+    if(0<studentUser.experiencePoint && studentUser.experiencePoint<1000){
+      return "ROOKIE";
+    } else if (1000 <= studentUser.experiencePoint && studentUser.experiencePoint < 2000){
+      return "NEWBIE";
+    }else if (2000 <= studentUser.experiencePoint && studentUser.experiencePoint  < 3000){
+      return "BLOGGER";
+    } else{
+      return "PRO BLOGGER";
+    }
   };
 
   const onHandleStudentSubmit = async (data) => {
@@ -37,8 +51,6 @@ function Profile(props) {
       try {
         const reponse = await userApi.updateStudentProfile(userProfile.id, data);
         if (reponse.status === 200) {
-          // setResponseObject(reponse);
-          // setStatus(true);
           window.alert("Update Student Profile successfully");
         }
       } catch (error) {
@@ -55,7 +67,6 @@ function Profile(props) {
       try {
         const response = await userApi.viewProfile(userId);
         const popularBlog = await userApi.getPopularBlogOfUser(response.data.id);
-        // console.log("repose ne", response);
         setUserProfile(response.data);
         setListPopularBlog(popularBlog.data);
         if (response.status === 200 && popularBlog.status === 200) {
@@ -67,17 +78,6 @@ function Profile(props) {
     })();
   }, [userId]);
 
-
-  // //get Lecturer information base on userProfile id
-  // const handleTakeLecturerInformation = async (id) => {
-  //   const lecturer = await lecturerApi.getLecturerById(id);
-  //   const lecturerField = await lecturerApi.getFieldOfLecturer(lecturer.data.id);
-  //   const listOfField = await lecturerApi.getListOfField();
-
-  //   setLecturerUser(lecturer.data);
-  //   setFieldOfLecturer(lecturerField.data);
-  //   setListOfField(listOfField.data);
-  // }
 
   return (
     <div>
@@ -106,6 +106,8 @@ function Profile(props) {
                           alt="profile img"
                         />
                       </div>
+
+                      {userProfile.role === "STUDENT" ?
                       <div className="col-span-1 absolute left-56 top-5">
                         <div className="profileNameNDes">
                           <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
@@ -117,10 +119,26 @@ function Profile(props) {
                               : "AYoooooooo <3"}
                           </p>
                         </div>
-                        <div className="mt-5 text-purple-600 font-bold uppercase">
-                          Pro Blogger
+                        <div className="mt-2 text-purple-600 font-bold uppercase"> 
+                          {experience()}
                         </div>
                       </div>
+                      :
+                      <div className="col-span-1 absolute left-56 top-5">
+                        <div className="profileNameNDes mt-5">
+                          <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
+                            {userProfile.firstName + " " + userProfile.lastName}
+                          </span>
+                          <p className="text-lg">
+                            {userProfile.description !== null
+                              ? userProfile.description
+                              : "AYoooooooo <3"}
+                          </p>
+                        </div>
+                      </div>
+                      
+                    
+                    }
                     </div>
                   </div>
 
@@ -151,9 +169,11 @@ function Profile(props) {
           </motion.div>
 
           {/* Below */}
+          
           <div className="grid grid-cols-3 my-5 gap-3">
             {/* Left */}
             <div className="col-span-1">
+            {(userProfile.role === "STUDENT" && loading === false) ?
               <motion.div
                 animate={{ y: 0, opacity: 1 }}
                 initial={{ y: 20, opacity: 0.5 }}
@@ -174,12 +194,12 @@ function Profile(props) {
                       Next Level:{" "}
                     </div>
                     <div className="absolute bottom-0 right-0 uppercase text-sm font-semibold text-pink-600">
-                      Supper Blogger{" "}
+                      Pro Blogger{" "}
                     </div>
                   </div>
                 </div>
                 <div className="">
-                  <h1 className="text-center font-bold uppercase">Badges Gained</h1>
+                  <h1 className="text-center font-bold uppercase">Experience Point</h1>
                   <div className="grid grid-cols-6 gap-4">
                     {profileAward?.map((award, index) => (
                       <div className="col-span-1" key={index}>
@@ -197,6 +217,12 @@ function Profile(props) {
                   </div>
                 </div>
               </motion.div>
+          
+          :
+
+          null
+          
+          }
 
               {/* ///////////////////////////////////////////////////////////////// */}
 
@@ -213,7 +239,7 @@ function Profile(props) {
                   ABOUT
                 </h1>
                 {userProfile.role === "STUDENT" ?
-                  <StudentOption userProfile={userProfile} dataOfStudentToUpdate={onHandleStudentSubmit} />
+                  <StudentOption userProfile={userProfile} dataOfStudentToUpdate={onHandleStudentSubmit} studentProfile = {handleStudentProfile} />
                   :
                   <LecturerOption userProfile={userProfile} />
                 }

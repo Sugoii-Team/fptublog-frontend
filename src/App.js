@@ -7,7 +7,7 @@ import ScrollToTop from "./components/WindowAction/ScrollToTop";
 import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import Approval from "./pages/Approval/Approval";
-import BlogByFieldHomePage from "./pages/BlogBasedOnCategory/BlogByFieldHomePage";
+import BlogByFieldHomePage from "./pages/BlogBasedOnField/BlogByFieldHomePage";
 import MentorDashboard from "./pages/Mentor/MentorDashboardDetail/MentorDashboard";
 import StudentBannedDashboard from "./pages/Mentor/StudentsBannedDashboard/StudentBannedDashboard";
 import HomePage from "./pages/Newest/HomePage";
@@ -17,16 +17,20 @@ import Profile from "./pages/Profile/Profile";
 import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import BlogContentDetail from "./pages/Showblogcontent/components/BlogContentDetail";
 import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
+import categoryApi from "./services/categoryApi";
 import fieldApi from "./services/fieldAPI";
 function App() {
 
   const [fieldList, setFieldList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const fieldListReponse = await fieldApi.getAllFields();
-        setFieldList(fieldListReponse.data)
+        const categoriesReponse = await categoryApi.getCategories();
+        setFieldList(fieldListReponse.data);
+        setCategoriesList(categoriesReponse.data);
       } catch (error) {
         console.log("Fail to load field list (nav bar component)", error);
       }
@@ -37,7 +41,7 @@ function App() {
     <div className="App font-monsterrat">
       <div>
         <header>
-          <NavBar fieldList = {fieldList} />
+          <NavBar fieldList = {fieldList} categoriesList = {categoriesList}/>
         </header>
         <div className="min-h-screen">
           <ScrollToTop />
@@ -56,6 +60,7 @@ function App() {
             <Route path="/mentorDashboard" component = {MentorDashboard} exact />
             <Route path="/studentBannedDashboard" component = {StudentBannedDashboard} exact />
             <Route path="/blogBaseOnField" component={BlogByFieldHomePage} exact/>
+            {/* <Route path="/blogBaseOnCategory" component={BlogByCategoryHomePage} exact/> */}
             <Route
               path="/about"
               component={() => {

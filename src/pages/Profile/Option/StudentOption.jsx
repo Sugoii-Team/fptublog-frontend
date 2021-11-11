@@ -6,7 +6,7 @@ import userApi from '../../../services/userApi';
 StudentOption.propTypes = {
 };
 
-function StudentOption({ userProfile, dataOfStudentToUpdate }) {
+function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
 
   const [studentUser, setStudentUser] = useState({});
   const [majorOfStudent, setMajorOfStudent] = useState({});
@@ -41,8 +41,8 @@ function StudentOption({ userProfile, dataOfStudentToUpdate }) {
         const student = await userApi.getStudentById(userProfile.id);
         const studentMajor = await userApi.getStudentMajorByMajorId(student.data.majorId);
         const listOfMajor = await userApi.getMajorList();
-        // console.log("student ne: ", student);
         setStudentUser(student.data);
+        studentProfile(student.data);
         setMajorOfStudent(studentMajor.data);
         setListOfMajor(listOfMajor.data);
       } catch (error) {

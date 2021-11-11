@@ -17,6 +17,7 @@ function LecturerOption({ userProfile }) {
     (async () => {
       try {
         const lecturer = await lecturerApi.getLecturerById(userProfile.id);
+        console.log("lecturer ne: ", lecturer);
         const lecturerField = await lecturerApi.getFieldOfLecturer(lecturer.data.id);
         const listOfField = await lecturerApi.getListOfField();
 

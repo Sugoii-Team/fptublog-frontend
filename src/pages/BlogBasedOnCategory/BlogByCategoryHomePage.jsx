@@ -19,29 +19,30 @@ function BlogByFieldHomePage(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [fields, setFields] = useState([]);
   const [blogByFieldIsEmpty, setBlogByFieldIsEmpty] = useState(true);
-  const fieldState = location.state.field;
-  console.log("field state ne: ", fieldState);
 
+  //get field which is tranfered like a state when user click field suggest link from slide item
+  const fieldState = location.state.field;
   const limitBlog = 6;
 
   //Get blog of field
   useEffect(() => {
     (async () => {
       try {
+        //get top field to suggest in slide item
         const topField = await fieldApi.getTopFieldToSuggest();
-        console.log("top field: ", topField);
         setFields(topField.data);
-        console.log("top field ne: ", topField);
-        console.log("location ne: ", location.state);
+
+        // if location.state != undefined => get field from state => then get blogs belong to that field by field id 
         if (location.state !== undefined) {
           setLoading(true);
-          const blogByField = await blogApi.getBlogsByFieldId(fieldState.field.field.id);
+          const blogByField = await blogApi.getBlogsByFieldId(fieldState.field.id);
+          console.log("blog field ne: ", blogByField.data);
           if(blogByField.data.length > 0){
             setLoading(false);
             setBlogList(blogByField.data);
             setBlogByFieldIsEmpty(false);
           }
-        }
+        } else setBlogByFieldIsEmpty(true);
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
       }
