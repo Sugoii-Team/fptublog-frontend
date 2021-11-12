@@ -9,7 +9,6 @@ import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
-
 HomePage.propTypes = {};
 
 function HomePage(props) {
@@ -38,7 +37,6 @@ function HomePage(props) {
       }
     })();
   }, [currentPage, location.state]);
-
 
   const handleOnpageChange = (data) => {
     console.log("data ne : ", data);
@@ -91,11 +89,7 @@ function HomePage(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            {fields.some ?
-              <FieldSuggest fieldList={fields} />
-              :
-              null
-            }
+            {fields.some ? <FieldSuggest fieldList={fields} /> : null}
           </div>
           {/* Side Items */}
         </div>

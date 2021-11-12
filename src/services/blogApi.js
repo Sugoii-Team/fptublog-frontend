@@ -29,6 +29,7 @@ const blogApi = {
     const dataPromise = promise.then((response) => response.data);
     return dataPromise;
   },
+
   add(data) {
     const url = "/api/blogs";
     return axiosClient.post(url, data);
@@ -82,18 +83,32 @@ const blogApi = {
     return dataAfterPromise;
   },
 
-  getCategoriesToSuggest(){
-    const url = 'api/categories';
+  getCategoriesToSuggest() {
+    const url = "api/categories";
     return axiosClient.get(url);
   },
 
-  getBlogsByFieldId(fieldId){
+  getBlogsByFieldId(fieldId) {
     const url = `api/fields/${fieldId}/blogs?limit=3&page=1`;
     return axiosClient.get(url);
   },
   getBlogsBelongToCategoryByCategoryId(categoryId){
     const url = `api/categories/${categoryId}/blogs`;
     return axiosClient.get(url);
+  },
+  
+  undoDeleteBlog(blogId) {
+    const url = `api/blogs/${blogId}/undo_delete`;
+    return axiosClient.post(
+      url,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+      }
+    );
   },
 };
 

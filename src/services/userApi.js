@@ -15,7 +15,6 @@ const userApi = {
   },
 
   login(data) {
-    console.log("data: ", data);
     const url = "api/auth/login";
     const promise = axiosClient.post(url, data, {
       headers: {

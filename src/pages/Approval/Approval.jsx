@@ -21,6 +21,8 @@ function Approval(props) {
     })();
   }, [userData.id]);
 
+  console.log("Reviewing blog ne: ", reviewBlog);
+
   return (
     <div>
       {userRole === "LECTURER" ? (
