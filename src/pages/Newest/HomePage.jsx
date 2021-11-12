@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
+import fieldApi from "../../services/fieldApi";
 import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
@@ -25,8 +25,6 @@ function HomePage(props) {
     (async () => {
       try {
         const topField = await fieldApi.getTopFieldToSuggest();
-        // console.log("top field ne: ", topField.data);
-
         setLoading(true);
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
@@ -41,6 +39,7 @@ function HomePage(props) {
   }, [currentPage, location.state]);
 
   const handleOnpageChange = (data) => {
+    console.log("data ne : ", data);
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
@@ -59,13 +58,15 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {loading || blogList === null || blogList.length === 0 ? (
+            {(loading || blogList === null) ? (
+              blogList.length === 0 ?
+              null
+              :
               <BlogListSkeleton />
             ) : (
-              // console.log("loading, bloglist", loading, blogList)
-              <>
+              <div>
                 <BlogList data={blogList} />
-              </>
+              </div>
             )}
             <Pagination
               previousLabel={"Previous"}

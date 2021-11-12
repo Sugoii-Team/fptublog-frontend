@@ -6,6 +6,8 @@ import FieldSuggest from "../Newest/components/SideItem/FieldSuggest";
 import BlogList from "../Newest/components/MainItem/BlogList";
 import BlogListSkeleton from "../Newest/components/MainItem/BlogListSkeleton";
 import BlogPopular from "../Newest/components/SideItem/BlogPopular";
+import FieldSuggest from "../Newest/components/SideItem/FieldSuggest";
+
 
 SearchResult.propTypes = {};
 

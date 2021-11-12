@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
-import BlogList from "./components/MainItem/BlogList";
+import fieldApi from "../../services/fieldApi";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
+import BlogsBelongToFieldList from "./components/MainItem/BlogsBelongToFieldList";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
@@ -21,7 +21,7 @@ function BlogByFieldHomePage(props) {
 
   //get field which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
-  //const limitBlog = 6;
+  // const limitBlog = 6;
 
   //Get blog of field
   useEffect(() => {
@@ -87,7 +87,7 @@ function BlogByFieldHomePage(props) {
             ) : (
               // console.log("loading, bloglist", loading, blogList)
               <>
-                <BlogList data={blogList} />
+                <BlogsBelongToFieldList data={blogList} />
               </>
             )}
             {blogByFieldIsEmpty === true ? null : (

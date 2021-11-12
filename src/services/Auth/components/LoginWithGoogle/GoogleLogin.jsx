@@ -12,8 +12,6 @@ function MyGoogleLogin(props) {
 
   const dispatch = useDispatch();
   const responseGoogle = async (response) => {
-    /*   console.log(response);
-    console.log(response.profileObj); */
     var token = "id_token=" + response.tokenId;
     try {
       const action = login(token);

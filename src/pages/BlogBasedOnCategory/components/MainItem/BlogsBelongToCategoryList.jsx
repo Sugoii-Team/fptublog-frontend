@@ -2,15 +2,15 @@ import PropTypes from "prop-types";
 import React from "react";
 import Blog from "./Blog";
 
-BlogList.propTypes = {
+BlogsBelongToCategoryList.propTypes = {
   data: PropTypes.array,
 };
 
-BlogList.defaultProps = {
+BlogsBelongToCategoryList.defaultProps = {
   data: [],
 };
 
-function BlogList({ data }) {
+function BlogsBelongToCategoryList({ data }) {
   /* const [pageNumber, setPageNumber] = useState(0);
   const blogPerPage = 6;
   const pagesVisited = pageNumber * blogPerPage;
@@ -37,4 +37,4 @@ function BlogList({ data }) {
   );
 }
 
-export default BlogList;
+export default BlogsBelongToCategoryList;

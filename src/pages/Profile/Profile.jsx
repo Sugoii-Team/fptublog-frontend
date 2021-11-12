@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
@@ -14,42 +15,41 @@ import StudentOption from "./Option/StudentOption";
 Profile.propTypes = {};
 
 function Profile(props) {
-  const currentUser = useSelector((state) => state.user.current);
+  const currentUser = useSelector((state) => state.user.current)
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
   const [profileAward, setProfileAward] = useState([]);
   const [loading, setLoading] = useState(true);
   const [listPopularBlog, setListPopularBlog] = useState([]);
   const [studentUser, setStudentUser] = useState({});
-  const defaultThumnail =
-    "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
+  const [currentPage, setCurrentPage] = useState(1);
+  const defaultThumnail = "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
 
   //Get student profile to get experience point to show on profile page
   const handleStudentProfile = (data) => {
     setStudentUser(data);
   };
 
+  const handleOnpageChange = (data) => {
+    setCurrentPage(data.selected + 1); // Page count start at 1
+  };
+
+  const limitBlog = 3;
+
   const color = {
     frombgColor: "pink",
     tobgColor: "purple",
-    completed: ((studentUser.experiencePoint / 4000) * 100).toFixed(2),
+    completed: ((studentUser.experiencePoint / 4000) * 100).toFixed(0),
   };
 
   const experience = () => {
-    console.log(studentUser.experiencePoint);
-    if (0 < studentUser.experiencePoint && studentUser.experiencePoint < 1000) {
+    if (0 <= studentUser.experiencePoint && studentUser.experiencePoint < 1000) {
       return "ROOKIE";
-    } else if (
-      1000 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 2000
-    ) {
+    } else if (1000 <= studentUser.experiencePoint && studentUser.experiencePoint < 2000) {
       return "NEWBIE";
-    } else if (
-      2000 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 3000
-    ) {
+    } else if (2000 <= studentUser.experiencePoint && studentUser.experiencePoint < 3000) {
       return "BLOGGER";
-    } else {
+    } else if (studentUser.experiencePoint >= 3000) {
       return "PRO BLOGGER";
     }
   };
@@ -67,45 +67,34 @@ function Profile(props) {
       } catch (error) {
         console.log("Fail to update Student profile", error);
       }
-    } else return;
+    }
+    else return;
   };
+
 
   useEffect(() => {
     (async () => {
       try {
+        //Get award of profile
+        if (userProfile.role === "STUDENT") {
+          const awardResponse = await awardApi.getAwardOfStudent(userId);
+          setProfileAward(awardResponse.data);
+        }
         const response = await userApi.viewProfile(userId);
-        const popularBlog = await userApi.getPopularBlogOfUser(
-          response.data.id
-        );
+        const popularBlog = await userApi.getPopularBlogOfUser(response.data.id, currentPage, limitBlog);
         setUserProfile(response.data);
         setListPopularBlog(popularBlog.data);
         if (response.status === 200 && popularBlog.status === 200) {
           setLoading(false);
+          console.log("reponse hinh anh", response.data.avatarUrl);
         }
       } catch (error) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userId]);
+  }, [userId, userProfile.role, currentPage]);
 
-  /*  const handleBanStudentClick = async () => {
-    const confirm = window.confirm("Are you sure wanted to ban this Student?");
-    if (confirm) {
-      try {
-        let lecturerId = currentUser.id;
-        let studentId = userProfile.id;
-        const banResponse = await lecturerApi.banStudent(lecturerId, studentId);
-        if (banResponse.status === 200) {
-          alert("Ban student sucess!");
-        }
-      } catch (error) {
-        console.log("Failed to ban student!", error);
-        alert("Failed to ban student!");
-      }
-    }
-  }; */
 
-  //Get award of profile
   useEffect(() => {
     (async () => {
       try {
@@ -122,7 +111,6 @@ function Profile(props) {
       }
     })();
   }, [userProfile.role, userId]);
-
   return (
     <div>
       {currentUser.role === "STUDENT" || currentUser.role === "LECTURER" ? (
@@ -150,51 +138,55 @@ function Profile(props) {
                       />
                     </div>
 
-                    {userProfile.role === "STUDENT" ? (
-                      <div className="col-span-1 absolute left-56 top-5">
-                        <div className="profileNameNDes">
-                          <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
-                            {userProfile.firstName + " " + userProfile.lastName}
-                          </span>
-                          <p className="text-lg">
-                            {userProfile.description !== null
-                              ? userProfile.description
-                              : "AYoooooooo <3"}
-                          </p>
+                      {userProfile.role === "STUDENT" ?
+                        <div className="col-span-1 absolute left-56 top-5">
+                          <div className="profileNameNDes">
+                            <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
+                              {userProfile.firstName + " " + userProfile.lastName}
+                            </span>
+                            <p className="text-lg">
+                              {userProfile.description !== null
+                                ? userProfile.description
+                                : "AYoooooooo <3"}
+                            </p>
+                          </div>
+                          <div className="mt-2 text-purple-600 font-bold uppercase">
+                            {experience()}
+                          </div>
                         </div>
-                        <div className="mt-2 text-purple-600 font-bold uppercase">
-                          {experience()}
+                        :
+                        <div className="col-span-1 absolute left-56 top-5">
+                          <div className="profileNameNDes mt-5">
+                            <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
+                              {userProfile.firstName + " " + userProfile.lastName}
+                            </span>
+                            <p className="text-lg">
+                              {userProfile.description !== null
+                                ? userProfile.description
+                                : "AYoooooooo <3"}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="col-span-1 absolute left-56 top-5">
-                        <div className="profileNameNDes mt-5">
-                          <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
-                            {userProfile.firstName + " " + userProfile.lastName}
-                          </span>
-                          <p className="text-lg">
-                            {userProfile.description !== null
-                              ? userProfile.description
-                              : "AYoooooooo <3"}
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                      }
+                    </div>
                   </div>
                 </div>
 
-                <div className="profileStatus col-span-2 ">
-                  <div className="flex flex-col items-end space-y-12 my-2 mx-10">
-                    <div className="flex flex-row gap-7 text-center text-xs uppercase text-gray-400">
-                      <div className="">
-                        <p className="text-2xl font-bold text-black">
-                          {listPopularBlog.length}
-                        </p>
-                        <p>Posted</p>
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold text-black">0</p>
-                        <p>Liked</p>
+                  <div className="profileStatus col-span-2 ">
+                    <div className="flex flex-col items-end space-y-12 my-2 mx-10">
+                      <div className="flex flex-row gap-7 text-center text-xs uppercase text-gray-400">
+                        <div className="">
+                          <p className="text-2xl font-bold text-black">{listPopularBlog.length}</p>
+                          <p>Posted</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-black">{userProfile.avgRate}</p>
+                          <p>Average Rate</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-black">0</p>
+                          <p>Award</p>
+                        </div>
                       </div>
                       <div>
                         <p className="text-2xl font-bold text-black">0</p>
@@ -216,15 +208,13 @@ function Profile(props) {
           <div className="grid grid-cols-3 my-5 gap-3">
             {/* Left */}
             <div className="col-span-1">
-              {userProfile.role === "STUDENT" && loading === false ? (
+              {(userProfile.role === "STUDENT" && loading === false) ?
                 <motion.div
                   animate={{ y: 0, opacity: 1 }}
                   initial={{ y: 20, opacity: 0.5 }}
                   className="border-2 border-gray-100 rounded-lg shadow-lg min-h-0 mb-3 py-4 px-7"
                 >
-                  <h1 className="font-bold text-xl text-center uppercase">
-                    Award
-                  </h1>
+                  <h1 className="font-bold text-xl text-center uppercase">Award</h1>
                   <div className="">
                     <p className="font-semibold text-md">Experience Point</p>
                     <div>
@@ -244,29 +234,34 @@ function Profile(props) {
                     </div>
                   </div>
                   <div className="">
-                    <h1 className="text-center font-bold uppercase">
-                      Experience Point
-                    </h1>
-                    <div className="grid grid-cols-6 gap-4">
-                      {profileAward?.map((award, index) => (
-                        <div className="col-span-1" key={index}>
-                          <div className="p-1">
-                            <img
-                              src={award?.iconUrl}
-                              className="w-12 mx-auto transition ease-in-out duration-150 transform hover:-translate-y-0.5 hover:scale-105"
-                              alt="award"
-                              title={award?.name}
-                            />
-                            <p className="flex justify-center font-semibold">
-                              1
-                            </p>
+                    <h1 className="text-center font-bold uppercase">Badges Gained</h1>
+                    {profileAward.length > 0 ?
+                      <div className="grid grid-cols-6 gap-4">
+                        {profileAward?.map((award, index) => (
+                          <div className="col-span-1" key={index}>
+                            <div className="p-1">
+                              <img
+                                src={award?.iconUrl}
+                                className="w-12 mx-auto transition ease-in-out duration-150 transform hover:-translate-y-0.5 hover:scale-105"
+                                alt="award"
+                                title={award?.name}
+                              />
+                              <p className="flex justify-center font-semibold">1</p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                      :
+                      <p className="uppercase text-center">You not have badges Gained</p>
+                    }
                   </div>
                 </motion.div>
-              ) : null}
+
+                :
+
+                null
+
+              }
 
               {/* ///////////////////////////////////////////////////////////////// */}
 
@@ -306,6 +301,7 @@ function Profile(props) {
                   Blogger's POST
                 </h1>
                 {listPopularBlog.map((popularBlog, idx) => (
+
                   <Link
                     to={`blogDetail?${popularBlog.id}`}
                     className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-3"
@@ -334,6 +330,22 @@ function Profile(props) {
                     </div>
                   </Link>
                 ))}
+                <ReactPaginate
+                  previousLabel={"Previous"}
+                  nextLabel={"Next"}
+                  pageCount={15}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={handleOnpageChange}
+                  containerClassName={"flex gap-1 justify-center my-4"}
+                  pageLinkClassName={
+                    "border-r-2 border-l-2 px-5 py-2 font-semibold hover:bg-gray-100 transision ease-in duration-200"
+                  }
+                  previousLinkClassName={"font-bold uppercase mr-2"}
+                  nextLinkClassName={"font-bold uppercase ml-2"}
+                  breakLinkClassName={"font-bold uppercase px-4 py-2"}
+                  activeLinkClassName={"bg-gray-100"}
+                />
               </div>
             </motion.div>
           </div>
