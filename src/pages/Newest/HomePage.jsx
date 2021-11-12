@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
+import fieldApi from "../../services/fieldApi";
 import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
-
 
 HomePage.propTypes = {};
 
@@ -26,15 +25,12 @@ function HomePage(props) {
     (async () => {
       try {
         const topField = await fieldApi.getTopFieldToSuggest();
-        // console.log("top field ne: ", topField.data);
-
         setLoading(true);
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
           setBlogList(response.data);
           setLoading(false);
           setFields(topField.data);
-          console.log("blog list ne: ", response.data);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
@@ -42,8 +38,8 @@ function HomePage(props) {
     })();
   }, [currentPage, location.state]);
 
-
   const handleOnpageChange = (data) => {
+    console.log("data ne : ", data);
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
@@ -62,13 +58,15 @@ function HomePage(props) {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {(loading || blogList === null || blogList.length === 0) ? (
+            {(loading || blogList === null) ? (
+              blogList.length === 0 ?
+              null
+              :
               <BlogListSkeleton />
             ) : (
-              // console.log("loading, bloglist", loading, blogList)
-              <>
+              <div>
                 <BlogList data={blogList} />
-              </>
+              </div>
             )}
             <Pagination
               previousLabel={"Previous"}
@@ -91,11 +89,7 @@ function HomePage(props) {
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            {fields.some ?
-              <FieldSuggest fieldList={fields} />
-              :
-              null
-            }
+            {fields.some ? <FieldSuggest fieldList={fields} /> : null}
           </div>
           {/* Side Items */}
         </div>

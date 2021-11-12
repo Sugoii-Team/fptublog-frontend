@@ -12,10 +12,7 @@ function MyGoogleLogin(props) {
 
   const dispatch = useDispatch();
   const responseGoogle = async (response) => {
-    /*   console.log(response);
-    console.log(response.profileObj); */
     var token = "id_token=" + response.tokenId;
-    console.log("token ne: ", token);
     try {
       const action = login(token);
       const resultAction = await dispatch(action);

@@ -8,9 +8,12 @@ import Dashboard from "./pages/Admin/AdminDashboard/Dashboard";
 import BannedAccount from "./pages/Admin/BannedAccountList/BannedAccount";
 import CommentManage from "./pages/Admin/CommentsManage/CommentManage";
 import Approval from "./pages/Approval/Approval";
+import BlogByCategoryHomePage from "./pages/BlogBasedOnCategory/BlogByCategoryHomePage";
+import GiveAwardTable from "./pages/GiveAward/GiveAwardTable";
 import BlogByFieldHomePage from "./pages/BlogBasedOnField/BlogByFieldHomePage";
 import MentorDashboard from "./pages/Mentor/MentorDashboardDetail/MentorDashboard";
 import StudentBannedDashboard from "./pages/Mentor/StudentsBannedDashboard/StudentBannedDashboard";
+
 import HomePage from "./pages/Newest/HomePage";
 import MyOwnBlogTable from "./pages/OwnBlog/MyOwnBlogTable";
 import PostBlog from "./pages/PostBlog/PostBlog";
@@ -20,7 +23,7 @@ import BlogContentFeature from "./pages/Showblogcontent/BlogContent";
 import BlogContentDetail from "./pages/Showblogcontent/components/BlogContentDetail";
 import UpdateBlog from "./pages/UpdateBlog/UpdateBlog";
 import categoryApi from "./services/categoryApi";
-import fieldApi from "./services/fieldAPI";
+import fieldApi from "./services/fieldApi";
 function App() {
 
   const [fieldList, setFieldList] = useState([]);
@@ -62,9 +65,10 @@ function App() {
             <Route path="/mentorDashboard" component = {MentorDashboard} exact />
             <Route path="/studentBannedDashboard" component = {StudentBannedDashboard} exact />
             <Route path="/blogBaseOnField" component={BlogByFieldHomePage} exact/>
-            {/* <Route path="/blogBaseOnCategory" component={BlogByCategoryHomePage} exact/> */}
+            <Route path="/blogBaseOnCategory" component={BlogByCategoryHomePage} exact/>
             <Route path="/commentsManage" component={CommentManage} exact />
             <Route path="/searchResult" component={SearchResult} exact />
+            <Route path="/giveAward" component={GiveAwardTable} exact />
             <Route
               path="/about"
               component={() => {

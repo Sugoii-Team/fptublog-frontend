@@ -1,33 +1,39 @@
+import { CircularProgress } from "@mui/material";
+//FireBase
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { motion } from "framer-motion";
+import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+//Mark down
+import ReactMde from "react-mde";
+import "react-mde/lib/styles/css/react-mde-all.css";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import Select from "react-select";
 //Addition Library
 import { WithContext as ReactTags } from "react-tag-input";
-//Mark down
-import ReactMde from "react-mde";
 import Showdown from "showdown";
-import "react-mde/lib/styles/css/react-mde-all.css";
-import "./postBlog.css";
 //Components and API
 import MyDialog from "../../components/Dialog/MyDialog";
 import blogApi from "../../services/blogApi";
 import categoryApi from "../../services/categoryApi";
-//FireBase
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import fieldApi from "../../services/fieldApi";
 import { storage } from "../../services/fireBase";
+import tagsApi from "../../services/tagsApi";
+import "./postBlog.css";
+//Another
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { CircularProgress } from "@mui/material";
 import tagsApi from "../../services/tagsApi";
-import fieldApi from "../../services/fieldApi";
+import fieldApi from "../../services/fieldAPI";
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,
   BlogNeedUpdate: PropTypes.object,
   isUpdate: PropTypes.bool,
 };
-
+//Converter for richtext input
 const converter = new Showdown.Converter({
   tables: true,
   simplifiedAutoLink: true,
@@ -44,7 +50,6 @@ export default function NewBlogForm(props) {
   const history = useHistory();
   /* const isLoggedIn = true; */
   const userId = getUserState.id;
-
   /* State for some field */
   const [title, setTitle] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -53,6 +58,7 @@ export default function NewBlogForm(props) {
   const [allField, setAllField] = useState([]);
   const [thisBlogCategoy, setThisBlogCategoy] = useState({});
   const [thumbNail, setThumbNail] = useState(null);
+  const [isThumbNailSelected, setIsThumbNailSelected] = useState(false);
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
   const [selectedTab, setSelectedTab] = useState("write");
@@ -71,9 +77,9 @@ export default function NewBlogForm(props) {
     { id: "AI", text: "AI" },
   ];
 
-  const minTitleLength = 30;
+  const minTitleLength = 5;
   const minContentLength = 300;
-  const minLength = 50;
+  const minLength = 5;
   const maxLength = 200;
   var thumbnailUrl = null;
 
@@ -136,7 +142,7 @@ export default function NewBlogForm(props) {
   useEffect(() => {
     (async () => {
       try {
-        const responseField = await fieldApi.getAllField();
+        const responseField = await fieldApi.getAllFields();
         setAllField(responseField.data);
       } catch (error) {
         console.log("Failed to get categories: ", error);
@@ -157,7 +163,7 @@ export default function NewBlogForm(props) {
   useEffect(() => {
     (async () => {
       try {
-        //Call field only when field is selected
+        //Call categories only when field is selected
         if (selectedField !== "") {
           const responseCategories = await categoryApi.getCategoryByFieldId(
             selectedField
@@ -215,7 +221,7 @@ export default function NewBlogForm(props) {
 
   //Function to call api post a blog
   async function callApiToPostBlog() {
-    devideTagsToPostAPI();
+    devideTagsToPostAPI(); //Summary all tags inputted to post
     try {
       if (isUpdate) {
         // If update, send api for update
@@ -225,16 +231,22 @@ export default function NewBlogForm(props) {
           content,
           description,
         };
+        // Calling updating api
         const response = await blogApi.updateBlog(BlogNeedUpdate.id, blog);
+        // Because update blog return new blog id so get new blogId from response to set tags
         const newBlogResponseId = response.data.id;
+        //when update success then send tags
         const tagsrespose = await tagsApi.updateTagsOfABlog(
           newBlogResponseId,
           tagsReadyToCallApi
         );
+        //After all is completed show dialog to user
         if (response.status === 200 && tagsrespose.status === 200) {
           setSuccessPostDialog(true);
         }
       } else {
+        //else send api to post new blog
+        //preparing payload
         const blog = {
           authorId: userId,
           title,
@@ -243,14 +255,16 @@ export default function NewBlogForm(props) {
           description,
           categoryId: selectedCategory,
         };
-        // else send api to post new blog
+        //sending api to post blog
         const response = await blogApi.post(blog);
         if (response.status === 200) {
+          //If posted blog completed add tags to that blog
           const tagResponse = await tagsApi.addTagsToBlog(
             response.data.id,
             tagsReadyToCallApi
           );
           if (tagResponse.status === 200) {
+            //After add tags succesfully show dialog post blog success to user
             setSuccessPostDialog(true);
           }
         }
@@ -258,13 +272,16 @@ export default function NewBlogForm(props) {
     } catch (error) {
       console.log("Failed to post Blog : ", error);
       window.alert("Failed to post blog, please try again!");
-      setSendingApprove(false);
+      setSendingApprove(false); //Set false to cancel approve buntton disabled
     }
   }
 
-  /* Call api to post */
+  /* Constrain some field */
   const handleSubmit = async (e) => {
     /* Validate some field */
+    if (!isThumbNailSelected && BlogNeedUpdate?.thumbnailUrl !== null) {
+      thumbnailUrl = BlogNeedUpdate?.thumbnailUrl;
+    }
     setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
     if (title.length < minTitleLength) {
@@ -283,11 +300,12 @@ export default function NewBlogForm(props) {
       setContentDialog(true);
       e.preventDefault();
     } else {
-      if (thumbNail) {
-        //If file chosen then upload it then call api
+      //if thumbnail is selected and thumbnail obj is not null then upload img before post blog
+      if (thumbNail && isThumbNailSelected) {
+        //If image file chosen then upload it and call api
         uploadAndGetUrl();
       } else {
-        //Else upload without image
+        //Else upload without image or img existed from updating blog
         callApiToPostBlog();
       }
     }
@@ -304,6 +322,7 @@ export default function NewBlogForm(props) {
     }
   };
 
+  /* After post success then push to another components */
   const responseFromPostBlogDialog = (isCancel) => {
     if (isCancel) {
       setSendingApprove(false);
@@ -351,7 +370,7 @@ export default function NewBlogForm(props) {
                   ) : (
                     <Select
                       options={fieldOption}
-                      isDisabled={onFieldChanging}
+                      isDisabled={true}
                       onChange={(e) =>
                         handleCallCategoriesOnFieldChange(e?.value)
                       }
@@ -408,10 +427,19 @@ export default function NewBlogForm(props) {
               {/* thumbNail URL */}
               <div className=" my-2">
                 <p className="font-semibold">Thumbnails:</p>
+                {BlogNeedUpdate?.thumbnailUrl ? (
+                  <p className="text-green-400">
+                    Thumbnails has been selected, you can skip this
+                  </p>
+                ) : null}
                 <input
                   className="border border-gray-300 w-full p-2 rounded-md"
                   type="file"
-                  onChange={(e) => setThumbNail(e.target.files[0])}
+                  onChange={(e) => {
+                    setThumbNail(e.target.files[0]);
+                    /* Set this in case update a blog can skip pick new thumbnail */
+                    setIsThumbNailSelected(true);
+                  }}
                 />
               </div>
               {/* Description Field */}
@@ -461,7 +489,7 @@ export default function NewBlogForm(props) {
         </motion.div>
       ) : (
         <div className="flex justify-center my-9">
-          <div className="font-bold text-2xl">
+          <div className="text-center text-2xl">
             You must be logged in before Post a Blog
           </div>
         </div>
@@ -479,7 +507,7 @@ export default function NewBlogForm(props) {
         <MyDialog
           isCancel={responseFromDialog}
           title="Warning"
-          description="Description length from 50 to 200 chars only!!"
+          description={`Description length from ${minLength} to ${maxLength} chars only!!`}
           icon="warning"
         />
       ) : null}

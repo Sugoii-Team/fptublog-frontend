@@ -1,4 +1,6 @@
 //React Things
+//Firebase
+import { collection, doc, setDoc } from "@firebase/firestore";
 import { Rating } from "@mui/material";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -10,18 +12,18 @@ import { Link, useHistory } from "react-router-dom";
 import gfm from "remark-gfm";
 import InputDialog from "../../../components/Dialog/InputDialog";
 import MyDialog from "../../../components/Dialog/MyDialog";
-//Firebase
-import { collection, doc, setDoc } from "@firebase/firestore";
-import { db } from "../../../services/fireBase";
+import StorageKey from "../../../constant/storage-keys";
 //Components
 import blogApi from "../../../services/blogApi";
+import { db } from "../../../services/fireBase";
 import lecturerApi from "../../../services/lecturerApi";
 import ratingApi from "../../../services/ratingApi";
 import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
 import FieldSuggest from "../../Newest/components/SideItem/FieldSuggest";
-import AwardForUser from "./AwardForUser";
 import FBComment from "./FBComent";
 import StorageKey from "../../../constant/storage-keys";
+import userApi from "../../../services/userApi";
+
 
 BlogContentDetail.propTypes = {
   blog: PropTypes.object,
@@ -55,6 +57,7 @@ function BlogContentDetail({
   /* Get role in case this blog is need to approving */
   const currentUser = useSelector((state) => state.user.current);
   const userRole = currentUser.role;
+  const [studentInfo, setStudentInfo] = useState({});
   const [accountOfAuthor, setAccountOfAuthor] = useState({});
   const [approvedDialog, setApprovedDialog] = useState(false);
   const [isReject, setIsReject] = useState(false);
@@ -74,6 +77,19 @@ function BlogContentDetail({
       blogDeletedClick(id);
     } else return;
   };
+
+  const experience = () => {
+    if(0 <= studentInfo.experiencePoint && studentInfo.experiencePoint<1000){
+      return "ROOKIE";
+    } else if (1000 <= studentInfo.experiencePoint && studentInfo.experiencePoint < 2000){
+      return "NEWBIE";
+    }else if (2000 <= studentInfo.experiencePoint && studentInfo.experiencePoint < 3000){
+      return "BLOGGER";
+    } else if (studentInfo.experiencePoint >= 3000){
+      return "PRO BLOGGER";
+    }
+  };
+
 
   const totalEveryoneRate =
     totalRated.oneStar +
@@ -119,8 +135,12 @@ function BlogContentDetail({
     (async () => {
       try {
         if (blog.authorId) {
-          const data = await blogApi.getAuthorById(blog.authorId);
-          setAccountOfAuthor(data.data);
+          const author = await blogApi.getAuthorById(blog.authorId);
+          setAccountOfAuthor(author.data);
+          if(author.data.role === "STUDENT"){
+            const studentAccountToGetExperience = await userApi.getStudentById(author.data.id);
+            setStudentInfo(studentAccountToGetExperience.data);
+          }
         }
       } catch (error) {
         console.log("Failed to fetch Author: ", error);
@@ -236,11 +256,15 @@ function BlogContentDetail({
             </Link>
             <div className="absolute top-6 text-xs italic">
               {/* {accountOfAuthor.description} */}
-              Dead just like the wind, always by my side!
+              {accountOfAuthor.description}
             </div>
             <div className="absolute bottom-0 text-base text-purple-600 font-bold uppercase">
               {/* {accountOfAuthor.description} */}
-              Pro Blogger
+              {accountOfAuthor.role === "LECTURER" ? 
+            <p>LECTURER</p>
+            :
+            <p>{experience()}</p>
+            }
             </div>
           </div>
         </div>
@@ -309,7 +333,8 @@ function BlogContentDetail({
 
               {/* Award section, if current loggin user is lecture and author of the blog is student then allowed to
               give award */}
-              {currentUser.id &&
+
+              {/* {currentUser.id &&
               isInPending.length < 1 &&
               currentUser.role === "LECTURER" &&
               accountOfAuthor.role === "STUDENT" ? (
@@ -319,7 +344,7 @@ function BlogContentDetail({
                     blogAuthor={accountOfAuthor}
                   />
                 </div>
-              ) : null}
+              ) : null} */}
 
               {/* Approve Buttons */}
               {conditionToApprove ? (

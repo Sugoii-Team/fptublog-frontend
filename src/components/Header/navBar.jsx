@@ -4,14 +4,13 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
+import Notification from "../Notifications/Notification";
 import AdminDropDownMenu from "./AdminDropDownMenu";
 import CategoriesShow from "./CategoriesShow";
 import UserDropDownMenu from "./UserDropDownMenu";
 
-
-function NavBar() {
+function NavBar({fieldList, categoriesList}) {
   const adminLoggedIn = useSelector((state) => state.admin.current);
-  // console.log("role admin ne: ", adminLoggedIn);
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
   const userImg = loggedInUser.avatarUrl;
@@ -35,8 +34,12 @@ function NavBar() {
     }
   }, [currentScrollPostion]);
 
-  const handleCategoriesClick = () => {
-    setShowCategories(!showCategories);
+  const handleCategoriesClick = (values) => {
+    setShowCategories(values);
+  };
+  //Send search value to url
+  const handleSearch = () => {
+    history.push(`/searchResult?${searchValue}`);
   };
 
   const handleLoginOnclick = () => {
@@ -222,9 +225,9 @@ function NavBar() {
           <li className="navItemPadding">
             <span
               className="navItemsHover cursor-pointer"
-              onClick={handleCategoriesClick}
+              onClick={() => handleCategoriesClick(!showCategories)}
             >
-              Categories
+              Fields
             </span>
           </li>
           <li className="navItemPadding">
@@ -247,7 +250,13 @@ function NavBar() {
       {/* Navigation bar */}
 
       {/* Category show */}
-      {showCategories ? <CategoriesShow /> : null}
+      {showCategories ? (
+        <CategoriesShow
+          fieldList={fieldList}
+          categoriesList={categoriesList}
+          setShowCategories={handleCategoriesClick}
+        />
+      ) : null}
       {/* Category show */}
 
       {/* Login Dialog */}

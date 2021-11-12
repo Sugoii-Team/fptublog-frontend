@@ -15,7 +15,6 @@ const userApi = {
   },
 
   login(data) {
-    console.log("data: ", data);
     const url = "api/auth/login";
     const promise = axiosClient.post(url, data, {
       headers: {
@@ -31,8 +30,8 @@ const userApi = {
     return axiosClient.get(url);
   },
 
-  getPopularBlogOfUser(authorId) {
-    const url = `api/blogs/authors/${authorId}?limit=5&page=1&sort_by=avg_rate&order_by=desc`;
+  getPopularBlogOfUser(authorId, currentPage, limitBlog) {
+    const url = `api/blogs/authors/${authorId}?limit=${limitBlog}&page=${currentPage}&sort_by=avg_rate&order_by=desc`;
     return axiosClient.get(url, {
       headers: {
         "Content-Type": "application/json",

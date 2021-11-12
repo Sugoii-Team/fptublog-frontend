@@ -11,6 +11,10 @@ const StorageKey = {
   //Noti Status
   unviewStatus: "unview",
   viewedStatus: "viewed",
+  //User Role
+  adminRole: "ADMIN",
+  lecturerRole: "LECTURER",
+  studentRole: "STUDENT",
 };
 
 export default StorageKey;

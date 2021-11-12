@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import fieldApi from "../../../../services/fieldApi";
 
 FieldSuggest.propTypes = {
   length: PropTypes.number,
@@ -10,12 +11,22 @@ FieldSuggest.defaultProps = {
   length: 4,
 };
 
-function FieldSuggest({ fieldList }) {
-  let listFieldsToShowOnHomePage = null;
-  fieldList !== undefined ? 
-    listFieldsToShowOnHomePage = fieldList.slice(0,5)
-    :
-    listFieldsToShowOnHomePage = null;
+function FieldSuggest() {
+  const [listFieldsToShowOnHomePage, setListFieldsToShowOnHomePage] = useState([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const topField = await fieldApi.getTopFieldToSuggest();
+        
+        if (topField.status === 200) {
+          setListFieldsToShowOnHomePage(topField.data.slice(0,5));
+        }
+      } catch (error) {
+        console.log("Failed to fetch blog list: ", error);
+      }
+    })();
+  }, []);
+  
   return (
     <div className="mt-8">
       <div className="h-full">

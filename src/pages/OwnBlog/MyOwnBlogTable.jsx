@@ -60,13 +60,38 @@ export default function MyOwnBlogTable(props) {
     if (check) {
       try {
         const respone = await blogApi.removeBlog(loggedInUser.id, blogId);
-        if (respone.status === 200 && isMounted.current) {
+        if (respone.status === 200) {
           setDeleteSuccessDialog(true);
           setIsSending(false); //only set false when component still mounted
         }
       } catch (error) {
         console.log("Failed to Delete Blog: ", error);
         alert("Failed to Delete Blog!", error);
+        setIsSending(false);
+      }
+    } else {
+      setIsSending(false);
+    }
+  };
+
+  //Undo delete a blog
+  const handleUndoDelete = async (blogId) => {
+    if (isSending) return; // if sending request then do nothing
+    setIsSending(true);
+    let check = window.confirm(
+      "This blog is on pending deleted so can't update, this action will UNDO DELETED! Do you wanted to continues?"
+    );
+    if (check) {
+      try {
+        const respone = await blogApi.undoDeleteBlog(blogId);
+        if (respone.status === 200) {
+          alert("Undo blog success!");
+          setReload({}); //Trigger page to rerender
+          setIsSending(false); //only set false when component still mounted
+        }
+      } catch (error) {
+        console.log("Failed to Undo Delete Blog: ", error);
+        alert("Failed to Undo Delete Blog!", error);
         setIsSending(false);
       }
     } else {
@@ -147,6 +172,7 @@ export default function MyOwnBlogTable(props) {
                           blogObj={blog}
                           onDeleteClick={handleDeleteOwnBlog}
                           isDisable={isSending}
+                          onUndoDeleted={handleUndoDelete}
                         />
                       ))
                     )}

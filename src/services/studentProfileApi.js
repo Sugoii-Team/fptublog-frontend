@@ -3,46 +3,51 @@ import axiosClient from "./axiosClient";
 
 const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
 const studentProfileApi = {
-
   getMajorList() {
-    const url = 'api/majors';
+    const url = "api/majors";
     return axiosClient.get(url, {
-      headers:{
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
 
-  getStudentById (id) {
+  getStudentById(id) {
     const url = `api/students/${id}`;
     return axiosClient.get(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }, 
+      },
     });
+  },
+
+  //Get top student contributor of month
+  getTopContributorOfMonth() {
+    const url = `api/students/top`;
+    return axiosClient.get(url);
   },
 
   getStudentMajorByMajorId(majorId) {
     const url = `api/majors/${majorId}`;
     return axiosClient.get(url, {
-      headers:{
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
 
-  updateStudentProfile(id, data){
+  updateStudentProfile(id, data) {
     const url = `api/students/${id}`;
     return axiosClient.put(url, data, {
-      headers : {
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
-    })
-  }
+      },
+    });
+  },
 };
 
 export default studentProfileApi;

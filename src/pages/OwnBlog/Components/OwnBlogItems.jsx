@@ -9,11 +9,12 @@ OwnBlogItems.propTypes = {
   onDeleteClick: PropTypes.func,
 };
 
-function OwnBlogItems({ blogObj, onDeleteClick, isDisable }) {
+function OwnBlogItems({ blogObj, onDeleteClick, isDisable, onUndoDeleted }) {
   const [blogStatus, setBlogStatus] = useState({});
   const [loading, setLoading] = useState(true);
   const blogDetailUrl = `/blogDetail?${blogObj.id}`;
   const updateBlogUrl = `/updateBlog?${blogObj.id}`;
+  const blogOnPendingDelete = blogStatus.name === "pending deleted";
   var styleOfStatus = "";
 
   //Status config
@@ -45,6 +46,7 @@ function OwnBlogItems({ blogObj, onDeleteClick, isDisable }) {
     }
   }
   styleOfStatus = `px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${colorForSpecStatus}-100 text-${colorForSpecStatus}-800 capitalize`;
+
   //Get blog Status
   useEffect(() => {
     (async () => {
@@ -119,8 +121,18 @@ function OwnBlogItems({ blogObj, onDeleteClick, isDisable }) {
           </Link>
           {/* Edit Icon */}
           <Link
-            to={updateBlogUrl}
+            /* If blog is on pending deleted then not allowed to edit */
+            to={blogOnPendingDelete ? "#" : updateBlogUrl}
+            onClick={
+              /* If this blog is in pending deleted then click will handle undo delete else onclick will do nothing */
+              blogOnPendingDelete
+                ? () => {
+                    onUndoDeleted(blogObj.id);
+                  }
+                : () => {}
+            }
             className="w-4 mr-2 transform hover:text-yellow-500 hover:scale-110"
+            disabled={isDisable}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
