@@ -20,7 +20,7 @@ function BlogByCategoryHomePage(props) {
   const [fields, setFields] = useState([]);
   const [blogByFieldIsEmpty, setBlogByFieldIsEmpty] = useState(true);
 
-  //get field which is tranfered like a state when user click field suggest link from slide item
+  //get field and category which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
   const categoryState = location.state.category;
   // const limitBlog = 6;

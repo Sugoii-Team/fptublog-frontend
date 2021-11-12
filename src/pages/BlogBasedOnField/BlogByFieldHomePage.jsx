@@ -21,8 +21,6 @@ function BlogByFieldHomePage(props) {
 
   //get field which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
-  // const limitBlog = 6;
-
   //Get blog of field
   useEffect(() => {
     (async () => {

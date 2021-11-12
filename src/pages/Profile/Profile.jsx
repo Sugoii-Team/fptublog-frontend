@@ -42,6 +42,7 @@ function Profile(props) {
     completed: ((studentUser.experiencePoint / 4000) * 100).toFixed(0),
   };
 
+  //Check experience point to assign experience title (rookie => newbie => blogger => pro blogger)
   const experience = () => {
     if (0 <= studentUser.experiencePoint && studentUser.experiencePoint < 1000) {
       return "ROOKIE";
@@ -79,6 +80,7 @@ function Profile(props) {
           setProfileAward(awardResponse.data);
         }
         const response = await userApi.viewProfile(userId);
+        //get popular blog of user to show on Profile page
         const popularBlog = await userApi.getPopularBlogOfUser(response.data.id, currentPage, limitBlog);
         setUserProfile(response.data);
         setListPopularBlog(popularBlog.data);
@@ -129,7 +131,11 @@ function Profile(props) {
                             <p className="text-lg">
                               {userProfile.description !== null
                                 ? userProfile.description
-                                : "AYoooooooo <3"}
+                                : 
+                                <p className="text-gray-400"> 
+                                  "AYoooooooo!!! Let update your description !"
+                                </p>
+                              }
                             </p>
                           </div>
                           <div className="mt-2 text-purple-600 font-bold uppercase">
@@ -145,7 +151,11 @@ function Profile(props) {
                             <p className="text-lg">
                               {userProfile.description !== null
                                 ? userProfile.description
-                                : "AYoooooooo <3"}
+                                : 
+                                <p className="text-gray-400"> 
+                                  "AYoooooooo!!! Let update your description !"
+                                </p>  
+                              }
                             </p>
                             <div className="mt-2 text-purple-600 font-bold uppercase">
                               LECTURER
@@ -174,10 +184,10 @@ function Profile(props) {
                           <p>Award</p>
                         </div>
                       </div>
-                      <div className="flex flex-row gap-4 text-sm cursor-pointer">
+                      {/* <div className="flex flex-row gap-4 text-sm cursor-pointer">
                         <div className="text-green-500">Like</div>
                         <div className="text-blue-500">Share</div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

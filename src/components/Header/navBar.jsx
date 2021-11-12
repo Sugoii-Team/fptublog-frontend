@@ -246,6 +246,7 @@ function NavBar({fieldList, categoriesList}) {
       {/* Navigation bar */}
 
       {/* Category show */}
+      {/* fieldList and CategoryList for showing when dropdown */}
       {showCategories ? <CategoriesShow fieldList = {fieldList} categoriesList= {categoriesList} setShowCategories = {handleCategoriesClick}/> : null}
       {/* Category show */}
 
