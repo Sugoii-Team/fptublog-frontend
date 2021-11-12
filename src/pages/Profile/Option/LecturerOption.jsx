@@ -16,7 +16,6 @@ function LecturerOption({ userProfile }) {
   const [options, setOptions] = useState([]);
   const [editProfile, setEditProfile] = useState(false);
 
-
   useEffect(() => {
     (async () => {
       try {
@@ -65,11 +64,10 @@ function LecturerOption({ userProfile }) {
 
         )
         );
-        console.log("field ne: ", fields);
         const repsonseField = await lecturerApi.updateLecturerField(userProfile.id, fields);
-
         if (reponseProfile.status === 200 && repsonseField.status === 200) {
           window.alert("Update Lecturer Profile successfully");
+          setEditProfile(!editProfile);
         }
       } catch (error) {
         console.log("Fail to update Lecturer profile", error);
@@ -214,7 +212,6 @@ function LecturerOption({ userProfile }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 ALTERNATIVE EMAIL
               </label>
-              {/* <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("alternativeEmail")} placeholder={lecturerUser.alternativeEmail} /> */}
               <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.alternativeEmail}</p>
             </div>
           </div>
@@ -238,13 +235,13 @@ function LecturerOption({ userProfile }) {
                   FIELD OF LECTURER:
                 </label>
                 <div>
-                  {fieldOfLecturer !== null ?
+                  {(fieldOfLecturer.length !== 0) ?
                     <ol className="ml-11 text-xl my-3 center">
                       {fieldOfLecturer.map((field, idx) =>
                         <li key = {idx} className="mt-2">{field.name}</li>)}
                     </ol>
                     :
-                    null
+                    <p>This Lecturer not have field</p>
                   }
                 </div>
               </div>
@@ -262,7 +259,7 @@ function LecturerOption({ userProfile }) {
               Edit Profile
             </button>
             {editProfile ?
-              <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0" type="submit" onClick={() => handleEditProfileButtonClick(!editProfile)}>
+              <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0" type="submit">
                 Save
               </button>
               :

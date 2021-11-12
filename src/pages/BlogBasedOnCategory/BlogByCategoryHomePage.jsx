@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldApi";
+import fieldApi from "../../services/fieldAPI";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogsBelongToCategoryList from "./components/MainItem/BlogsBelongToCategoryList";
 import BlogPopular from "./components/SideItem/BlogPopular";
@@ -23,7 +23,6 @@ function BlogByCategoryHomePage(props) {
   //get field which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
   const categoryState = location.state.category;
-  console.log("category ne: ", categoryState);
   // const limitBlog = 6;
 
   //Get blog of field
@@ -57,7 +56,6 @@ function BlogByCategoryHomePage(props) {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
-  console.log("blog list ne: ", blogList);
 
   return (
     <motion.div
@@ -77,8 +75,12 @@ function BlogByCategoryHomePage(props) {
             {(loading || blogList === null || blogList.length === 0 ) ? (
               (blogByFieldIsEmpty === true) ? 
               <div className="mt-10">
-                <p className="text-center text-2xl">This field not have blogs!</p>
-                <p className="text-center text-2xl">Let post your own blog in for this field.</p>
+                <p className="text-center text-2xl">
+                  This field not have blogs!
+                </p>
+                <p className="text-center text-2xl">
+                  Let post your own blog in for this field.
+                </p>
               </div>
               :
                 <BlogListSkeleton />

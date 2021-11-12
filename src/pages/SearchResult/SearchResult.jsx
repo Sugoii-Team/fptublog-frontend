@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import FieldSuggest from "../Newest/components/SideItem/FieldSuggest";
 import BlogList from "../Newest/components/MainItem/BlogList";
 import BlogListSkeleton from "../Newest/components/MainItem/BlogListSkeleton";
 import BlogPopular from "../Newest/components/SideItem/BlogPopular";
