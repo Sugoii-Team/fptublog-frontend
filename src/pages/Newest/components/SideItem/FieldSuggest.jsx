@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import fieldApi from "../../../../services/fieldApi";
+import fieldApi from "../../../../services/fieldAPI";
 
 FieldSuggest.propTypes = {
   length: PropTypes.number,

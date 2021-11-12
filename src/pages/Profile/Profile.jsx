@@ -57,19 +57,17 @@ function Profile(props) {
   const onHandleStudentSubmit = async (data) => {
     if (userProfile.role === "STUDENT") {
       try {
-        const reponse = await userApi.updateStudentProfile(
-          userProfile.id,
-          data
-        );
+        const reponse = await userApi.updateStudentProfile(userProfile.id, data);
         if (reponse.status === 200) {
           window.alert("Update Student Profile successfully");
         }
       } catch (error) {
         console.log("Fail to update Student profile", error);
       }
+
     }
     else return;
-  };
+  }
 
 
   useEffect(() => {
@@ -86,57 +84,41 @@ function Profile(props) {
         setListPopularBlog(popularBlog.data);
         if (response.status === 200 && popularBlog.status === 200) {
           setLoading(false);
-          console.log("reponse hinh anh", response.data.avatarUrl);
         }
       } catch (error) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userId, userProfile.role, currentPage]);
+  }, [userId, userProfile.role, userProfile.description,currentPage]);
 
 
-  useEffect(() => {
-    (async () => {
-      try {
-        //If profile is student then get award
-        if (userProfile.role === "STUDENT") {
-          const awardResponse = await awardApi.getAwardOfStudent(userId);
-          setProfileAward(awardResponse.data);
-          if (awardResponse.status === 200) {
-            setLoading(false);
-          }
-        }
-      } catch (error) {
-        console.log("Failed to get profile: ", error);
-      }
-    })();
-  }, [userProfile.role, userId]);
   return (
     <div>
-      {currentUser.role === "STUDENT" || currentUser.role === "LECTURER" ? (
+      {(currentUser.role === "STUDENT" || currentUser.role === "LECTURER") ?
         <div className="my-24 w-11/12 relative mx-auto h-full">
           {/* Start */}
           <motion.div
             animate={{ x: 0, opacity: 1 }}
             initial={{ x: -50, opacity: 0 }}
           >
-            {loading ? (
-              <NameSectionSkeleton />
-            ) : (
-              <div className="profileHeader border-2 border-gray-100 rounded-lg h-40 grid grid-cols-6 mt-5 shadow-lg">
-                <div className="profileInfoWrapper col-span-4 relative">
-                  <div className="profileInfo grid grid-cols-2">
-                    <div className="absolute col-span-1 -top-7 left-10">
-                      <img
-                        className="w-40 h-40 rounded-full border-4 border-gray-700 border-opacity-70"
-                        src={
-                          userProfile.avatarUrl
-                            ? userProfile.avatarUrl
-                            : "https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-                        }
-                        alt="profile img"
-                      />
-                    </div>
+            {loading ?
+              (<NameSectionSkeleton />)
+              :
+              (
+                <div className="profileHeader border-2 border-gray-100 rounded-lg h-40 grid grid-cols-6 mt-5 shadow-lg">
+                  <div className="profileInfoWrapper col-span-4 relative">
+                    <div className="profileInfo grid grid-cols-2">
+                      <div className="absolute col-span-1 -top-7 left-10">
+                        <img
+                          className="w-40 h-40 rounded-full border-4 border-gray-700 border-opacity-70"
+                          src={
+                            userProfile.avatarUrl
+                              ? userProfile.avatarUrl
+                              : "https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
+                          }
+                          alt="profile img"
+                        />
+                      </div>
 
                       {userProfile.role === "STUDENT" ?
                         <div className="col-span-1 absolute left-56 top-5">
@@ -156,7 +138,7 @@ function Profile(props) {
                         </div>
                         :
                         <div className="col-span-1 absolute left-56 top-5">
-                          <div className="profileNameNDes mt-5">
+                          <div className="profileNameNDes">
                             <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
                               {userProfile.firstName + " " + userProfile.lastName}
                             </span>
@@ -165,12 +147,16 @@ function Profile(props) {
                                 ? userProfile.description
                                 : "AYoooooooo <3"}
                             </p>
+                            <div className="mt-2 text-purple-600 font-bold uppercase">
+                              LECTURER
+                            </div>
                           </div>
                         </div>
+
+
                       }
                     </div>
                   </div>
-                </div>
 
                   <div className="profileStatus col-span-2 ">
                     <div className="flex flex-col items-end space-y-12 my-2 mx-10">
@@ -188,19 +174,14 @@ function Profile(props) {
                           <p>Award</p>
                         </div>
                       </div>
-                      <div>
-                        <p className="text-2xl font-bold text-black">0</p>
-                        <p>Award</p>
+                      <div className="flex flex-row gap-4 text-sm cursor-pointer">
+                        <div className="text-green-500">Like</div>
+                        <div className="text-blue-500">Share</div>
                       </div>
-                    </div>
-                    <div className="flex flex-row gap-4 text-sm cursor-pointer">
-                      <div className="text-green-500">Like</div>
-                      <div className="text-blue-500">Share</div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </motion.div>
 
           {/* Below */}
@@ -267,6 +248,7 @@ function Profile(props) {
 
               {/* Infomation of user to edit */}
 
+
               <motion.div
                 animate={{ y: 0, opacity: 1 }}
                 initial={{ y: 20, opacity: 0.5 }}
@@ -276,19 +258,18 @@ function Profile(props) {
                 <h1 className="font-bold text-xl text-center uppercase">
                   ABOUT
                 </h1>
-                {userProfile.role === "STUDENT" ? (
-                  <StudentOption
-                    userProfile={userProfile}
-                    dataOfStudentToUpdate={onHandleStudentSubmit}
-                    studentProfile={handleStudentProfile}
-                  />
-                ) : (
+                {userProfile.role === "STUDENT" ?
+                  <StudentOption userProfile={userProfile} dataOfStudentToUpdate={onHandleStudentSubmit} studentProfile={handleStudentProfile} />
+                  :
                   <LecturerOption userProfile={userProfile} />
-                )}
+                }
               </motion.div>
+
+
             </div>
 
             {/* ///////////////////////////////////////////////////////////////// */}
+
 
             {/* right */}
             <motion.div
@@ -296,40 +277,22 @@ function Profile(props) {
               initial={{ y: 20, opacity: 0.5 }}
               className="col-span-2"
             >
-              <div className=" border-2 border-gray-100 rounded-lg shadow-lg min-h-screen">
-                <h1 className="text-left font-bold text-xl mt-2 ml-5 uppercase ">
-                  Blogger's POST
-                </h1>
-                {listPopularBlog.map((popularBlog, idx) => (
 
-                  <Link
-                    to={`blogDetail?${popularBlog.id}`}
-                    className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-3"
-                    key={idx}
-                  >
+              <div className=" border-2 border-gray-100 rounded-lg shadow-lg min-h-screen">
+                <h1 className="text-left font-bold text-xl mt-2 ml-5 uppercase ">Blogger's POST</h1>
+                {listPopularBlog.map((popularBlog, idx) => (
+                  <Link to={`blogDetail?${popularBlog.id}`} className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-3" key={idx} >
                     <div className="min-w-minWidthForBlogInProfilePage object-none object-center my-4 ml-6">
-                      <img
-                        className="inline object-contain w-32 h-32 bg-no-repeat rounded-md"
-                        src={
-                          popularBlog.thumbnailUrl
-                            ? popularBlog.thumbnailUrl
-                            : defaultThumnail
-                        }
-                        alt=""
-                      />
+                      <img className="inline object-contain w-32 h-32 bg-no-repeat rounded-md" src={popularBlog.thumbnailUrl ? popularBlog.thumbnailUrl : defaultThumnail} alt="" />
                     </div>
                     <div className="my-8">
-                      <div className="font-bold text-xl ml-3 uppercase">
-                        {popularBlog.title}
-                      </div>
-                      <div className="ml-3 text-sm">
-                        Created date:{" "}
-                        {moment(popularBlog.createdDateTime).format("LL")}
-                      </div>
+                      <div className="font-bold text-xl ml-3 uppercase">{popularBlog.title}</div>
+                      <div className="ml-3 text-sm">Created date: {moment(popularBlog.createdDateTime).format("LL")}</div>
                       <div className="ml-3 pr-6">{popularBlog.description}</div>
                     </div>
                   </Link>
                 ))}
+                
                 <ReactPaginate
                   previousLabel={"Previous"}
                   nextLabel={"Next"}
@@ -357,12 +320,13 @@ function Profile(props) {
               responseObject={responseObject}
             />
           ) : null} */}
+
         </div>
-      ) : (
+        :
         <p className="text-center text-2xl my-10">
           LOGIN TO USE THIS PAGE !!! (ONLY FOR LECTURER AND STUDENT)
         </p>
-      )}
+      }
     </div>
   );
 }

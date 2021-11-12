@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
-import Notification from "../Notifications/Notification";
 import AdminDropDownMenu from "./AdminDropDownMenu";
 import CategoriesShow from "./CategoriesShow";
 import UserDropDownMenu from "./UserDropDownMenu";
+
 
 function NavBar({fieldList, categoriesList}) {
   const adminLoggedIn = useSelector((state) => state.admin.current);
@@ -36,10 +36,6 @@ function NavBar({fieldList, categoriesList}) {
 
   const handleCategoriesClick = (values) => {
     setShowCategories(values);
-  };
-  //Send search value to url
-  const handleSearch = () => {
-    history.push(`/searchResult?${searchValue}`);
   };
 
   const handleLoginOnclick = () => {
@@ -225,7 +221,7 @@ function NavBar({fieldList, categoriesList}) {
           <li className="navItemPadding">
             <span
               className="navItemsHover cursor-pointer"
-              onClick={() => handleCategoriesClick(!showCategories)}
+              onClick={()=>handleCategoriesClick(!showCategories)}
             >
               Fields
             </span>
@@ -250,13 +246,7 @@ function NavBar({fieldList, categoriesList}) {
       {/* Navigation bar */}
 
       {/* Category show */}
-      {showCategories ? (
-        <CategoriesShow
-          fieldList={fieldList}
-          categoriesList={categoriesList}
-          setShowCategories={handleCategoriesClick}
-        />
-      ) : null}
+      {showCategories ? <CategoriesShow fieldList = {fieldList} categoriesList= {categoriesList} setShowCategories = {handleCategoriesClick}/> : null}
       {/* Category show */}
 
       {/* Login Dialog */}

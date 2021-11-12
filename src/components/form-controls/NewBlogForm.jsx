@@ -17,16 +17,10 @@ import Showdown from "showdown";
 import MyDialog from "../../components/Dialog/MyDialog";
 import blogApi from "../../services/blogApi";
 import categoryApi from "../../services/categoryApi";
-import fieldApi from "../../services/fieldApi";
+import fieldApi from "../../services/fieldAPI";
 import { storage } from "../../services/fireBase";
 import tagsApi from "../../services/tagsApi";
 import "./postBlog.css";
-//Another
-import PropTypes from "prop-types";
-import { motion } from "framer-motion";
-import { CircularProgress } from "@mui/material";
-import tagsApi from "../../services/tagsApi";
-import fieldApi from "../../services/fieldAPI";
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,
