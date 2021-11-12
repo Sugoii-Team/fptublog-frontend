@@ -30,7 +30,7 @@ function BannedAccount() {
         ) : (
           bannedAccountsList.length === 0 ?
             <p className="text-center text-2xl my-10">
-              Not have student banned
+             Banned Account list is empty (No one is banned!)
             </p>
             :
             <UserListSkeletons />

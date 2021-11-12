@@ -41,6 +41,7 @@ function HomePage(props) {
 
 
   const handleOnpageChange = (data) => {
+    console.log("data ne : ", data);
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
@@ -65,9 +66,9 @@ function HomePage(props) {
               :
               <BlogListSkeleton />
             ) : (
-              <>
+              <div>
                 <BlogList data={blogList} />
-              </>
+              </div>
             )}
             <Pagination
               previousLabel={"Previous"}

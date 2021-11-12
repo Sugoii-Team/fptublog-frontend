@@ -14,6 +14,8 @@ function LecturerOption({ userProfile }) {
   const [fieldOfLecturer, setFieldOfLecturer] = useState([]);
   const [listOfField, setListOfField] = useState([]);
   const [options, setOptions] = useState([]);
+  const [editProfile, setEditProfile] = useState(false);
+
 
   useEffect(() => {
     (async () => {
@@ -40,6 +42,9 @@ function LecturerOption({ userProfile }) {
     setOptions(lecturerOption);
   }, [listOfField]);
 
+  const handleEditProfileButtonClick = (values) => {
+    setEditProfile(values);
+  }
 
   //Send data to API to update lecture profile: include data of lecturer and field of lecturer
   const handleLecturerDataToUpdate = async (data) => {
@@ -83,7 +88,7 @@ function LecturerOption({ userProfile }) {
 
   return (
     <form onSubmit={handleSubmit(handleLecturerDataToUpdate)}>
-      {currentUser.id === userProfile.id ?
+      {(currentUser.id === userProfile.id && editProfile === true) ?
         <div>
           {/* first name and last name row */}
           <div className="flex flex-wrap -mx-3 mb-6">
@@ -181,7 +186,7 @@ function LecturerOption({ userProfile }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 First Name
               </label>
-              
+
               <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{lecturerUser.firstName}</p>
             </div>
             {/* last name */}
@@ -189,7 +194,7 @@ function LecturerOption({ userProfile }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 Last Name
               </label>
-              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{lecturerUser.lastName}</p> 
+              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{lecturerUser.lastName}</p>
             </div>
           </div>
 
@@ -232,19 +237,12 @@ function LecturerOption({ userProfile }) {
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                   FIELD OF LECTURER:
                 </label>
-                <div className="border-4 rounded-md mt-3">
-                  {options !== null ?
-                    options.map((option, idx) =>
-                      <div key={idx} className="ml-11 text-xl my-3 center" >
-                        {fieldOfLecturer &&
-                          <div>
-                            <input type="checkbox"
-                              value={option.value}
-                              defaultChecked={handleChecked(option)}
-                              {...register("field")} />
-                            <span className="ml-7">{option.label}</span>
-                          </div>}
-                      </div>)
+                <div>
+                  {fieldOfLecturer !== null ?
+                    <ol className="ml-11 text-xl my-3 center">
+                      {fieldOfLecturer.map((field, idx) =>
+                        <li key = {idx} className="mt-2">{field.name}</li>)}
+                    </ol>
                     :
                     null
                   }
@@ -255,16 +253,24 @@ function LecturerOption({ userProfile }) {
             null
           }
         </div>
-
-    }
-
+      }
 
       {currentUser.id === userProfile.id ?
-        <div className="flex flex-row-reverse">
-          <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full" type="submit">
-            Save
-          </button>
-        </div>
+        <span>
+          <div className="relative">
+            <button type="button" className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded-full" onClick={() => handleEditProfileButtonClick(!editProfile)}>
+              Edit Profile
+            </button>
+            {editProfile ?
+              <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0" type="submit" onClick={() => handleEditProfileButtonClick(!editProfile)}>
+                Save
+              </button>
+              :
+              null
+            }
+          </div>
+
+        </span>
         :
         null
       }
