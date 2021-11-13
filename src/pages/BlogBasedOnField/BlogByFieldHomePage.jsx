@@ -4,8 +4,8 @@ import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
 import fieldApi from "../../services/fieldAPI";
-import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
+import BlogsBelongToFieldList from "./components/MainItem/BlogsBelongToFieldList";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
@@ -21,7 +21,7 @@ function BlogByFieldHomePage(props) {
 
   //get field which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
-  //const limitBlog = 6;
+  // const limitBlog = 6;
 
   //Get blog of field
   useEffect(() => {
@@ -37,14 +37,15 @@ function BlogByFieldHomePage(props) {
           const blogByField = await blogApi.getBlogsByFieldId(
             fieldState.field.id
           );
-          console.log("blog field ne: ", blogByField.data);
           if (blogByField.data.length > 0) {
             setLoading(false);
             setBlogList(blogByField.data);
             setBlogByFieldIsEmpty(false);
-          }
-        } else setBlogByFieldIsEmpty(true);
+          } else setBlogByFieldIsEmpty(true);
+        }
+        else setBlogByFieldIsEmpty(true);
       } catch (error) {
+        setBlogByFieldIsEmpty(true);
         console.log("Failed to fetch blog list: ", error);
       }
     })();
@@ -75,7 +76,7 @@ function BlogByFieldHomePage(props) {
               blogByFieldIsEmpty === true ? (
                 <div className="mt-10">
                   <p className="text-center text-2xl">
-                    This field have not had blogs!
+                    This field not have blogs!
                   </p>
                   <p className="text-center text-2xl">
                     Let post your own blog in for this field.
@@ -87,7 +88,7 @@ function BlogByFieldHomePage(props) {
             ) : (
               // console.log("loading, bloglist", loading, blogList)
               <>
-                <BlogList data={blogList} />
+                <BlogsBelongToFieldList data={blogList} />
               </>
             )}
             {blogByFieldIsEmpty === true ? null : (

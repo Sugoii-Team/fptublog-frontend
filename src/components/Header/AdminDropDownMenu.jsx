@@ -30,15 +30,11 @@ function AdminDropDownMenu({ admin }) {
         tabIndex="-1"
       >
         <div className="py-1" role="none">
-          <Link
-            to="/profile"
+          <div
             className="text-gray-700 block px-4 py-2 text-sm"
-            role="menuitem"
-            tabIndex="-1"
-            id="menu-item-0"
           >
             Hello <span className="font-semibold">{userRole}</span>
-          </Link>
+          </div>
         </div>
         <div className="py-1" role="none">
           <Link

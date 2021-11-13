@@ -90,7 +90,11 @@ const blogApi = {
     const url = `api/fields/${fieldId}/blogs?limit=3&page=1`;
     return axiosClient.get(url);
   },
-
+  getBlogsBelongToCategoryByCategoryId(categoryId){
+    const url = `api/categories/${categoryId}/blogs`;
+    return axiosClient.get(url);
+  },
+  
   undoDeleteBlog(blogId) {
     const url = `api/blogs/${blogId}/undo_delete`;
     return axiosClient.post(

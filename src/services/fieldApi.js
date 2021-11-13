@@ -5,7 +5,7 @@ const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
 
 const fieldApi = {
   getAllFields() {
-    const url = "api/fields";
+    const url = 'api/fields';
     return axiosClient.get(url);
   },
 
@@ -49,6 +49,7 @@ const fieldApi = {
       },
     });
   },
+
 };
 
 export default fieldApi;
