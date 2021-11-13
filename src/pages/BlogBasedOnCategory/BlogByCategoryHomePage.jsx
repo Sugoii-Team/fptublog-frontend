@@ -9,7 +9,6 @@ import BlogsBelongToCategoryList from "./components/MainItem/BlogsBelongToCatego
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
-
 BlogByCategoryHomePage.propTypes = {};
 
 function BlogByCategoryHomePage(props) {
@@ -33,12 +32,18 @@ function BlogByCategoryHomePage(props) {
         const topField = await fieldApi.getTopFieldToSuggest();
         setFields(topField.data);
 
-        // if location.state != undefined => get field from state => then get blogs belong to that field by field id 
+        // if location.state != undefined => get field from state => then get blogs belong to that field by field id
         if (location.state !== undefined) {
           setLoading(true);
           // const blogByField = await blogApi.getBlogsByFieldId(fieldState.field.id);
-          const blogsByCategory = await blogApi.getBlogsBelongToCategoryByCategoryId(categoryState.category.id);
-          if(blogsByCategory.data.length > 0 && blogsByCategory.status === 200){
+          const blogsByCategory =
+            await blogApi.getBlogsBelongToCategoryByCategoryId(
+              categoryState.category.id
+            );
+          if (
+            blogsByCategory.data.length > 0 &&
+            blogsByCategory.status === 200
+          ) {
             setLoading(false);
             setBlogList(blogsByCategory.data);
             setBlogByFieldIsEmpty(false);
@@ -50,12 +55,16 @@ function BlogByCategoryHomePage(props) {
         setBlogByFieldIsEmpty(true);
       }
     })();
-  }, [currentPage, fieldState.field.id, location.state, categoryState.category.id]);
+  }, [
+    currentPage,
+    fieldState.field.id,
+    location.state,
+    categoryState.category.id,
+  ]);
 
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
-
 
   return (
     <motion.div
@@ -69,31 +78,31 @@ function BlogByCategoryHomePage(props) {
           <div className="col-span-2 w-auto">
             <div className="mb-4">
               <div className="text-lg font-medium uppercase">
-                <span className="border-b-2 border-gray-300">Blogs about {categoryState.category.name} category:</span>
+                <span className="border-b-2 border-gray-300">
+                  Blogs about {categoryState.category.name} category:
+                </span>
               </div>
             </div>
-            {(loading || blogList === null || blogList.length === 0 ) ? (
-              (blogByFieldIsEmpty === true) ? 
-              <div className="mt-10">
-                <p className="text-center text-2xl">
-                  This field not have blogs!
-                </p>
-                <p className="text-center text-2xl">
-                  Let post your own blog in for this field.
-                </p>
-              </div>
-              :
+            {loading || blogList === null || blogList.length === 0 ? (
+              blogByFieldIsEmpty === true ? (
+                <div className="mt-10">
+                  <p className="text-center text-2xl">
+                    This field not have blogs!
+                  </p>
+                  <p className="text-center text-2xl">
+                    Let post your own blog in for this field.
+                  </p>
+                </div>
+              ) : (
                 <BlogListSkeleton />
+              )
             ) : (
               // console.log("loading, bloglist", loading, blogList)
               <>
                 <BlogsBelongToCategoryList data={blogList} />
               </>
             )}
-            {
-              blogByFieldIsEmpty === true ?
-              null
-              :
+            {blogByFieldIsEmpty === true ? null : (
               <Pagination
                 previousLabel={"Previous"}
                 nextLabel={"Next"}
@@ -110,17 +119,13 @@ function BlogByCategoryHomePage(props) {
                 breakLinkClassName={"font-bold uppercase px-4 py-2"}
                 activeLinkClassName={"bg-gray-100"}
               />
-            }
+            )}
           </div>
           {/* Blog loader */}
           {/* Side Items */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            {fields != null ?
-              <FieldSuggest fieldList={fields} />
-              :
-              null
-            }
+            {fields != null ? <FieldSuggest fieldList={fields} /> : null}
           </div>
           {/* Side Items */}
         </div>

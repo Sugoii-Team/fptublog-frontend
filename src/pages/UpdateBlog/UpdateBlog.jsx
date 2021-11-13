@@ -15,7 +15,7 @@ function UpdateBlog(props) {
       try {
         const data = await blogApi.get(location);
         const tagsResponse = await tagsApi.getTagsOfABlog(location);
-        setBlogDetail(data);
+        setBlogDetail(data.data);
         setTagsOfBlog(tagsResponse.data);
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);

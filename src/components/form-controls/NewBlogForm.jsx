@@ -1,18 +1,14 @@
-import { CircularProgress } from "@mui/material";
-//FireBase
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { motion } from "framer-motion";
-import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-//Mark down
-import ReactMde from "react-mde";
-import "react-mde/lib/styles/css/react-mde-all.css";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { useSelector } from "react-redux";
 import Select from "react-select";
 //Addition Library
 import { WithContext as ReactTags } from "react-tag-input";
+//Mark down
+import ReactMde from "react-mde";
 import Showdown from "showdown";
+import "react-mde/lib/styles/css/react-mde-all.css";
+import "./postBlog.css";
 //Components and API
 import MyDialog from "../../components/Dialog/MyDialog";
 import blogApi from "../../services/blogApi";
@@ -30,7 +26,6 @@ import fieldApi from "../../services/fieldAPI";
 import PageAlert from "../PageAlert/PageAlert";
 import moment from "moment";
 import StorageKey from "../../constant/storage-keys";
-
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,

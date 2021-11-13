@@ -24,7 +24,6 @@ import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
 import FieldSuggest from "../../Newest/components/SideItem/FieldSuggest";
 import FBComment from "./FBComent";
 
-
 BlogContentDetail.propTypes = {
   blog: PropTypes.object,
   tagOfBlog: PropTypes.array,
@@ -81,17 +80,25 @@ function BlogContentDetail({
   };
 
   const experience = () => {
-    if(0 <= studentInfo.experiencePoint && studentInfo.experiencePoint<1000){
+    if (
+      0 <= studentInfo.experiencePoint &&
+      studentInfo.experiencePoint < 1000
+    ) {
       return "ROOKIE";
-    } else if (1000 <= studentInfo.experiencePoint && studentInfo.experiencePoint < 2000){
+    } else if (
+      1000 <= studentInfo.experiencePoint &&
+      studentInfo.experiencePoint < 2000
+    ) {
       return "NEWBIE";
-    }else if (2000 <= studentInfo.experiencePoint && studentInfo.experiencePoint < 3000){
+    } else if (
+      2000 <= studentInfo.experiencePoint &&
+      studentInfo.experiencePoint < 3000
+    ) {
       return "BLOGGER";
-    } else if (studentInfo.experiencePoint >= 3000){
+    } else if (studentInfo.experiencePoint >= 3000) {
       return "PRO BLOGGER";
     }
   };
-
 
   const totalEveryoneRate =
     totalRated.oneStar +
@@ -139,8 +146,10 @@ function BlogContentDetail({
         if (blog.authorId) {
           const author = await blogApi.getAuthorById(blog.authorId);
           setAccountOfAuthor(author.data);
-          if(author.data.role === "STUDENT"){
-            const studentAccountToGetExperience = await userApi.getStudentById(author.data.id);
+          if (author.data.role === "STUDENT") {
+            const studentAccountToGetExperience = await userApi.getStudentById(
+              author.data.id
+            );
             setStudentInfo(studentAccountToGetExperience.data);
           }
         }
@@ -237,38 +246,38 @@ function BlogContentDetail({
 
   return (
     <div>
-
-{blog.id !== undefined ? (
-      <div className="mt-6 p-8 md:p-5 mx-10">
-        {/* <!--About the author--> */}
-        <div className="text-xs place-content-center mx-28 grid grid-cols-12">
-          {/* <!--Image of the author--> */}
-          <div className="col-span-1">
-            <img
-              className="rounded-md h-16 w-16 flex items-center justify-center"
-              src={authorAvatar ? authorAvatar : defaultAvatar}
-              alt="Author Img"
-            />
-          </div>
-          {/* Account Infomation */}
-          <div className="-ml-4 text-lg relative col-span-11 w-full overflow-hidden">
-            <Link
-              to={`profile?${blog.authorId}`}
-              className="absolute top-0 font-bold uppercase hover:text-gray-500"
-            >
-              {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
-            </Link>
-            <div className="absolute top-6 text-xs italic">
-              {/* {accountOfAuthor.description} */}
-              {accountOfAuthor.description}
+      {blog.id !== undefined ? (
+        <div className="mt-6 p-8 md:p-5 mx-10">
+          {/* <!--About the author--> */}
+          <div className="text-xs place-content-center mx-28 grid grid-cols-12">
+            {/* <!--Image of the author--> */}
+            <div className="col-span-1">
+              <img
+                className="rounded-md h-16 w-16 flex items-center justify-center"
+                src={authorAvatar ? authorAvatar : defaultAvatar}
+                alt="Author Img"
+              />
             </div>
-            <div className="absolute bottom-0 text-base text-purple-600 font-bold uppercase">
-              {/* {accountOfAuthor.description} */}
-              {accountOfAuthor.role === "LECTURER" ? 
-            <p>LECTURER</p>
-            :
-            <p>{experience()}</p>
-            }
+            {/* Account Infomation */}
+            <div className="-ml-4 text-lg relative col-span-11 w-full overflow-hidden">
+              <Link
+                to={`profile?${blog.authorId}`}
+                className="absolute top-0 font-bold uppercase hover:text-gray-500"
+              >
+                {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
+              </Link>
+              <div className="absolute top-6 text-xs italic">
+                {/* {accountOfAuthor.description} */}
+                {accountOfAuthor.description}
+              </div>
+              <div className="absolute bottom-0 text-base text-purple-600 font-bold uppercase">
+                {/* {accountOfAuthor.description} */}
+                {accountOfAuthor.role === "LECTURER" ? (
+                  <p>LECTURER</p>
+                ) : (
+                  <p>{experience()}</p>
+                )}
+              </div>
             </div>
           </div>
           {/* About the blog content */}
