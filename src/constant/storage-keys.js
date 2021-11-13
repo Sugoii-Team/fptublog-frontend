@@ -4,10 +4,13 @@ const StorageKey = {
   TOKEN: "access_token",
   ExTime: "expire_time",
   rejectblog: "rejectBlog",
-  //Comments
+  //Noti keys
   replyComment: "replyComment",
   deleteComment: "deleteComment",
   commentBlog: "commentBlog",
+  giveAward: "giveAward",
+  postNewBlog: "postNewBlog",
+  deleteBlog: "deleteBlog",
   //Noti Status
   unviewStatus: "unview",
   viewedStatus: "viewed",

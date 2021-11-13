@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AnnouncementDialog from "../../../components/AnouncementStatusDialog/AnnouncementDialog";
+import PageAlert from "../../../components/PageAlert/PageAlert";
 import adminApi from "../../../services/adminApi";
 import UserListSkeletons from "../Skeletons/UserListSkeletons";
 import DashboardDetail from "./components/DashboardDetail";
@@ -93,9 +94,10 @@ function DashboardPage() {
           <UserListSkeletons />
         )
       ) : (
-        <p className="text-center text-2xl my-10">
-          You need permission to acces this page (ONLY FOR ADMIN !)
-        </p>
+        <PageAlert
+          title="Access Denied"
+          description="You don't have permission to view this page!"
+        />
       )}
       {/* Show annountment dialog */}
       {status ? (

@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import awardApi from "../../../services/awardApi";
+import moment from "moment";
+import StorageKey from "../../../constant/storage-keys";
+//Firebase
+import { collection, doc, setDoc } from "@firebase/firestore";
+import { db } from "../../../services/fireBase";
+import { useSelector } from "react-redux";
 
 GiveAwardDialog.propTypes = {
   isCancel: PropTypes.func,
 };
 
 function GiveAwardDialog(props) {
+  const currentUser = useSelector((state) => state.user.current);
   const { isCancel, allAwardAvailable, forStudentId } = props;
   const [onAwarding, setOnAwarding] = useState(false);
 
@@ -25,21 +32,39 @@ function GiveAwardDialog(props) {
         });
         //if success show dialog to user
         if (awardResponse.status === 200) {
+          createNotiAfterAward(awardObj);
           window.alert(awardResponse.data);
         }
       }
     } catch (error) {
       console.log("Failed to give award: ", error);
       //If response is gived award then show dialog to user
-      const check = error.message === "Award already given to this user";
+      const check = error.message === "Already given award in last 30 days";
       window.alert(
         check
-          ? "Award already given to this user"
+          ? "This award already given to this student in this month!"
           : "Failed to give Award, please try again later!"
       );
     } finally {
       setOnAwarding(false);
     }
+  };
+
+  const createNotiAfterAward = async (award) => {
+    let currentDate = moment().valueOf();
+    //Create notification when reply comments
+    const newNotiDocRef = doc(collection(db, "notifications")); // Create new doc to generate id
+    const notiPayload = {
+      id: newNotiDocRef.id, // Give field id by doc's id
+      forUserId: forStudentId, //for first comment author
+      fromUserId: currentUser.id, //this is from admin
+      message: award.name,
+      referenceId: forStudentId, // Give award so set student id to view profile
+      status: StorageKey.unviewStatus,
+      date: currentDate,
+      type: StorageKey.giveAward, // Get constrain value from storage key
+    };
+    await setDoc(newNotiDocRef, notiPayload); // Update doc with some field
   };
 
   return (

@@ -15,13 +15,17 @@ import blogApi from "../../services/blogApi";
 import categoryApi from "../../services/categoryApi";
 //FireBase
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../services/fireBase";
+import { db, storage } from "../../services/fireBase";
+import { collection, doc, setDoc } from "@firebase/firestore";
 //Another
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { CircularProgress } from "@mui/material";
 import tagsApi from "../../services/tagsApi";
 import fieldApi from "../../services/fieldAPI";
+import PageAlert from "../PageAlert/PageAlert";
+import moment from "moment";
+import StorageKey from "../../constant/storage-keys";
 
 NewBlogForm.propTypes = {
   Ftitle: PropTypes.string,
@@ -237,6 +241,8 @@ export default function NewBlogForm(props) {
         );
         //After all is completed show dialog to user
         if (response.status === 200 && tagsrespose.status === 200) {
+          //Also create new notification
+          createNewNotification(newBlogResponseId);
           setSuccessPostDialog(true);
         }
       } else {
@@ -260,6 +266,8 @@ export default function NewBlogForm(props) {
           );
           if (tagResponse.status === 200) {
             //After add tags succesfully show dialog post blog success to user
+            //Also create new notification
+            createNewNotification(response.data.id);
             setSuccessPostDialog(true);
           }
         }
@@ -271,9 +279,43 @@ export default function NewBlogForm(props) {
     }
   }
 
+  //Create notification for every lecturer of field
+  const createNewNotification = async (blogId) => {
+    //Get all lecturer of selected field
+    if (selectedField) {
+      let isSuccess = false; //To check is all completed yet
+      //Call Api to get All lecturer of selected field
+      const lecturerResponse = await fieldApi.getLecturersOfField(
+        selectedField
+      );
+      const lecturerList = lecturerResponse.data;
+      let currentDate = moment().valueOf();
+      //After get list then give notification to every lecturer
+      lecturerList?.forEach(async (lecture) => {
+        //Create notification when post or update blog
+        const newNotiDocRef = doc(collection(db, "notifications")); // Create new doc to generate id
+        const notiPayload = {
+          id: newNotiDocRef.id, // Give field id by doc's id
+          forUserId: lecture.id, //for each lecturer id
+          fromUserId: getUserState.id, //from who posted this blog
+          message: "",
+          referenceId: blogId, // Give blog Id to reference to specify blog
+          status: StorageKey.unviewStatus,
+          date: currentDate,
+          type: StorageKey.postNewBlog, // Get constrain value from storage key
+        };
+        await setDoc(newNotiDocRef, notiPayload); // Update doc with some field
+      });
+      //When all good set success true
+      isSuccess = true;
+      return isSuccess;
+    }
+  };
+
   /* Constrain some field */
   const handleSubmit = async (e) => {
     /* Validate some field */
+
     if (!isThumbNailSelected && BlogNeedUpdate?.thumbnailUrl !== null) {
       thumbnailUrl = BlogNeedUpdate?.thumbnailUrl;
     }
@@ -483,11 +525,10 @@ export default function NewBlogForm(props) {
           </div>
         </motion.div>
       ) : (
-        <div className="flex justify-center my-9">
-          <div className="font-bold text-2xl">
-            You must be logged in before Post a Blog
-          </div>
-        </div>
+        <PageAlert
+          title="Loggin Required"
+          description="Please login to use this feature!"
+        />
       )}
       {/* Dialog for some field */}
       {dialog ? (

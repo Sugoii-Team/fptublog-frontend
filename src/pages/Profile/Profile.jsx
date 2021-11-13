@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import PageAlert from "../../components/PageAlert/PageAlert";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import awardApi from "../../services/awardApi";
 import userApi from "../../services/userApi";
@@ -347,9 +348,10 @@ function Profile(props) {
           ) : null} */}
         </div>
       ) : (
-        <p className="text-center text-2xl my-10">
-          LOGIN TO USE THIS PAGE !!! (ONLY FOR LECTURER AND STUDENT)
-        </p>
+        <PageAlert
+          title="Loggin Required"
+          description="Please login to use this feature!"
+        />
       )}
     </div>
   );

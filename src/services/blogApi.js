@@ -25,9 +25,7 @@ const blogApi = {
 
   get(id) {
     const url = `/api/blogs/${id}`;
-    const promise = axiosClient.get(url);
-    const dataPromise = promise.then((response) => response.data);
-    return dataPromise;
+    return axiosClient.get(url);
   },
 
   add(data) {

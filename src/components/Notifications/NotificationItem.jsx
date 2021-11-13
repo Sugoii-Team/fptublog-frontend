@@ -36,6 +36,24 @@ function NotificationItem({ notiObj }) {
       stateColor = "red";
       break;
     }
+    case StorageKey.giveAward: {
+      typeMessage = "Gave you an award";
+      url = `profile?${notiObj?.referenceId}`; //give award so redirect to profile
+      stateColor = "yellow";
+      break;
+    }
+    case StorageKey.deleteBlog: {
+      typeMessage = "Delete your blog";
+      url = `blogdetail?${notiObj?.referenceId}`; //give award so redirect to profile
+      stateColor = "red";
+      break;
+    }
+    case StorageKey.postNewBlog: {
+      typeMessage = "Posted New Blog";
+      url = `blogdetail?${notiObj?.referenceId}`; //give award so redirect to profile
+      stateColor = "green";
+      break;
+    }
     default: {
     }
   }

@@ -39,6 +39,16 @@ const fieldApi = {
     const url = `api/fields/${fieldId}/blogs?limit=3&page=1`;
     return axiosClient.get(url);
   },
+
+  getLecturersOfField(fieldId) {
+    const url = `api/fields/${fieldId}/lecturers`;
+    return axiosClient.get(url, {
+      herders: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
 };
 
 export default fieldApi;
