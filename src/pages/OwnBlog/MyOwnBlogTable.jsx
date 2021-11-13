@@ -7,6 +7,7 @@ import OwnBlogItems from "./Components/OwnBlogItems";
 import Pagination from "react-paginate";
 import { motion } from "framer-motion";
 import OwnBlogSkeleton from "./Components/OwnBlogSkeleton";
+import PageAlert from "../../components/PageAlert/PageAlert";
 
 export default function MyOwnBlogTable(props) {
   const loggedInUser = useSelector((state) => state.user.current);
@@ -198,9 +199,10 @@ export default function MyOwnBlogTable(props) {
           />
         </motion.div>
       ) : (
-        <div className="flex justify-center my-9">
-          <div className="font-bold text-2xl">Login to use this feature!</div>
-        </div>
+        <PageAlert
+          title="Loggin Required"
+          description="Please login to use this feature!"
+        />
       )}
       {deleteSuccessDialog ? (
         <MyDialog

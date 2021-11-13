@@ -4,6 +4,7 @@ import AnnouncementDialog from "../../../components/AnouncementStatusDialog/Anno
 import lecturerApi from "../../../services/lecturerApi";
 import MentorDashboardDetail from "./MentorDashboardDetail";
 import UserListSkeletons from "../Skeletons/UserListSkeletons";
+import PageAlert from "../../../components/PageAlert/PageAlert";
 
 MentorDashboard.propTypes = {};
 
@@ -37,7 +38,11 @@ function MentorDashboard() {
 
   const handleBanAccountClick = async (id, message) => {
     // console.log("curent user, id:",currentUser.id, id, message);
-    const banUser = await lecturerApi.banStudentByStudentId(currentUserId, id, message);
+    const banUser = await lecturerApi.banStudentByStudentId(
+      currentUserId,
+      id,
+      message
+    );
     if (banUser.status === 200) {
       setStatus(true);
       setResponseObject(banUser);
@@ -56,12 +61,12 @@ function MentorDashboard() {
         // if (currentUser.role === "LECTURER") {
         //   if (user.some) {
         //     setUser([]);
-        //   } 
-            const accountsData = await lecturerApi.getStudentList();
-            const allUser = accountsData.data;
-            console.log("all user ne: ", accountsData);
-            setUser(allUser);
-            setLoading(true);
+        //   }
+        const accountsData = await lecturerApi.getStudentList();
+        const allUser = accountsData.data;
+        console.log("all user ne: ", accountsData);
+        setUser(allUser);
+        setLoading(true);
         // }
       } catch (error) {
         console.log("Failed to fetch all user accounts: ", error);
@@ -81,9 +86,10 @@ function MentorDashboard() {
           <UserListSkeletons />
         )
       ) : (
-        <p className="text-center text-2xl my-10">
-          You need permission to acces this page (ONLY FOR LECTURER !)
-        </p>
+        <PageAlert
+          title="Access Denied"
+          description="You don't have permission to view this page!"
+        />
       )}
       {/* Show annountment dialog */}
       {status ? (

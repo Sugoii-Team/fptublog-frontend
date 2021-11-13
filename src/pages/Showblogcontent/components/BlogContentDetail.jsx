@@ -12,6 +12,7 @@ import { Link, useHistory } from "react-router-dom";
 import gfm from "remark-gfm";
 import InputDialog from "../../../components/Dialog/InputDialog";
 import MyDialog from "../../../components/Dialog/MyDialog";
+import PageAlert from "../../../components/PageAlert/PageAlert";
 import StorageKey from "../../../constant/storage-keys";
 //Components
 import blogApi from "../../../services/blogApi";
@@ -60,6 +61,7 @@ function BlogContentDetail({
   const [accountOfAuthor, setAccountOfAuthor] = useState({});
   const [approvedDialog, setApprovedDialog] = useState(false);
   const [isReject, setIsReject] = useState(false);
+  const [isDeletingBlog, setIsDeletingBlog] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
   const [averageRate, setAverageRate] = useState(0);
   const defaultAvatar = "http://placehold.it/70x70";
@@ -68,12 +70,13 @@ function BlogContentDetail({
   //For delete blog function
   const adminLoggedIn = admin.role === "ADMIN";
   //Handle open-close announment when delete blog
-  const handleDeleteBlogClick = (id) => {
+  const handleDeleteBlogClick = (reason) => {
     let confirmToDeleteBlog = window.confirm(
       "Are you sure to delete this blog ?"
     );
     if (confirmToDeleteBlog === true) {
-      blogDeletedClick(id);
+      blogDeletedClick(blog.id, reason);
+      setIsDeletingBlog(false);
     } else return;
   };
 
@@ -234,6 +237,8 @@ function BlogContentDetail({
 
   return (
     <div>
+
+{blog.id !== undefined ? (
       <div className="mt-6 p-8 md:p-5 mx-10">
         {/* <!--About the author--> */}
         <div className="text-xs place-content-center mx-28 grid grid-cols-12">
@@ -266,74 +271,75 @@ function BlogContentDetail({
             }
             </div>
           </div>
-        </div>
-        {/* About the blog content */}
-        <div>
-          <div className="grid md:grid-cols-3 gap-3 mx-auto w-10/12">
-            {/* content 2 part, aside 1 part */}
-            {/* <!--Content area--> */}
-            {/* Title of the blog */}
-            <div className="md:col-span-2">
-              <div className="mb-5">
-                <h1 className="mt-9 font-bold text-4xl text-left w-full">
-                  {blog.title}
-                </h1>
-                <div className="flex flex-col space-y-2 mt-1">
-                  <p className="text-md italic ">Posted: {time}</p>
-                  <div className="flex flex-row gap-2">
-                    {tagOfBlog.map((tag) => (
-                      <div
-                        key={tag.id}
-                        className="border-2 rounded-md p-1 text-sm italic font-semibold text-blue-800"
-                      >
-                        #{tag.name}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex flex-row">
-                    <Rating
-                      name="read-only"
-                      value={averageRate ? averageRate : 0}
-                      readOnly
-                      precision={0.1}
-                    />
-                    <span className="ml-1 font-light text-gray-500">
-                      ( {totalEveryoneRate} )
-                    </span>
-                  </div>
-                </div>
-              </div>
-              {/* Content of the blog */}
-              <span className="text-justify text-3xl ">
-                <article className="prose">
-                  <ReactMarkdown remarkPlugins={[gfm]}>
-                    {blog.content}
-                  </ReactMarkdown>
-                </article>
-              </span>
-              {currentUser.id && isInPending.length < 1 ? (
-                <div className="flex flex-col justify-center gap-3 my-4">
-                  <div className="font-semibold uppercase text-xs mx-auto">
-                    Leave a rate
-                  </div>
-                  <div className="mx-auto">
-                    <Rating
-                      name="simple-controlled"
-                      value={ratingValue}
-                      onChange={(event, newValue) => {
-                        setRatingValue(newValue);
-                        handleRatingBlog(newValue);
-                      }}
-                      size="large"
-                    />
+          {/* About the blog content */}
+          <div>
+            <div className="grid md:grid-cols-3 gap-3 mx-auto w-10/12">
+              {/* content 2 part, aside 1 part */}
+              {/* <!--Content area--> */}
+              {/* Title of the blog */}
+              <div className="md:col-span-2">
+                <div className="mb-5">
+                  <h1 className="mt-9 font-bold text-4xl text-left w-full">
+                    {blog.title}
+                  </h1>
+                  <div className="flex flex-col space-y-2 mt-1">
+                    <p className="text-md italic ">Posted: {time}</p>
+                    <div className="flex flex-row gap-2">
+                      {tagOfBlog.map((tag) => (
+                        <div
+                          key={tag.id}
+                          className="border-2 rounded-md p-1 text-sm italic font-semibold text-blue-800"
+                        >
+                          #{tag.name}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex flex-row">
+                      <Rating
+                        name="read-only"
+                        value={averageRate ? averageRate : 0}
+                        readOnly
+                        precision={0.1}
+                      />
+                      <span className="ml-1 font-light text-gray-500">
+                        ( {totalEveryoneRate} )
+                      </span>
+                    </div>
                   </div>
                 </div>
-              ) : null}
+                {/* Content of the blog */}
+                <span className="text-justify text-3xl ">
+                  <article className="prose">
+                    <ReactMarkdown remarkPlugins={[gfm]}>
+                      {blog.content}
+                    </ReactMarkdown>
+                  </article>
+                </span>
+                {currentUser.id &&
+                isInPending.length < 1 &&
+                blog.id !== undefined ? (
+                  <div className="flex flex-col justify-center gap-3 my-4">
+                    <div className="font-semibold uppercase text-xs mx-auto">
+                      Leave a rate
+                    </div>
+                    <div className="mx-auto">
+                      <Rating
+                        name="simple-controlled"
+                        value={ratingValue}
+                        onChange={(event, newValue) => {
+                          setRatingValue(newValue);
+                          handleRatingBlog(newValue);
+                        }}
+                        size="large"
+                      />
+                    </div>
+                  </div>
+                ) : null}
 
-              {/* Award section, if current loggin user is lecture and author of the blog is student then allowed to
+                {/* Award section, if current loggin user is lecture and author of the blog is student then allowed to
               give award */}
 
-              {/* {currentUser.id &&
+                {/* {currentUser.id &&
               isInPending.length < 1 &&
               currentUser.role === "LECTURER" &&
               accountOfAuthor.role === "STUDENT" ? (
@@ -345,73 +351,91 @@ function BlogContentDetail({
                 </div>
               ) : null} */}
 
-              {/* Approve Buttons */}
-              {conditionToApprove ? (
-                <div className="my-5 flex gap-3">
-                  <span>
-                    {" "}
-                    <button
-                      className="bg-red-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-red-500 transition ease-in-out duration-150"
-                      onClick={() => setIsReject(true)}
-                    >
-                      Reject
-                    </button>
-                  </span>
-                  <span>
-                    {" "}
-                    <button
-                      className="bg-green-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-green-500 transition ease-in-out duration-150"
-                      onClick={() => HandleApprovalBtn("approve")}
-                    >
-                      Approve
-                    </button>
-                  </span>
-                </div>
-              ) : null}
-              {/* Approve Buttons */}
-              {isReject ? (
-                <InputDialog
-                  isCancel={handleCancelDialog}
-                  onSubmitReason={handleSubmitRejectReason}
-                />
-              ) : null}
-            </div>
+                {/* Approve Buttons */}
+                {conditionToApprove ? (
+                  <div className="my-5 flex gap-3">
+                    <span>
+                      {" "}
+                      <button
+                        className="bg-red-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-red-500 transition ease-in-out duration-150"
+                        onClick={() => setIsReject(true)}
+                      >
+                        Reject
+                      </button>
+                    </span>
+                    <span>
+                      {" "}
+                      <button
+                        className="bg-green-400 px-5 py-3 text-sm shadow-lg font-medium tracking-wider  text-white rounded-lg hover:shadow-2xl hover:bg-green-500 transition ease-in-out duration-150"
+                        onClick={() => HandleApprovalBtn("approve")}
+                      >
+                        Approve
+                      </button>
+                    </span>
+                  </div>
+                ) : null}
+                {/* Approve Buttons */}
+                {isReject ? (
+                  <InputDialog
+                    title="Reject a blog!"
+                    isCancel={handleCancelDialog}
+                    onSubmitReason={handleSubmitRejectReason}
+                  />
+                ) : null}
+              </div>
 
-            {/* <!--Aside area--> */}
-            <div className="hidden lg:col-span-1 lg:flex ">
-              <div className="border-l-2 min-h-screen mr-10"></div>
-              {/* <!--Advertise blog area - include 3 blog demo--> */}
-              {/* <AsideBlogContent /> */}
-              <div>
-                <BlogPopular />
-                <FieldSuggest />
+              {/* <!--Aside area--> */}
+              <div className="hidden lg:col-span-1 lg:flex ">
+                <div className="border-l-2 min-h-screen mr-10"></div>
+                {/* <!--Advertise blog area - include 3 blog demo--> */}
+                {/* <AsideBlogContent /> */}
+                <div>
+                  <BlogPopular />
+                  <FieldSuggest />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <PageAlert
+          title="Blog not found!"
+          description="This blog might has been deleted!"
+        />
+      )}
 
       {/* Delete blog buttons */}
       {/* Hide when admin log out */}
-      {adminLoggedIn ? (
+      {adminLoggedIn && blogId !== undefined ? (
         <div className="grid grid-cols-9 mt-4 mb-8">
           <div className="text-center grid col-start-6">
             <button
               className="ml-5 p-2 pl-3 pr-3 w-24 transition-colors 
-          duration-300 rounded-3xl transform 
+          duration-300 rounded-md transform 
         text-white bg-red-200 hover:bg-red-500 
         border-red-300 text-sm focus:border-4"
-              onClick={() => handleDeleteBlogClick(blog.id)}
+              onClick={() => setIsDeletingBlog(true)}
             >
               DELETE
             </button>
+            {isDeletingBlog ? (
+              <InputDialog
+                title="Deleting Blog!"
+                isCancel={() => {
+                  setIsDeletingBlog(false);
+                }}
+                onSubmitReason={handleDeleteBlogClick}
+              />
+            ) : null}
           </div>
         </div>
       ) : null}
 
       {/* <!-- Comment Area --> */}
       <div className="col-span-2 mb-16">
-        <FBComment blogId={blogId} authorId={blog.authorId} />
+        {blog.id !== undefined ? (
+          <FBComment blogId={blogId} authorId={blog.authorId} />
+        ) : null}
       </div>
       {/* <!-- Comment Area /- --> */}
       {/* Dialog Area */}

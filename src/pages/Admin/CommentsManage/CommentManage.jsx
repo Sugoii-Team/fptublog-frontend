@@ -4,6 +4,7 @@ import CommentsItems from "./Components/CommentsItems";
 import { db } from "../../../services/fireBase";
 import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
 import { useSelector } from "react-redux";
+import PageAlert from "../../../components/PageAlert/PageAlert";
 
 CommentManage.propTypes = {};
 
@@ -97,11 +98,10 @@ function CommentManage(props) {
   /> */}
         </motion.div>
       ) : (
-        <div className="flex justify-center my-9">
-          <div className="font-bold text-2xl uppercase">
-            You don't have permission to access this!
-          </div>
-        </div>
+        <PageAlert
+          title="Access Denied"
+          description="You don't have permission to view this page!"
+        />
       )}
     </>
   );

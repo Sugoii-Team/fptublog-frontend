@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import PageAlert from "../../components/PageAlert/PageAlert";
 import StorageKey from "../../constant/storage-keys";
 import awardApi from "../../services/awardApi";
 import studentProfileApi from "../../services/studentProfileApi";
@@ -93,11 +94,10 @@ function GiveAwardTable(props) {
   /> */}
         </motion.div>
       ) : (
-        <div className="flex justify-center my-9">
-          <div className="font-bold text-2xl uppercase">
-            You don't have permission to view this!
-          </div>
-        </div>
+        <PageAlert
+          title="Access Denied"
+          description="You don't have permission to view this page!"
+        />
       )}
     </>
   );

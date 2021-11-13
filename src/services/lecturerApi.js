@@ -26,7 +26,6 @@ const lecturerApi = {
     });
   },
 
-
   banStudent(lectureId, studentId) {
     const url = `api/lecturers/${lectureId}/banningstudent/${studentId}`;
     return axiosClient.put(url, {
@@ -37,17 +36,17 @@ const lecturerApi = {
     });
   },
 
-  getLecturerById (id) {
+  getLecturerById(id) {
     const url = `api/lecturers/${id}`;
     return axiosClient.get(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }, 
+      },
     });
   },
 
-  getFieldOfLecturer (id) {
+  getFieldOfLecturer(id) {
     const url = `api/lecturers/${id}/fields`;
     return axiosClient.get(url, {
       herders: {
@@ -57,78 +56,88 @@ const lecturerApi = {
     });
   },
 
-  getListOfField (){
-    const url = 'api/fields';
+  getLecturersOfField(fieldId) {
+    const url = `api/fields/${fieldId}/lecturers`;
     return axiosClient.get(url, {
       herders: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-    }
-  });
+      },
+    });
   },
 
-  updateLecturerProfile(id, data){
+  getListOfField() {
+    const url = "api/fields";
+    return axiosClient.get(url, {
+      herders: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  updateLecturerProfile(id, data) {
     const url = `api/accounts/${id}`;
     return axiosClient.put(url, data, {
-      headers : {
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
-    })
+      },
+    });
   },
 
-  updateLecturerField (id,data){
+  updateLecturerField(id, data) {
     const url = `api/lecturers/${id}/fields`;
     return axiosClient.put(url, data, {
-      headers : {
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
-    })
+      },
+    });
   },
 
-  banStudentByStudentId(lecturerId, studentId, message){
+  banStudentByStudentId(lecturerId, studentId, message) {
     const url = `api/lecturers/${lecturerId}/banningstudent/${studentId}`;
     // console.log(accessToken)
     var data = {
-      "message": message,
-    }
-    return axiosClient.post(url,data, {
+      message: message,
+    };
+    return axiosClient.post(url, data, {
       headers: {
-        "Content-Type":"application/json",
+        "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
 
-  unbanStudentByStudentId(lecturerId, studentId){           
+  unbanStudentByStudentId(lecturerId, studentId) {
     const url = `api/lecturers/${lecturerId}/unbanningstudent/${studentId}`;
     return axiosClient.patch(url, {
       headers: {
-        "Content-Type":"application/json",
+        "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
 
-  getStudentList(){
-    const url = 'api/students';
+  getStudentList() {
+    const url = "api/students";
     return axiosClient.get(url, {
-      herders:{
+      herders: {
         "Content-Type": "application/json",
         Authorization: accessToken,
       },
     });
   },
-  
-  getBannedStudentList(){
-    const url = 'api/accounts/banned';
+
+  getBannedStudentList() {
+    const url = "api/accounts/banned";
     return axiosClient.get(url, {
-      headers : {
+      headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
-    })
+      },
+    });
   },
 };
 

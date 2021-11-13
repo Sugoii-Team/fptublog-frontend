@@ -7,7 +7,7 @@ InputDialog.propTypes = {
 };
 
 function InputDialog(props) {
-  const { isCancel, onSubmitReason } = props;
+  const { title, isCancel, onSubmitReason } = props;
   const [reasonsContent, setReasonContent] = useState("");
 
   //If submit then send reason content to above components
@@ -43,7 +43,7 @@ function InputDialog(props) {
                   className="text-lg uppercase font-bold text-center leading-6 text-gray-900"
                   id="modal-title"
                 >
-                  Reject a blog
+                  {title}
                 </h3>
                 <div className="mt-2">
                   <div>
