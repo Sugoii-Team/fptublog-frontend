@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
+import fieldApi from "../../services/fieldApi";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogsBelongToCategoryList from "./components/MainItem/BlogsBelongToCategoryList";
 import BlogPopular from "./components/SideItem/BlogPopular";
@@ -20,7 +20,7 @@ function BlogByCategoryHomePage(props) {
   const [fields, setFields] = useState([]);
   const [blogByFieldIsEmpty, setBlogByFieldIsEmpty] = useState(true);
 
-  //get field which is tranfered like a state when user click field suggest link from slide item
+  //get field and category which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
   const categoryState = location.state.category;
   // const limitBlog = 6;
@@ -42,7 +42,7 @@ function BlogByCategoryHomePage(props) {
             setLoading(false);
             setBlogList(blogsByCategory.data);
             setBlogByFieldIsEmpty(false);
-          }
+          } else setBlogByFieldIsEmpty(true);
         } else setBlogByFieldIsEmpty(true);
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);

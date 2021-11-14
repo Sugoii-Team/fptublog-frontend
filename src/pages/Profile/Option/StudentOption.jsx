@@ -34,6 +34,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
     }
     console.log("data ne:", data);
     dataOfStudentToUpdate(data);
+    setEditProfile(false)
   }
 
 
@@ -52,7 +53,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userProfile.id]);
+  }, [userProfile.id, majorOfStudent.name]);
 
   useEffect(() => {
     const studentOption = listOfMajor.map((major) => (
@@ -255,7 +256,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                 Edit Profile
               </button>
               {editProfile ?
-                <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0" type="submit" onClick={() => handleEditProfileButtonClick(!editProfile)}>
+                <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0" type="submit">
                   Save
                 </button>
                 :

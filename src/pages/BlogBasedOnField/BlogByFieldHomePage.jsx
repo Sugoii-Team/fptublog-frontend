@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
+import fieldApi from "../../services/fieldApi";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogsBelongToFieldList from "./components/MainItem/BlogsBelongToFieldList";
 import BlogPopular from "./components/SideItem/BlogPopular";
@@ -19,9 +19,8 @@ function BlogByFieldHomePage(props) {
   const [fields, setFields] = useState([]);
   const [blogByFieldIsEmpty, setBlogByFieldIsEmpty] = useState(true);
 
-  //get field which is tranfered like a state when user click field suggest link from slide item
+  //get field and category which is tranfered like a state when user click field suggest link from slide item
   const fieldState = location.state.field;
-  // const limitBlog = 6;
 
   //Get blog of field
   useEffect(() => {

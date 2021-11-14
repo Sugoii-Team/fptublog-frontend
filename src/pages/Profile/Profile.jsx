@@ -64,7 +64,6 @@ function Profile(props) {
       } catch (error) {
         console.log("Fail to update Student profile", error);
       }
-
     }
     else return;
   }
@@ -89,7 +88,7 @@ function Profile(props) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userId, userProfile.role, userProfile.description,currentPage]);
+  }, [userId, userProfile.role, userProfile.description, currentPage]);
 
 
   return (
@@ -129,7 +128,11 @@ function Profile(props) {
                             <p className="text-lg">
                               {userProfile.description !== null
                                 ? userProfile.description
-                                : "AYoooooooo <3"}
+                                :
+                                <p className="text-gray-400">
+                                  "AYoooooooo!!! Let update your description !"
+                                </p>
+                              }
                             </p>
                           </div>
                           <div className="mt-2 text-purple-600 font-bold uppercase">
@@ -145,7 +148,11 @@ function Profile(props) {
                             <p className="text-lg">
                               {userProfile.description !== null
                                 ? userProfile.description
-                                : "AYoooooooo <3"}
+                                :
+                                <p className="text-gray-400">
+                                  "AYoooooooo!!! Let update your description !"
+                                </p>
+                              }
                             </p>
                             <div className="mt-2 text-purple-600 font-bold uppercase">
                               LECTURER
@@ -174,10 +181,10 @@ function Profile(props) {
                           <p>Award</p>
                         </div>
                       </div>
-                      <div className="flex flex-row gap-4 text-sm cursor-pointer">
+                      {/* <div className="flex flex-row gap-4 text-sm cursor-pointer">
                         <div className="text-green-500">Like</div>
                         <div className="text-blue-500">Share</div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -292,7 +299,7 @@ function Profile(props) {
                     </div>
                   </Link>
                 ))}
-                
+
                 <ReactPaginate
                   previousLabel={"Previous"}
                   nextLabel={"Next"}

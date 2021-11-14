@@ -17,7 +17,7 @@ import Showdown from "showdown";
 import MyDialog from "../../components/Dialog/MyDialog";
 import blogApi from "../../services/blogApi";
 import categoryApi from "../../services/categoryApi";
-import fieldApi from "../../services/fieldAPI";
+import fieldApi from "../../services/fieldApi";
 import { storage } from "../../services/fireBase";
 import tagsApi from "../../services/tagsApi";
 import "./postBlog.css";
