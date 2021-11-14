@@ -24,8 +24,8 @@ function HomePage(props) {
   useEffect(() => {
     (async () => {
       try {
-        const topField = await fieldApi.getTopFieldToSuggest();
         setLoading(true);
+        const topField = await fieldApi.getTopFieldToSuggest();
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
           setBlogList(response.data);

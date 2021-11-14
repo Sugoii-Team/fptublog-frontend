@@ -6,7 +6,7 @@ import lecturerApi from '../../../services/lecturerApi';
 LecturerOption.propTypes = {
 };
 
-function LecturerOption({ userProfile }) {
+function LecturerOption({ userProfile, updateLecturerStatus}) {
 
   const currentUser = useSelector((state) => state.user.current);
   const { register, handleSubmit } = useForm();
@@ -29,7 +29,7 @@ function LecturerOption({ userProfile }) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userProfile.id]);
+  }, [userProfile.id, editProfile]);
 
   useEffect(() => {
     const lecturerOption = listOfField.map((field) => (
@@ -68,6 +68,7 @@ function LecturerOption({ userProfile }) {
         if (reponseProfile.status === 200 && repsonseField.status === 200) {
           window.alert("Update Lecturer Profile successfully");
           setEditProfile(!editProfile);
+          updateLecturerStatus(true);
         }
       } catch (error) {
         console.log("Fail to update Lecturer profile", error);
@@ -223,7 +224,7 @@ function LecturerOption({ userProfile }) {
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                   DESCRIPTION
                 </label>
-                <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{userProfile.description}</p>
+                <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.description}</p>
               </div>
             </div>
           </div>

@@ -24,10 +24,16 @@ function Profile(props) {
   const [studentUser, setStudentUser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const defaultThumnail = "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
+  const [updateLecturerStatus, setUpdateLecturerStatus] = useState(false);
+
 
   //Get student profile to get experience point to show on profile page
   const handleStudentProfile = (data) => {
     setStudentUser(data);
+  };
+
+  const handleUpdateLecturerStatus = (values) =>{
+    setUpdateLecturerStatus(values);
   };
 
   const handleOnpageChange = (data) => {
@@ -88,7 +94,7 @@ function Profile(props) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userId, userProfile.role, userProfile.description, currentPage]);
+  }, [userId, userProfile.role, currentPage, studentUser, updateLecturerStatus]);
 
 
   return (
@@ -268,7 +274,7 @@ function Profile(props) {
                 {userProfile.role === "STUDENT" ?
                   <StudentOption userProfile={userProfile} dataOfStudentToUpdate={onHandleStudentSubmit} studentProfile={handleStudentProfile} />
                   :
-                  <LecturerOption userProfile={userProfile} />
+                  <LecturerOption userProfile={userProfile} updateLecturerStatus = {handleUpdateLecturerStatus} />
                 }
               </motion.div>
 

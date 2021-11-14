@@ -32,7 +32,6 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
     if (data.description === "") {
       data.description = null;
     }
-    console.log("data ne:", data);
     dataOfStudentToUpdate(data);
     setEditProfile(false)
   }
@@ -53,7 +52,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userProfile.id, majorOfStudent.name]);
+  }, [userProfile.id, majorOfStudent.name, editProfile === true, studentUser.description]);
 
   useEffect(() => {
     const studentOption = listOfMajor.map((major) => (
@@ -219,7 +218,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                     DESCRIPTION
                   </label>
                   <p className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    {userProfile.description}
+                    {studentUser.description}
                   </p>
                 </div>
               </div>
