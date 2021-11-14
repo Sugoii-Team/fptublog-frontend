@@ -324,9 +324,12 @@ function BlogContentDetail({
                     </ReactMarkdown>
                   </article>
                 </span>
+                {/* Only show rating when user is logged in and blog not on any pending type
+                and blog is existed and current user differ from author of that blog */}
                 {currentUser.id &&
                 isInPending.length < 1 &&
-                blog.id !== undefined ? (
+                blog.id !== undefined &&
+                currentUser.id !== blog.authorId ? (
                   <div className="flex flex-col justify-center gap-3 my-4">
                     <div className="font-semibold uppercase text-xs mx-auto">
                       Leave a rate
