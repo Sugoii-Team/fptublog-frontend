@@ -32,6 +32,7 @@ function Profile(props) {
     setStudentUser(data);
   };
 
+  //To reload description in profile (information bar)
   const handleUpdateLecturerStatus = (values) =>{
     setUpdateLecturerStatus(values);
   };
@@ -56,6 +57,19 @@ function Profile(props) {
     } else if (2000 <= studentUser.experiencePoint && studentUser.experiencePoint < 3000) {
       return "BLOGGER";
     } else if (studentUser.experiencePoint >= 3000) {
+      return "PRO BLOGGER";
+    }
+  };
+
+  const experienceForSuggest = () => {
+    if(studentUser.experiencePoint === 0){
+      return "ROOKIE";
+    }
+    if (0 < studentUser.experiencePoint && studentUser.experiencePoint < 1000) {
+      return "NEWBIE";
+    } else if (1000 <= studentUser.experiencePoint && studentUser.experiencePoint < 2000) {
+      return "BLOGGER";
+    } else if (2000 <= studentUser.experiencePoint) {
       return "PRO BLOGGER";
     }
   };
@@ -179,7 +193,7 @@ function Profile(props) {
                           <p>Posted</p>
                         </div>
                         <div>
-                          <p className="text-2xl font-bold text-black">{userProfile.avgRate}</p>
+                          <p className="text-2xl font-bold text-black">{(userProfile.avgRate).toFixed(1)}</p>
                           <p>Average Rate</p>
                         </div>
                         <div>
@@ -187,10 +201,6 @@ function Profile(props) {
                           <p>Award</p>
                         </div>
                       </div>
-                      {/* <div className="flex flex-row gap-4 text-sm cursor-pointer">
-                        <div className="text-green-500">Like</div>
-                        <div className="text-blue-500">Share</div>
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -223,7 +233,7 @@ function Profile(props) {
                         Next Level:{" "}
                       </div>
                       <div className="absolute bottom-0 right-0 uppercase text-sm font-semibold text-pink-600">
-                        Pro Blogger{" "}
+                        {experienceForSuggest()}
                       </div>
                     </div>
                   </div>
