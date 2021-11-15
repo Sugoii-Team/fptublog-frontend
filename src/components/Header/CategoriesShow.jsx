@@ -28,6 +28,7 @@ function CategoriesShow({ fieldList, categoriesList, setShowCategories }) {
                   }
                 }}
                 onClick={() => handleOnFieldClick(false)}
+                className = "p-2 hover:bg-gray-200 hover: rounded-md transition duration-300 ease-in-out"
                 >
                   {field.name}
                 </Link>
@@ -41,8 +42,9 @@ function CategoriesShow({ fieldList, categoriesList, setShowCategories }) {
                     field: { field },
                     category: { category }
                   }
-                }} key={idx} className="mt-2 ml-7 text-sm block"
-                  onClick={() => handleOnFieldClick(false)}>
+                }} key={idx} className="mt-2 ml-7 text-sm block pl-2 hover:bg-gray-100 hover: rounded-md transition duration-300 ease-in-out"
+                  onClick={() => handleOnFieldClick(false)}
+                  >
 
                   {category.name}
 

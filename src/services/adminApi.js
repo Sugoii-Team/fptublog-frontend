@@ -78,7 +78,18 @@ const adminApi = {
         Authorization: accessToken,
       }
     });
-  }
+  },
+
+  updateLecturerField(id, data) {
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/lecturers/${id}/fields`;
+    return axiosClient.put(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
 };
 
 export default adminApi;

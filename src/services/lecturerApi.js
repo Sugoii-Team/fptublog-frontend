@@ -86,15 +86,15 @@ const lecturerApi = {
     });
   },
 
-  updateLecturerField(id, data) {
-    const url = `api/lecturers/${id}/fields`;
-    return axiosClient.put(url, data, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
-  },
+  // updateLecturerField(id, data) {
+  //   const url = `api/lecturers/${id}/fields`;
+  //   return axiosClient.put(url, data, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: accessToken,
+  //     },
+  //   });
+  // },
 
   banStudentByStudentId(lecturerId, studentId, message) {
     const url = `api/lecturers/${lecturerId}/banningstudent/${studentId}`;
