@@ -25,6 +25,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "start": "node server.js",
     "start:dev" : "set PORT=3005 && craco start",
     "build": "craco build && rm build/static/js/*.map",
     "test": "craco test",
