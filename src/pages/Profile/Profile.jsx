@@ -108,6 +108,7 @@ function Profile(props) {
   }, [userId, userProfile.role, userProfile.description, currentPage]);
 
   //Return
+
   return (
     <div>
       <div className="my-24 w-11/12 relative mx-auto h-full">
