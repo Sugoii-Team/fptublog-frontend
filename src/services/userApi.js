@@ -32,12 +32,7 @@ const userApi = {
 
   getPopularBlogOfUser(authorId, currentPage, limitBlog) {
     const url = `api/blogs/authors/${authorId}/approved?limit=${limitBlog}&page=${currentPage}&sort_by=avg_rate&order_by=desc`;
-    return axiosClient.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   getOwnBlog(userId) {
