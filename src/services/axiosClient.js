@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://3c62-42-114-206-112.ap.ngrok.io/fptu-blog",
+  baseURL: "34.124.170.202/fptu-blog",
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
   },
@@ -40,6 +40,9 @@ axiosClient.interceptors.response.use(
         (status === 406 || status === 404)
       ) {
         throw new Error(data);
+      } else if (config.url.includes("api/auth/login") && status === 401) {
+        //Catch banned error and get data
+        throw new Error(error + " " + error.response.data.id);
       }
 
       if (config.url.includes("api/awards/students") && status === 417) {

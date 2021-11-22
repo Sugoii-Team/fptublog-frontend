@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
@@ -10,14 +11,17 @@ import userApi from "../../services/userApi";
 import NameSectionSkeleton from "./NameSectionSkeleton";
 import LecturerOption from "./Option/LecturerOption";
 import StudentOption from "./Option/StudentOption";
+import UpdateProfileImg from "./UpdateProfileImg/UpdateProfileImg";
 
 Profile.propTypes = {};
 
 function Profile(props) {
+  const currentUser = useSelector((state) => state.user.current);
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
   const [profileAward, setProfileAward] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [isUpdateImg, setIsUpdateImg] = useState(false);
   const [listPopularBlog, setListPopularBlog] = useState([]);
   const [studentUser, setStudentUser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +37,7 @@ function Profile(props) {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
-  const limitBlog = 3;
+  const limitBlog = 10;
 
   const color = {
     frombgColor: "pink",
@@ -117,7 +121,14 @@ function Profile(props) {
             <div className="profileHeader border-2 border-gray-100 rounded-lg h-40 grid grid-cols-6 mt-5 shadow-lg">
               <div className="profileInfoWrapper col-span-4 relative">
                 <div className="profileInfo grid grid-cols-2">
-                  <div className="absolute col-span-1 -top-7 left-10">
+                  <div
+                    className="absolute col-span-1 -top-7 left-10 cursor-pointer"
+                    onClick={() => {
+                      if (currentUser.id === userProfile.id) {
+                        setIsUpdateImg(true);
+                      }
+                    }}
+                  >
                     <img
                       className="w-40 h-40 rounded-full border-4 border-gray-700 border-opacity-70"
                       src={
@@ -128,7 +139,14 @@ function Profile(props) {
                       alt="profile img"
                     />
                   </div>
-
+                  {isUpdateImg ? (
+                    <UpdateProfileImg
+                      isCancle={() => {
+                        setIsUpdateImg(false);
+                      }}
+                      userId={userId}
+                    />
+                  ) : null}
                   {userProfile.role === "STUDENT" ? (
                     <div className="col-span-1 absolute left-56 top-5">
                       <div className="profileNameNDes">
@@ -138,7 +156,7 @@ function Profile(props) {
                         <p className="text-lg">
                           {userProfile.description !== null
                             ? userProfile.description
-                            : "AYoooooooo <3"}
+                            : ""}
                         </p>
                       </div>
                       <div className="mt-2 text-purple-600 font-bold uppercase">
@@ -170,7 +188,7 @@ function Profile(props) {
                   <div className="flex flex-row gap-7 text-center text-xs uppercase text-gray-400">
                     <div className="">
                       <p className="text-2xl font-bold text-black">
-                        {listPopularBlog.length}
+                        {userProfile.blogsNumber}
                       </p>
                       <p>Posted</p>
                     </div>

@@ -64,7 +64,6 @@ function MentorDashboard() {
         //   }
         const accountsData = await lecturerApi.getStudentList();
         const allUser = accountsData.data;
-        console.log("all user ne: ", accountsData);
         setUser(allUser);
         setLoading(true);
         // }

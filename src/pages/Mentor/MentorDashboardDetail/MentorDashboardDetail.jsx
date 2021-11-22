@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import React from 'react';
-
+import React from "react";
 
 MentorDashboardDetail.propTypes = {
   userList: PropTypes.array,
@@ -8,12 +7,10 @@ MentorDashboardDetail.propTypes = {
   onBanClick: PropTypes.func,
 };
 
-
-
 function MentorDashboardDetail({ userList, onBanClick }) {
-  const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU";
+  const image =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU";
   let messageConfirmToRemoveOrBan = false;
-
 
   // const handleRemoveClick = (user) => {
   //   confirmToRemoveOrBan = window.confirm("Are you sure to remove this user ?");
@@ -24,15 +21,19 @@ function MentorDashboardDetail({ userList, onBanClick }) {
 
   const handleBanAccountClick = (user) => {
     messageConfirmToRemoveOrBan = window.prompt("Why this user is banned ?");
-    if (messageConfirmToRemoveOrBan != null || messageConfirmToRemoveOrBan === "" || messageConfirmToRemoveOrBan == null ||
-      (messageConfirmToRemoveOrBan != null && messageConfirmToRemoveOrBan.trim() != null)) {
-        if(messageConfirmToRemoveOrBan == null ){
-          messageConfirmToRemoveOrBan = "";
-        }
+    if (
+      messageConfirmToRemoveOrBan != null ||
+      messageConfirmToRemoveOrBan === "" ||
+      messageConfirmToRemoveOrBan == null ||
+      (messageConfirmToRemoveOrBan != null &&
+        messageConfirmToRemoveOrBan.trim() != null)
+    ) {
+      if (messageConfirmToRemoveOrBan == null) {
+        messageConfirmToRemoveOrBan = "";
+      }
       onBanClick(user.id, messageConfirmToRemoveOrBan);
     } else return;
   };
-
 
   return (
     <div className="mt-3 p-10">
@@ -81,16 +82,24 @@ function MentorDashboardDetail({ userList, onBanClick }) {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center pl-9">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <img className="h-10 w-10 rounded-full" src={user.avatarUrl ? user.avatarUrl : image} alt="" />
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={user.avatarUrl ? user.avatarUrl : image}
+                              alt=""
+                            />
                           </div>
                           <div className="ml-4 px-6">
-                            <div className="font-medium text-gray-900">{user.firstName} {user.lastName}</div>
+                            <div className="font-medium text-gray-900">
+                              {user.firstName} {user.lastName}
+                            </div>
                           </div>
                         </div>
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <div className="text-sm text-gray-500">
+                          {user.email}
+                        </div>
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -103,7 +112,10 @@ function MentorDashboardDetail({ userList, onBanClick }) {
                         </button>
                       </td> */}
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button onClick={() => handleBanAccountClick(user)} className="text-yellow-300 hover:text-red-600">
+                        <button
+                          onClick={() => handleBanAccountClick(user)}
+                          className="text-yellow-300 hover:text-red-600"
+                        >
                           BAN
                         </button>
                       </td>
@@ -115,10 +127,8 @@ function MentorDashboardDetail({ userList, onBanClick }) {
           </div>
         </div>
       </div>
-
-
     </div>
-  )
+  );
 }
 
 export default MentorDashboardDetail;
