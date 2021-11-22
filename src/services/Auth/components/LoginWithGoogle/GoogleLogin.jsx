@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { login, logout, register } from "../../userSlice";
 import GoogleLogin from "react-google-login";
 import MyDialog from "../../../../components/Dialog/MyDialog";
+import userApi from "../../../userApi";
 
 MyGoogleLogin.propTypes = {};
 
@@ -43,6 +44,24 @@ function MyGoogleLogin(props) {
         if (response.status === 200) {
           alert("Loggin success!");
           window.location.reload();
+        }
+      } else if (
+        error.message.includes("Request failed with status code 401")
+      ) {
+        //If user got banned then call api to get ban's message
+        //Cut message string to get data
+        const userId = error.message.replace(
+          "Error: Request failed with status code 401 ",
+          ""
+        );
+        //Call api to get message
+        try {
+          const banMessageResponse = await userApi.getBanMessage(userId.trim());
+          alert(
+            "You has been banned! \nReason: " + banMessageResponse.data.message
+          );
+        } catch (error) {
+          console.log("Failed to get message: ", error);
         }
       }
       console.log("Failed to Login: ", error.message);

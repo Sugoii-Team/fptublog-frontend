@@ -228,7 +228,7 @@ function NavBar({ fieldList, categoriesList }) {
                       <img
                         src={userImg}
                         alt="User's img"
-                        className="rounded-full border-2 border-black"
+                        className="rounded-full w-6 h-6 border-2 border-black"
                       />
                     </div>
                   ) : (
@@ -305,11 +305,6 @@ function NavBar({ fieldList, categoriesList }) {
             >
               Fields
             </span>
-          </li>
-          <li className="navItemPadding">
-            <Link to="" className="navItemsHover">
-              Archives
-            </Link>
           </li>
           <li className="navItemPadding">
             <Link to="/about" className="navItemsHover">

@@ -445,7 +445,7 @@ function BlogContentDetail({
 
       {/* <!-- Comment Area --> */}
       <div className="col-span-2 mb-16">
-        {blog.id !== undefined ? (
+        {blog.id !== undefined && isInPending.length === 0 ? (
           <FBComment blogId={blogId} authorId={blog.authorId} />
         ) : null}
       </div>

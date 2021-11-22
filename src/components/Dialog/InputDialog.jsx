@@ -12,7 +12,11 @@ function InputDialog(props) {
 
   //If submit then send reason content to above components
   const handleSendReason = () => {
-    onSubmitReason(reasonsContent);
+    if (reasonsContent.length <= 0) {
+      alert("Reason Required");
+    } else {
+      onSubmitReason(reasonsContent);
+    }
   };
 
   return (

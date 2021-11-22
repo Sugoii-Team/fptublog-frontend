@@ -110,9 +110,9 @@ const lecturerApi = {
     });
   },
 
-  unbanStudentByStudentId(lecturerId, studentId) {
+  unbanStudentByStudentId(lecturerId, studentId, data) {
     const url = `api/lecturers/${lecturerId}/unbanningstudent/${studentId}`;
-    return axiosClient.patch(url, {
+    return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
