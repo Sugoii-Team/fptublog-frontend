@@ -107,6 +107,7 @@ function Profile(props) {
     })();
   }, [userId, userProfile.role, userProfile.description, currentPage]);
 
+  //Return
   return (
     <div>
       <div className="my-24 w-11/12 relative mx-auto h-full">
@@ -124,7 +125,7 @@ function Profile(props) {
                   <div
                     className="absolute col-span-1 -top-7 left-10 cursor-pointer"
                     onClick={() => {
-                      if (currentUser.id === userProfile.id) {
+                      if (currentUser?.id === userProfile.id) {
                         setIsUpdateImg(true);
                       }
                     }}
