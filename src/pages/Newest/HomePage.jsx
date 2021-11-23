@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import Pagination from "react-paginate";
 import { useLocation } from "react-router";
+import TagSuggest from "../../components/SuggestTag/TagSuggest";
 import blogApi from "../../services/blogApi";
-import fieldApi from "../../services/fieldAPI";
 import BlogList from "./components/MainItem/BlogList";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
 import BlogPopular from "./components/SideItem/BlogPopular";
@@ -11,26 +11,23 @@ import FieldSuggest from "./components/SideItem/FieldSuggest";
 
 HomePage.propTypes = {};
 
-function HomePage(props) {
+function HomePage() {
   const [blogList, setBlogList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [fields, setFields] = useState([]);
   const location = useLocation();
 
   const limitBlog = 6;
 
-  //Get all Blogs
+  //Get all Blogs, field to suggest of the right
   useEffect(() => {
     (async () => {
       try {
-        const topField = await fieldApi.getTopFieldToSuggest();
         setLoading(true);
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
           setBlogList(response.data);
           setLoading(false);
-          setFields(topField.data);
         }
       } catch (error) {
         console.log("Failed to fetch blog list: ", error);
@@ -39,7 +36,6 @@ function HomePage(props) {
   }, [currentPage, location.state]);
 
   const handleOnpageChange = (data) => {
-    console.log("data ne : ", data);
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
@@ -87,9 +83,11 @@ function HomePage(props) {
           </div>
           {/* Blog loader */}
           {/* Side Items */}
+          {/* Suggest tag */}
           <div className="col-span-1 border-l-2 min-h-screen">
             <BlogPopular />
-            {fields.some ? <FieldSuggest fieldList={fields} /> : null}
+            <FieldSuggest />
+            <TagSuggest />
           </div>
           {/* Side Items */}
         </div>

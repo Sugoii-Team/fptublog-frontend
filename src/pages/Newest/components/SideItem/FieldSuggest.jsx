@@ -41,8 +41,7 @@ function FieldSuggest() {
             <ul>             
                {listFieldsToShowOnHomePage.map((field, index) => (
                 <li key = {index} className="w-80 my-1">
-                  <div  className="py-3 text-center text-sm font-medium uppercase bg-gray-50 shadow-sm hover:bg-gray-200 
-                  cursor-pointer transition ease-in-out duration-100 rounded-md mt-1">
+                  <div>
                   {/* Go to blog list based on field */}
                   <Link
                     to = {{
@@ -51,7 +50,8 @@ function FieldSuggest() {
                         field : {field}
                       }
                     }}
-                    className = "px-3"
+                    className="py-3 text-center text-sm font-medium uppercase bg-gray-50 shadow-sm hover:bg-gray-200 
+                    cursor-pointer transition ease-in-out duration-100 rounded-md mt-1 block"
                   >
                     {field.name}
                   </Link>

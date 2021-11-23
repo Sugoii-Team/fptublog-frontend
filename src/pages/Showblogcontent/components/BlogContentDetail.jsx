@@ -23,6 +23,8 @@ import userApi from "../../../services/userApi";
 import BlogPopular from "../../Newest/components/SideItem/BlogPopular";
 import FieldSuggest from "../../Newest/components/SideItem/FieldSuggest";
 import FBComment from "./FBComent";
+import TagSuggest from "../../../components/SuggestTag/TagSuggest";
+
 
 BlogContentDetail.propTypes = {
   blog: PropTypes.object,
@@ -401,6 +403,7 @@ function BlogContentDetail({
                 <div>
                   <BlogPopular />
                   <FieldSuggest />
+                  <TagSuggest />
                 </div>
               </div>
             </div>

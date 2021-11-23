@@ -160,7 +160,6 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                         />
                       )}
                     />
-
                     :
                     null
                   }
