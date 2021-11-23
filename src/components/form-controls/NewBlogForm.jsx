@@ -192,12 +192,12 @@ export default function NewBlogForm(props) {
   var options;
   if (categories.length > 0) {
     options = categories.map((category) => {
-      return { value: category.id, label: category.name };
+      return { value: category?.id, label: category?.name };
     });
   }
 
   //Upload to firestore and get image url
-  const uploadAndGetUrl = (isPosted) => {
+  const uploadAndGetUrl = (isUpload) => {
     const metadata = {
       contentType: "image/jpeg",
     };
@@ -205,17 +205,17 @@ export default function NewBlogForm(props) {
     // Upload file and metadata to the object 'images/mountains.jpg'
     //Create storage References base on firebase
     let storageRef;
-    if (isPosted === true) {
+    if (isUpload !== true) {
       //if posted new blog upload thumnails
-      storageRef = ref(storage, "thumnails/" + thumbNail.name);
+      storageRef = ref(storage, "thumnails/" + thumbNail?.name);
     } else {
       //Else if user click upload img to put into mark down do this ref
       setIsUploading(true);
-      storageRef = ref(storage, "uploadimages/" + uploadImage.name);
+      storageRef = ref(storage, "uploadimages/" + uploadImage?.name);
     }
     //Create an upload task
     let uploadTask;
-    if (isPosted) {
+    if (isUpload !== true) {
       //If click send approve then upload thumbnails
       uploadTask = uploadBytesResumable(storageRef, thumbNail, metadata);
     } else {
@@ -232,7 +232,7 @@ export default function NewBlogForm(props) {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           //If posted new blog upload then call api to post blog
-          if (isPosted === true) {
+          if (isUpload !== true) {
             thumbnailUrl = downloadURL;
             callApiToPostBlog();
           } else {
@@ -342,7 +342,7 @@ export default function NewBlogForm(props) {
   /* Constrain some field */
   const handleSubmit = async (e) => {
     /* Validate some field */
-
+    //If update then choose old thumbnails
     if (!isThumbNailSelected && BlogNeedUpdate?.thumbnailUrl !== null) {
       thumbnailUrl = BlogNeedUpdate?.thumbnailUrl;
     }
@@ -370,8 +370,7 @@ export default function NewBlogForm(props) {
         uploadAndGetUrl();
       } else {
         //Else upload without image or img existed from updating blog
-        let isPosted = true;
-        callApiToPostBlog(isPosted);
+        callApiToPostBlog();
       }
     }
   };
@@ -524,8 +523,8 @@ export default function NewBlogForm(props) {
                       <button
                         className="border shadow-md ml-2 p-2 font-semibold rounded-md text-xs uppercase hover:bg-gray-100 transition ease-in-out duration-200"
                         onClick={() => {
-                          let isPosted = false;
-                          uploadAndGetUrl(isPosted);
+                          let isUpload = true;
+                          uploadAndGetUrl(isUpload);
                         }}
                         disabled={isUploading}
                       >

@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:dev" : "set PORT=3005 && craco start",
+    "start:dev": "set PORT=3005 && craco start",
     "build": "craco build && rm build/static/js/*.map",
     "test": "craco test",
     "eject": "react-scripts eject",

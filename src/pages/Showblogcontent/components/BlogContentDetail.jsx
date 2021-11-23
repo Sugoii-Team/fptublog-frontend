@@ -249,34 +249,38 @@ function BlogContentDetail({
       {blog.id !== undefined ? (
         <div className="mt-6 p-8 md:p-5 mx-10">
           {/* <!--About the author--> */}
-          <div className="text-xs place-content-center mx-28 grid grid-cols-12">
-            {/* <!--Image of the author--> */}
-            <div className="col-span-1">
-              <img
-                className="rounded-md h-16 w-16 flex items-center justify-center"
-                src={authorAvatar ? authorAvatar : defaultAvatar}
-                alt="Author Img"
-              />
-            </div>
-            {/* Account Infomation */}
-            <div className="-ml-4 text-lg relative col-span-11 w-full overflow-hidden">
-              <Link
-                to={`profile?${blog.authorId}`}
-                className="absolute top-0 font-bold uppercase hover:text-gray-500"
-              >
-                {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
-              </Link>
-              <div className="absolute top-6 text-xs italic">
-                {/* {accountOfAuthor.description} */}
-                {accountOfAuthor.description}
-              </div>
-              <div className="absolute bottom-0 text-base text-purple-600 font-bold uppercase">
-                {/* {accountOfAuthor.description} */}
-                {accountOfAuthor.role === "LECTURER" ? (
-                  <p>LECTURER</p>
-                ) : (
-                  <p>{experience()}</p>
-                )}
+          <div className="w-10/12 mx-auto">
+            <div className="text-xs place-content-center grid grid-cols-3">
+              {/* <!--Image of the author--> */}
+              <div className="col-span-2 grid grid-cols-12">
+                <div className="col-span-1">
+                  <img
+                    className="rounded-md h-16 w-16 flex items-center justify-center border-2"
+                    src={authorAvatar ? authorAvatar : defaultAvatar}
+                    alt="Author Img"
+                  />
+                </div>
+                {/* Account Infomation */}
+                <div className="text-lg relative col-span-11 w-full overflow-hidden">
+                  <Link
+                    to={`profile?${blog.authorId}`}
+                    className="absolute top-0 font-bold uppercase hover:text-gray-500"
+                  >
+                    {accountOfAuthor.firstName + " " + accountOfAuthor.lastName}{" "}
+                  </Link>
+                  <div className="absolute top-6 text-xs italic">
+                    {/* {accountOfAuthor.description} */}
+                    {accountOfAuthor.description}
+                  </div>
+                  <div className="absolute bottom-0 text-base text-purple-600 font-bold uppercase">
+                    {/* {accountOfAuthor.description} */}
+                    {accountOfAuthor.role === "LECTURER" ? (
+                      <p>LECTURER</p>
+                    ) : (
+                      <p>{experience()}</p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -286,14 +290,14 @@ function BlogContentDetail({
               {/* content 2 part, aside 1 part */}
               {/* <!--Content area--> */}
               {/* Title of the blog */}
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 w-full">
                 <div className="mb-5">
                   <h1 className="mt-9 font-bold text-4xl text-left w-full">
                     {blog.title}
                   </h1>
-                  <div className="flex flex-col space-y-2 mt-1">
+                  <div className="flex flex-col text-left space-y-2 mt-1">
                     <p className="text-md italic ">Posted: {time}</p>
-                    <div className="flex flex-row gap-2">
+                    <div className="flex flex-row justify-begin gap-2">
                       {tagOfBlog.map((tag) => (
                         <div
                           key={tag.id}
@@ -303,7 +307,7 @@ function BlogContentDetail({
                         </div>
                       ))}
                     </div>
-                    <div className="flex flex-row">
+                    <div className="flex flex-row justify-begin">
                       <Rating
                         name="read-only"
                         value={averageRate ? averageRate : 0}
@@ -317,7 +321,7 @@ function BlogContentDetail({
                   </div>
                 </div>
                 {/* Content of the blog */}
-                <span className="text-justify text-3xl ">
+                <span className="text-justify text-3xl">
                   <article className="prose">
                     <ReactMarkdown remarkPlugins={[gfm]}>
                       {blog.content}

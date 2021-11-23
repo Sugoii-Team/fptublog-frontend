@@ -25,25 +25,25 @@ function Footer(props) {
                     d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                   />
                 </svg>
-                <span className="ml-3 text-xl text-black">DEV</span>
+                <span className="ml-3 text-xl text-black">FPTU BLOG</span>
               </div>
               <p className="mt-2 text-sm text-black">
-                Air plant banjo lyft occupy retro adaptogen indego
+                The most effective way to learn is to share!
               </p>
             </div>
-            <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
-              <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                <h2 className="title-font font-bold text-black tracking-widest text-md mb-3">
-                  CATEGORIES
+            <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center justify-end content-end">
+              <div className="lg:w-2/4 md:w-1/2 w-full px-4">
+                <h2 className="title-font font-bold text-black text-md mb-3">
+                  This site has been created by DSC_Sugoii Team:
                 </h2>
-                <nav className="list-none mb-10">
+                <ul className="list-none mb-10">
                   <li>
                     <Link
-                      to="#"
+                      to=""
                       className="text-black hover:text-red-300"
                       href="#"
                     >
-                      First Link
+                      Phan Phuoc Thanh
                     </Link>
                   </li>
                   <li>
@@ -52,7 +52,7 @@ function Footer(props) {
                       className="text-black hover:text-red-300"
                       href="#"
                     >
-                      Second Link
+                      Dang Dong Quan
                     </Link>
                   </li>
                   <li>
@@ -61,7 +61,7 @@ function Footer(props) {
                       className="text-black hover:text-red-300"
                       href="#"
                     >
-                      Third Link
+                      Le Quang Ky
                     </Link>
                   </li>
                   <li>
@@ -70,10 +70,19 @@ function Footer(props) {
                       className="text-black hover:text-red-300"
                       href="#"
                     >
-                      Fourth Link
+                      Dang Xuan Dat
                     </Link>
                   </li>
-                </nav>
+                  <li>
+                    <Link
+                      to="#"
+                      className="text-black hover:text-red-300"
+                      href="#"
+                    >
+                      Pham Vo Ngoc Tam
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

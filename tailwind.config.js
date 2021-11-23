@@ -37,26 +37,28 @@ module.exports = {
         minHForIndexPicture: "13rem",
         minHForCommentAvatar: "3rem",
         minHForSidePic: "80px",
-        
+        minHForProfileBlogThumbnails: "8rem",
       },
 
       maxHeight: {
         maxHForIndexPicture: "13rem",
         maxHForCommentAvatar: "3rem",
         maxHForSidePic: "80px",
+        maxHForProfileBlogThumbnails: "8rem",
       },
 
       minWidth: {
         minWForIndexPicture: "15rem",
         minWForCommentAvatar: "3rem",
         minWForSidePic: "100px",
-        minWidthForBlogInProfilePage: "10rem",
+        minWForProfileBlogThumbnails: "8rem",
       },
 
       maxWidth: {
         maxWForIndexPicture: "15rem",
         maxWForCommentAvatar: "3rem",
         maxWForSidePic: "100px",
+        maxWForProfileBlogThumbnails: "8rem",
       },
 
       height: {
