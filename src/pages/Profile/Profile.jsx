@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
@@ -10,14 +11,17 @@ import userApi from "../../services/userApi";
 import NameSectionSkeleton from "./NameSectionSkeleton";
 import LecturerOption from "./Option/LecturerOption";
 import StudentOption from "./Option/StudentOption";
+import UpdateProfileImg from "./UpdateProfileImg/UpdateProfileImg";
 
 Profile.propTypes = {};
 
 function Profile(props) {
+  const currentUser = useSelector((state) => state.user.current);
   const userId = useLocation().search.substr(1);
   const [userProfile, setUserProfile] = useState({});
   const [profileAward, setProfileAward] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [isUpdateImg, setIsUpdateImg] = useState(false);
   const [listPopularBlog, setListPopularBlog] = useState([]);
   const [studentUser, setStudentUser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,7 +43,7 @@ function Profile(props) {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
-  const limitBlog = 3;
+  const limitBlog = 10;
 
   const color = {
     frombgColor: "pink",
@@ -73,6 +77,7 @@ function Profile(props) {
     }
   };
 
+  //Handle update profile
   const onHandleStudentSubmit = async (data) => {
     if (userProfile.role === "STUDENT") {
       try {
@@ -88,6 +93,7 @@ function Profile(props) {
   }
 
 
+  //Get data
   useEffect(() => {
     (async () => {
       try {
@@ -110,6 +116,7 @@ function Profile(props) {
   }, [userId, userProfile.role, currentPage, studentUser, updateLecturerStatus]);
 
 
+  //Return
   return (
     <div>
       <div className="my-24 w-11/12 relative mx-auto h-full">
@@ -118,23 +125,53 @@ function Profile(props) {
           animate={{ x: 0, opacity: 1 }}
           initial={{ x: -50, opacity: 0 }}
         >
-          {loading ?
-            (<NameSectionSkeleton />)
-            :
-            (
-              <div className="profileHeader border-2 border-gray-100 rounded-lg h-40 grid grid-cols-6 mt-5 shadow-lg">
-                <div className="profileInfoWrapper col-span-4 relative">
-                  <div className="profileInfo grid grid-cols-2">
-                    <div className="absolute col-span-1 -top-7 left-10">
-                      <img
-                        className="w-40 h-40 rounded-full border-4 border-gray-700 border-opacity-70"
-                        src={
-                          userProfile.avatarUrl
-                            ? userProfile.avatarUrl
-                            : "https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-                        }
-                        alt="profile img"
-                      />
+          {loading ? (
+            <NameSectionSkeleton />
+          ) : (
+            <div className="profileHeader border-2 border-gray-100 rounded-lg h-40 grid grid-cols-6 mt-5 shadow-lg">
+              <div className="profileInfoWrapper col-span-4 relative">
+                <div className="profileInfo grid grid-cols-2">
+                  <div
+                    className="absolute col-span-1 -top-7 left-10 cursor-pointer"
+                    onClick={() => {
+                      if (currentUser?.id === userProfile.id) {
+                        setIsUpdateImg(true);
+                      }
+                    }}
+                  >
+                    <img
+                      className="w-40 h-40 rounded-full border-4 border-gray-700 border-opacity-70"
+                      src={
+                        userProfile.avatarUrl
+                          ? userProfile.avatarUrl
+                          : "https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
+                      }
+                      alt="profile img"
+                    />
+                  </div>
+                  {isUpdateImg ? (
+                    <UpdateProfileImg
+                      isCancle={() => {
+                        setIsUpdateImg(false);
+                      }}
+                      userId={userId}
+                    />
+                  ) : null}
+                  {userProfile.role === "STUDENT" ? (
+                    <div className="col-span-1 absolute left-56 top-5">
+                      <div className="profileNameNDes">
+                        <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
+                          {userProfile.firstName + " " + userProfile.lastName}
+                        </span>
+                        <p className="text-lg">
+                          {userProfile.description !== null
+                            ? userProfile.description
+                            : ""}
+                        </p>
+                      </div>
+                      <div className="mt-2 text-purple-600 font-bold uppercase">
+                        {experience()}
+                      </div>
                     </div>
 
                     {userProfile.role === "STUDENT" ?
@@ -185,7 +222,7 @@ function Profile(props) {
                   <div className="flex flex-col items-end space-y-12 my-2 mx-10">
                     <div className="flex flex-row gap-7 text-center text-xs uppercase text-gray-400">
                       <div>
-                        <p className="text-2xl font-bold text-black">{listPopularBlog.length}</p>
+                        <p className="text-2xl font-bold text-black">{userProfile.blogsNumber}</p>
                         <p>Posted</p>
                       </div>
                       <div>
@@ -262,7 +299,7 @@ function Profile(props) {
                       ))}
                     </div>
                     :
-                    <p className="uppercase text-center">You not have badges Gained</p>
+                    <p className="uppercase text-center">No badges Gained</p>
                   }
                 </div>
               </motion.div>
@@ -310,14 +347,33 @@ function Profile(props) {
             <div className=" border-2 border-gray-100 rounded-lg shadow-lg min-h-screen">
               <h1 className="text-left font-bold text-xl mt-2 ml-5 uppercase ">Blogger's POST</h1>
               {listPopularBlog.map((popularBlog, idx) => (
-                <Link to={`blogDetail?${popularBlog.id}`} className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-3" key={idx} >
-                  <div className="min-w-minWidthForBlogInProfilePage object-none object-center my-4 ml-6">
-                    <img className="inline object-contain w-32 h-32 bg-no-repeat rounded-md" src={popularBlog.thumbnailUrl ? popularBlog.thumbnailUrl : defaultThumnail} alt="" />
-                  </div>
-                  <div className="my-8">
-                    <div className="font-bold text-xl ml-3 uppercase">{popularBlog.title}</div>
-                    <div className="ml-3 text-sm">Created date: {moment(popularBlog.createdDateTime).format("LL")}</div>
-                    <div className="ml-3 pr-6">{popularBlog.description}</div>
+                <Link
+                  to={`blogDetail?${popularBlog.id}`}
+                  className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-3"
+                  key={idx}
+                >
+                  <div className="border flex flex-row w-full p-4">
+                    <div className="my-auto">
+                      <img
+                        className="min-w-minWForProfileBlogThumbnails max-w-maxWForProfileBlogThumbnails min-h-minHForProfileBlogThumbnails max-h-maxHForProfileBlogThumbnails rounded-md"
+                        src={
+                          popularBlog.thumbnailUrl
+                            ? popularBlog.thumbnailUrl
+                            : defaultThumnail
+                        }
+                        alt=""
+                      />
+                    </div>
+                    <div className="">
+                      <div className="font-bold text-xl ml-3 uppercase">
+                        {popularBlog.title}
+                      </div>
+                      <div className="ml-3 text-sm italic">
+                        Created date:{" "}
+                        {moment(popularBlog.createdDateTime).format("LL")}
+                      </div>
+                      <div className="ml-3 pr-6">{popularBlog.description}</div>
+                    </div>
                   </div>
                 </Link>
               ))}

@@ -59,6 +59,9 @@ export default function NewBlogForm(props) {
   const [thisBlogCategoy, setThisBlogCategoy] = useState({});
   const [thumbNail, setThumbNail] = useState(null);
   const [isThumbNailSelected, setIsThumbNailSelected] = useState(false);
+  const [uploadImage, setUploadImage] = useState(null);
+  const [outPutImage, setOutputImage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
   const [selectedTab, setSelectedTab] = useState("write");
@@ -190,19 +193,36 @@ export default function NewBlogForm(props) {
   var options;
   if (categories.length > 0) {
     options = categories.map((category) => {
-      return { value: category.id, label: category.name };
+      return { value: category?.id, label: category?.name };
     });
   }
 
   //Upload to firestore and get image url
-  const uploadAndGetUrl = () => {
+  const uploadAndGetUrl = (isUpload) => {
     const metadata = {
       contentType: "image/jpeg",
     };
 
     // Upload file and metadata to the object 'images/mountains.jpg'
-    const storageRef = ref(storage, "thumnails/" + thumbNail.name);
-    const uploadTask = uploadBytesResumable(storageRef, thumbNail, metadata);
+    //Create storage References base on firebase
+    let storageRef;
+    if (isUpload !== true) {
+      //if posted new blog upload thumnails
+      storageRef = ref(storage, "thumnails/" + thumbNail?.name);
+    } else {
+      //Else if user click upload img to put into mark down do this ref
+      setIsUploading(true);
+      storageRef = ref(storage, "uploadimages/" + uploadImage?.name);
+    }
+    //Create an upload task
+    let uploadTask;
+    if (isUpload !== true) {
+      //If click send approve then upload thumbnails
+      uploadTask = uploadBytesResumable(storageRef, thumbNail, metadata);
+    } else {
+      //Else click on upload img upload selected img
+      uploadTask = uploadBytesResumable(storageRef, uploadImage, metadata);
+    }
     uploadTask.on(
       "state_changed",
       (snapshot) => { },
@@ -212,8 +232,15 @@ export default function NewBlogForm(props) {
       () => {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          thumbnailUrl = downloadURL;
-          callApiToPostBlog();
+          //If posted new blog upload then call api to post blog
+          if (isUpload !== true) {
+            thumbnailUrl = downloadURL;
+            callApiToPostBlog();
+          } else {
+            //Else return url to user
+            setOutputImage(downloadURL);
+            setIsUploading(false);
+          }
         });
       }
     );
@@ -330,7 +357,7 @@ export default function NewBlogForm(props) {
   /* Constrain some field */
   const handleSubmit = async (e) => {
     /* Validate some field */
-
+    //If update then choose old thumbnails
     if (!isThumbNailSelected && BlogNeedUpdate?.thumbnailUrl !== null) {
       thumbnailUrl = BlogNeedUpdate?.thumbnailUrl;
     }
@@ -440,8 +467,8 @@ export default function NewBlogForm(props) {
                     <p className="font-semibold">Field:</p>
                     <p className="appearance-none block w-full bg-gray-100  border border-gray-100 rounded py-3 px-4 leading-tight uppercase">announcement</p>
                   </div>
-                  {/* Categories Select */}
-
+             
+                  {/* Categories announcement*/}
                   <div className="my-3 col-span-1">
                     <p className="font-semibold">Categories:</p>
                     <p className="appearance-none block w-full bg-gray-100 border border-gray-100 rounded py-3 px-4 leading-tight uppercase">announcement</p>
@@ -523,7 +550,7 @@ export default function NewBlogForm(props) {
                    handleAddition={handleAddTags}
                    delimiters={delimiters}
                  />
-               </div>
+             </div>
                // Tags
           }
 
@@ -531,25 +558,67 @@ export default function NewBlogForm(props) {
             null
             :
             // thumbNail URL 
-            <div className=" my-2">
-              <p className="font-semibold">Thumbnails:</p>
-              {BlogNeedUpdate?.thumbnailUrl ? (
-                <p className="text-green-400">
-                  Thumbnails has been selected, you can skip this
-                </p>
-              ) : null}
-              <input
-                className="border border-gray-300 w-full p-2 rounded-md"
-                type="file"
-                onChange={(e) => {
-                  setThumbNail(e.target.files[0]);
-                  /* Set this in case update a blog can skip pick new thumbnail */
-                  setIsThumbNailSelected(true);
-                }}
-              />
+             <div className=" my-2">
+                <p className="font-semibold">Thumbnails:</p>
+                {BlogNeedUpdate?.thumbnailUrl ? (
+                  <p className="text-green-400">
+                    Thumbnails has been get from previous blog, you can skip
+                    this
+                  </p>
+                ) : null}
+                <input
+                  className="border border-gray-300 w-full p-1 rounded-md"
+                  type="file"
+                  onChange={(e) => {
+                    setThumbNail(e.target.files[0]);
+                    /* Set this in case update a blog can skip pick new thumbnail */
+                    setIsThumbNailSelected(true);
+                  }}
+                />
             </div>
-            
           }
+          
+          {/* Upload img for markdown editor */}
+              <div className=" my-2">
+                <p className="font-semibold">Upload img and get Url:</p>
+                <div className="border border-gray-300 p-2 rounded-md ">
+                  <div>
+                    <input
+                      className="border border-gray-300 w-4/12 p-1 rounded-md"
+                      type="file"
+                      onChange={(e) => {
+                        setUploadImage(e.target.files[0]);
+                      }}
+                    />
+                    <div className="inline-block relative">
+                      <button
+                        className="border shadow-md ml-2 p-2 font-semibold rounded-md text-xs uppercase hover:bg-gray-100 transition ease-in-out duration-200"
+                        onClick={() => {
+                          let isUpload = true;
+                          uploadAndGetUrl(isUpload);
+                        }}
+                        disabled={isUploading}
+                      >
+                        Upload
+                      </button>
+                      {isUploading ? (
+                        <span className="my-auto absolute top-2 -right-7">
+                          {" "}
+                          <CircularProgress size={20} />
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <p className="font-semibold">Output:</p>
+                  <input
+                    className="border border-gray-300 w-full p-2 rounded-md"
+                    type="text"
+                    defaultValue={outPutImage}
+                  />
+                </div>
+              </div>
+          
+
             {/* Description Field */}
             <div>
               <p className="font-semibold mt-2">Description:</p>
@@ -562,21 +631,23 @@ export default function NewBlogForm(props) {
                 onInput={(e) => setDescription(e?.target.value)}
               />
             </div>
+
             {/* Rich Text Editor */}
-            <div className="">
-              <p className="font-semibold">Blog Content:</p>
-              <div className="container border border-gray-300 rounded-md">
-                <ReactMde
-                  value={content}
-                  onChange={(e) => setContent(e)}
-                  selectedTab={selectedTab}
-                  onTabChange={setSelectedTab}
-                  generateMarkdownPreview={(markdown) =>
-                    Promise.resolve(converter.makeHtml(markdown))
-                  }
-                />
+              <div className="">
+                <p className="font-semibold">Blog Content:</p>
+                <div className="container border border-gray-300 rounded-md">
+                  <ReactMde
+                    value={content}
+                    onChange={(e) => setContent(e)}
+                    selectedTab={selectedTab}
+                    onTabChange={setSelectedTab}
+                    generateMarkdownPreview={(markdown) =>
+                      Promise.resolve(converter.makeHtml(markdown))
+                    }
+                  />
+                </div>
               </div>
-            </div>
+                          
             <div className="flex justify-end my-2 relative">
               {sendingApprove ? (
                 <span className="absolute right-36 top-1">
@@ -584,23 +655,14 @@ export default function NewBlogForm(props) {
                   <CircularProgress size={30} />
                 </span>
               ) : null}
-              {getUserState.role === "ADMIN" ?
-              <button
-                className="py-2 px-4 shadow-md w-32 border border-gray-200 no-underline rounded-md bg-white text-black font-sans font-semibold text-sm border-blue btn-primary hover:text-white hover:bg-black focus:outline-none active:shadow-none "
-                onClick={handleSubmit}
-                disabled={sendingApprove}
-              >
-                Post Blog
-              </button>
-              :
-              <button
-                className="py-2 px-4 shadow-md w-32 border border-gray-200 no-underline rounded-md bg-white text-black font-sans font-semibold text-sm border-blue btn-primary hover:text-white hover:bg-black focus:outline-none active:shadow-none "
-                onClick={handleSubmit}
-                disabled={sendingApprove}
-              >
-                Send Approve
-              </button>
-            }
+                <button
+                  className="py-2 px-4 shadow-md w-32 border border-gray-200 no-underline rounded-md bg-white text-black font-sans font-semibold text-sm border-blue btn-primary hover:text-white hover:bg-black focus:outline-none active:shadow-none transition ease-in-out duration-200"
+                  onClick={handleSubmit}
+                  disabled={sendingApprove}
+                >
+                  {getUserState.role === "ADMIN" ? "Post Blog" : "Send Approve"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

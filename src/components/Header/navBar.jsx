@@ -105,6 +105,9 @@ function NavBar({ fieldList, categoriesList }) {
                         type="text"
                         className="px-1"
                         onInput={(e) => setSearchValue(e?.target.value)}
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") handleSearch();
+                        }}
                       />
                       {/* Search Icon in Text Box*/}
                       <svg
@@ -178,10 +181,10 @@ function NavBar({ fieldList, categoriesList }) {
           <div className="flex gap-2 pt-2 ml-auto lg:ml-0 relative">
             {/* Notification Icon */}
             <div>
-              <div className="relative">
+              {/* <div className="relative">
                 <span className="absolute rounded-full h-2 w-2 right-0 top-0 bg-red-500"></span>
                 <span className="absolute rounded-full h-2 w-2 right-0 top-0 animate-ping bg-red-500"></span>
-              </div>
+              </div> */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 cursor-pointer"
@@ -228,7 +231,7 @@ function NavBar({ fieldList, categoriesList }) {
                       <img
                         src={userImg}
                         alt="User's img"
-                        className="rounded-full border-2 border-black"
+                        className="rounded-full w-6 h-6 border-2 border-black"
                       />
                     </div>
                   ) : (
@@ -305,11 +308,6 @@ function NavBar({ fieldList, categoriesList }) {
             >
               Fields
             </span>
-          </li>
-          <li className="navItemPadding">
-            <Link to="" className="navItemsHover">
-              Archives
-            </Link>
           </li>
           <li className="navItemPadding">
             <Link to="/about" className="navItemsHover">

@@ -7,10 +7,10 @@ const adminApi = {
     return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     });
   },
-  
+
   getAllAccounts() {
     const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = "api/admin/accounts";
@@ -29,56 +29,65 @@ const adminApi = {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
+      },
     });
   },
 
-  
-  getListBannedAccount(){
+  getListBannedAccount() {
     const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = "api/admin/accounts/bannedaccounts";
     return axiosClient.get(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
+      },
     });
   },
-  
-  banUser(id, obj){
+
+  banUser(accountId, data) {
     const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
-    const url = `api/admin/accounts/${id}`;
-    return axiosClient.put(url, obj,{
+    const url = `api/admin/accounts/banningstudent/${accountId}`;
+    return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
+      },
     });
   },
-  
-  updateUserRole(id,params){
+
+  unbanUser(accountId, data) {
     const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
-    const url = `api/admin/accounts/${id}`;
-    return axiosClient.put(url,params, {
+    const url = `api/admin/accounts/unbanningaccount/${accountId}`;
+    return axiosClient.put(url, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
+      },
+    });
+  },
+
+  updateUserRole(id, params) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/admin/accounts/${id}`;
+    return axiosClient.put(url, params, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
     });
   },
 
   //only admin can delete a blog by id
-  deleteBlogById(id){
-    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+  deleteBlogById(id) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = `api/admin/blogs/${id}`;
     return axiosClient.delete(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
-      }
+      },
     });
   },
-
   updateLecturerField(id, data) {
     const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
     const url = `api/lecturers/${id}/fields`;
@@ -145,6 +154,7 @@ const adminApi = {
       },
     });
   },
+
 };
 
 export default adminApi;

@@ -5,7 +5,7 @@ const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
 
 const fieldApi = {
   getAllFields() {
-    const url = 'api/fields';
+    const url = "api/fields";
     return axiosClient.get(url);
   },
 
@@ -41,7 +41,7 @@ const fieldApi = {
   },
 
   getLecturersOfField(fieldId) {
-    const url =  `api/fields/${fieldId}/lecturers`;
+    const url = `api/fields/${fieldId}/lecturers`;
     return axiosClient.get(url, {
       herders: {
         "Content-Type": "application/json",

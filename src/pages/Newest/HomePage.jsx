@@ -24,6 +24,7 @@ function HomePage() {
     (async () => {
       try {
         setLoading(true);
+        const topField = await fieldApi.getTopFieldToSuggest();
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
           setBlogList(response.data);
@@ -54,14 +55,15 @@ function HomePage() {
                 <span className="border-b-2 border-gray-300">Newest</span>
               </div>
             </div>
-            {(loading || blogList === null) ? (
-              blogList.length === 0 ?
-              null
-              :
+            {loading ? (
               <BlogListSkeleton />
             ) : (
               <div>
-                <BlogList data={blogList} />
+                {blogList.length !== 0 ? (
+                  <BlogList data={blogList} />
+                ) : (
+                  <div>There is no blog! Post new</div>
+                )}
               </div>
             )}
             <Pagination

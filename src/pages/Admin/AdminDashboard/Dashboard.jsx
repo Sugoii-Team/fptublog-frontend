@@ -45,10 +45,9 @@ function DashboardPage() {
     setReload({});
   };
 
-  const handleBanAccountClick = async (id) => {
-    const obj = { id: id };
-
-    const banUser = await adminApi.banUser(id, obj);
+  const handleBanAccountClick = async (id, message) => {
+    const payload = { message };
+    const banUser = await adminApi.banUser(id, payload);
     console.log(banUser);
     if (banUser.status === 200) {
       setStatus(true);

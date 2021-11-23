@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import adminApi from '../../../services/adminApi';
 import lecturerApi from '../../../services/lecturerApi';
 
-LecturerOption.propTypes = {
-};
+
+LecturerOption.propTypes = {};
+
 
 function LecturerOption({ userProfile, updateLecturerStatus }) {
   const idOfUserProfile = useLocation().search.substr(1);
@@ -21,12 +22,16 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
   useEffect(() => {
     (async () => {
       try {
-        const lecturer = await lecturerApi.getLecturerById(userProfile.id);
-        const lecturerField = await lecturerApi.getFieldOfLecturer(lecturer.data.id);
-        const listOfField = await lecturerApi.getListOfField();
-        setLecturerUser(lecturer.data);
-        setFieldOfLecturer(lecturerField.data);
-        setListOfField(listOfField.data);
+        if (userProfile.id) {
+          const lecturer = await lecturerApi.getLecturerById(userProfile.id);
+          const lecturerField = await lecturerApi.getFieldOfLecturer(
+            lecturer.data.id
+          );
+          const listOfField = await lecturerApi.getListOfField();
+          setLecturerUser(lecturer.data);
+          setFieldOfLecturer(lecturerField.data);
+          setListOfField(listOfField.data);
+        }
       } catch (error) {
         console.log("Failed to get profile: ", error);
       }
@@ -34,18 +39,16 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
   }, [userProfile.id, editProfile, currentUser]);
 
   useEffect(() => {
-    const lecturerOption = listOfField.map((field) => (
-      {
-        value: field.id,
-        label: field.name,
-      }
-    ));
+    const lecturerOption = listOfField.map((field) => ({
+      value: field.id,
+      label: field.name,
+    }));
     setOptions(lecturerOption);
   }, [listOfField]);
 
   const handleEditProfileButtonClick = (values) => {
     setEditProfile(values);
-  }
+  };
 
   //Send data to API to update lecture profile: include data of lecturer and field of lecturer
   const handleLecturerDataToUpdate = async (data) => {
@@ -86,21 +89,22 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
           } else {
             window.alert("Fail to update Lecturer Profile !!! Try again!");
           }
+
         }
       } catch (error) {
         console.log("Fail to update Lecturer profile", error);
       }
     }
-  }
+  };
 
   //Check similarity between option and field of lecturer to check checkbox
   const handleChecked = (option) => {
-    let check = fieldOfLecturer.filter(field => {
-      return field.name === option.label
-    })
+    let check = fieldOfLecturer.filter((field) => {
+      return field.name === option.label;
+    });
 
     return check.length > 0 ? true : false;
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit(handleLecturerDataToUpdate)}>
@@ -121,6 +125,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 :
                 <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text"  {...register("firstName")} placeholder={lecturerUser.firstName} />
               }
+
             </div>
 
             {/* last name */}
@@ -136,6 +141,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 :
                 (<input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" {...register("lastName")} placeholder={lecturerUser.lastName} />)
               }
+
             </div>
           </div>
 
@@ -208,21 +214,23 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                   FIELD OF LECTURER:
                 </label>
                 <div className="border-4 rounded-md mt-3">
-                  {options !== null ?
-                    options.map((option, idx) =>
-                      <div key={idx} className="ml-11 text-xl my-3 center" >
-                        {fieldOfLecturer &&
-                          <div>
-                            <input type="checkbox"
-                              value={option.value}
-                              defaultChecked={handleChecked(option)}
-                              {...register("field")} />
-                            <span className="ml-7">{option.label}</span>
-                          </div>}
-                      </div>)
-                    :
-                    null
-                  }
+                  {options !== null
+                    ? options.map((option, idx) => (
+                        <div key={idx} className="ml-11 text-xl my-3 center">
+                          {fieldOfLecturer && (
+                            <div>
+                              <input
+                                type="checkbox"
+                                value={option.value}
+                                defaultChecked={handleChecked(option)}
+                                {...register("field")}
+                              />
+                              <span className="ml-7">{option.label}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    : null}
                 </div>
               </div>
             </div>
@@ -256,14 +264,24 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 First Name
               </label>
-              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{lecturerUser.firstName}</p>
+              <p
+                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                type="text"
+              >
+                {lecturerUser.firstName}
+              </p>
             </div>
             {/* last name */}
             <div className="w-full md:w-1/2 px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 Last Name
               </label>
-              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">{lecturerUser.lastName}</p>
+              <p
+                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                type="text"
+              >
+                {lecturerUser.lastName}
+              </p>
             </div>
           </div>
 
@@ -273,7 +291,9 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 Email
               </label>
-              <p className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.email}</p>
+              <p className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                {lecturerUser.email}
+              </p>
             </div>
           </div>
 
@@ -283,7 +303,9 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 ALTERNATIVE EMAIL
               </label>
-              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.alternativeEmail}</p>
+              <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                {lecturerUser.alternativeEmail}
+              </p>
             </div>
           </div>
 
@@ -294,7 +316,9 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                   DESCRIPTION
                 </label>
-                <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.description}</p>
+                <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                  {userProfile.description}
+                </p>
               </div>
             </div>
           </div>
@@ -331,40 +355,47 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                   FIELD OF LECTURER:
                 </label>
                 <div>
-                  {(fieldOfLecturer.length !== 0) ?
+                  {fieldOfLecturer.length !== 0 ? (
                     <ol className="ml-11 text-xl my-3 center">
-                      {fieldOfLecturer.map((field, idx) =>
-                        <li key={idx} className="mt-2">{field.name}</li>)}
+                      {fieldOfLecturer.map((field, idx) => (
+                        <li key={idx} className="mt-2">
+                          {field.name}
+                        </li>
+                      ))}
                     </ol>
-                    :
+                  ) : (
                     <p>This Lecturer not have field</p>
-                  }
+                  )}
                 </div>
               </div>
             </div>
           }
         </div>
-      }
+      )}
+
 
       {/* ADMIN UPDATE FIELD, LECTURER UPDATE THEIR PROFILE */}
       {(currentUser.id === userProfile.id || currentUser.role === "ADMIN") ?
         <span>
           <div className="relative">
-            <button type="button" className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded-full" onClick={() => handleEditProfileButtonClick(!editProfile)}>
+            <button
+              type="button"
+              className="bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded-full"
+              onClick={() => handleEditProfileButtonClick(!editProfile)}
+            >
               Edit Profile
             </button>
-            {editProfile ?
-              <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0" type="submit">
+            {editProfile ? (
+              <button
+                className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0"
+                type="submit"
+              >
                 Save
               </button>
-              :
-              null
-            }
+            ) : null}
           </div>
         </span>
-        :
-        null
-      }
+      ) : null}
     </form>
   );
 }

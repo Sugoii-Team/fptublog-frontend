@@ -208,7 +208,7 @@ export default function MyOwnBlogTable(props) {
         <MyDialog
           isCancel={responseFromSuccessDialog}
           title="Success"
-          description="Your blog is in delete pending!"
+          description="Action success!"
           icon="success"
         />
       ) : null}
