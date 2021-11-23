@@ -66,6 +66,28 @@ function Profile(props) {
     }
   };
 
+  const nextLevel = () => {
+    if (
+      0 <= studentUser.experiencePoint &&
+      studentUser.experiencePoint < 1000
+    ) {
+      return "NEWBIE";
+    } else if (
+      1000 <= studentUser.experiencePoint &&
+      studentUser.experiencePoint < 2000
+    ) {
+      return "BLOGGER";
+    } else if (
+      2000 <= studentUser.experiencePoint &&
+      studentUser.experiencePoint < 3000
+    ) {
+      return "PRO BLOGGER";
+    } else if (studentUser.experiencePoint >= 3000) {
+      return "MAX LEVEL";
+    }
+  };
+
+  //Handle update profile
   const onHandleStudentSubmit = async (data) => {
     if (userProfile.role === "STUDENT") {
       try {
@@ -82,6 +104,7 @@ function Profile(props) {
     } else return;
   };
 
+  //Get data
   useEffect(() => {
     (async () => {
       try {
@@ -242,7 +265,7 @@ function Profile(props) {
                       Next Level:{" "}
                     </div>
                     <div className="absolute bottom-0 right-0 uppercase text-sm font-semibold text-pink-600">
-                      Pro Blogger{" "}
+                      {nextLevel()}{" "}
                     </div>
                   </div>
                 </div>
@@ -269,9 +292,7 @@ function Profile(props) {
                       ))}
                     </div>
                   ) : (
-                    <p className="uppercase text-center">
-                      You not have badges Gained
-                    </p>
+                    <p className="uppercase text-center">No badges Gained</p>
                   )}
                 </div>
               </motion.div>
@@ -318,26 +339,28 @@ function Profile(props) {
                   className="grid: grid-cols-5 flex bg-gray-50 shadow-md border rounded-md h-40 mx-4 mb-3 mt-3"
                   key={idx}
                 >
-                  <div className="min-w-minWidthForBlogInProfilePage object-none object-center my-4 ml-6">
-                    <img
-                      className="inline object-contain w-32 h-32 bg-no-repeat rounded-md"
-                      src={
-                        popularBlog.thumbnailUrl
-                          ? popularBlog.thumbnailUrl
-                          : defaultThumnail
-                      }
-                      alt=""
-                    />
-                  </div>
-                  <div className="my-8">
-                    <div className="font-bold text-xl ml-3 uppercase">
-                      {popularBlog.title}
+                  <div className="border flex flex-row w-full p-4">
+                    <div className="my-auto">
+                      <img
+                        className="min-w-minWForProfileBlogThumbnails max-w-maxWForProfileBlogThumbnails min-h-minHForProfileBlogThumbnails max-h-maxHForProfileBlogThumbnails rounded-md"
+                        src={
+                          popularBlog.thumbnailUrl
+                            ? popularBlog.thumbnailUrl
+                            : defaultThumnail
+                        }
+                        alt=""
+                      />
                     </div>
-                    <div className="ml-3 text-sm">
-                      Created date:{" "}
-                      {moment(popularBlog.createdDateTime).format("LL")}
+                    <div className="">
+                      <div className="font-bold text-xl ml-3 uppercase">
+                        {popularBlog.title}
+                      </div>
+                      <div className="ml-3 text-sm italic">
+                        Created date:{" "}
+                        {moment(popularBlog.createdDateTime).format("LL")}
+                      </div>
+                      <div className="ml-3 pr-6">{popularBlog.description}</div>
                     </div>
-                    <div className="ml-3 pr-6">{popularBlog.description}</div>
                   </div>
                 </Link>
               ))}

@@ -42,7 +42,7 @@ function GiveAwardDialog(props) {
       const check = error.message === "Already given award in last 30 days";
       window.alert(
         check
-          ? "This award already given to this student in this month!"
+          ? "You already give award to this student in this month!"
           : "Failed to give Award, please try again later!"
       );
     } finally {

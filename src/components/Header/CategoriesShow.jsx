@@ -5,10 +5,9 @@ import { Link } from "react-router-dom";
 CategoriesShow.propTypes = {};
 
 function CategoriesShow({ fieldList, categoriesList, setShowCategories }) {
-
   const handleOnFieldClick = (values) => {
     setShowCategories(values);
-  }
+  };
 
   return (
     <motion.div
@@ -19,41 +18,44 @@ function CategoriesShow({ fieldList, categoriesList, setShowCategories }) {
       {fieldList.map((field, idx) => (
         <div key={idx} className="text-sm ml-10">
           <div>
-            <div className="text-left px-4 relative text-secondary font-bold mt-10" key={idx}>
+            <div
+              className="text-left px-4 relative text-secondary font-bold mt-10 hover:text-gray-400 transition ease-in-out duration-150"
+              key={idx}
+            >
               <span className="borderForCategories text-lg">
-                <Link to={{
-                  pathname: '/blogBaseOnField',
-                  state: {
-                    field: { field }
-                  }
-                }}
-                onClick={() => handleOnFieldClick(false)}
+                <Link
+                  to={{
+                    pathname: "/blogBaseOnField",
+                    state: {
+                      field: { field },
+                    },
+                  }}
+                  onClick={() => handleOnFieldClick(false)}
                 >
                   {field.name}
                 </Link>
               </span>
             </div>
-            {categoriesList.map((category, idx) => (
-              (category.fieldId === field.id) ?
-                <Link to={{
-                  pathname: '/blogBaseOnCategory',
-                  state: {
-                    field: { field },
-                    category: { category }
-                  }
-                }} key={idx} className="mt-2 ml-7 text-sm block"
-                  onClick={() => handleOnFieldClick(false)}>
-
+            {categoriesList.map((category, idx) =>
+              category.fieldId === field.id ? (
+                <Link
+                  to={{
+                    pathname: "/blogBaseOnCategory",
+                    state: {
+                      field: { field },
+                      category: { category },
+                    },
+                  }}
+                  key={idx}
+                  className="mt-2 ml-7 text-sm block hover:text-gray-400 transition ease-in-out duration-150 transform hover:scale-y-110"
+                  onClick={() => handleOnFieldClick(false)}
+                >
                   {category.name}
-
                 </Link>
-                :
-                null
-            ))}
-
+              ) : null
+            )}
           </div>
         </div>
-
       ))}
     </motion.div>
   );

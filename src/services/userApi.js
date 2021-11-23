@@ -47,32 +47,17 @@ const userApi = {
 
   getMajorList() {
     const url = "api/majors";
-    return axiosClient.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   getStudentById(id) {
     const url = `api/students/${id}`;
-    return axiosClient.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   getStudentMajorByMajorId(majorId) {
     const url = `api/majors/${majorId}`;
-    return axiosClient.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   updateStudentProfile(id, data) {
