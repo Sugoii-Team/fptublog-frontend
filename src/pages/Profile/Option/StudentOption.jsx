@@ -55,7 +55,8 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userProfile, studentProfile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userProfile.id]);
 
   useEffect(() => {
     const studentOption = listOfMajor.map((major) => ({
