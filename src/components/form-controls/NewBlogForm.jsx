@@ -225,7 +225,7 @@ export default function NewBlogForm(props) {
     }
     uploadTask.on(
       "state_changed",
-      (snapshot) => { },
+      (snapshot) => {},
       (error) => {
         console.log("Failed to upload img: ", error);
       },
@@ -280,11 +280,11 @@ export default function NewBlogForm(props) {
           title,
           content,
           description,
-        }
+        };
         //sending api to admin to post blog
         const adminPostBlogReponse = await adminApi.adminPostBlog(blog);
         console.log("blog admin ne : ", adminPostBlogReponse);
-        if(adminPostBlogReponse.status === 200){
+        if (adminPostBlogReponse.status === 200) {
           setSuccessPostDialog(true);
         }
       } else {
@@ -363,7 +363,7 @@ export default function NewBlogForm(props) {
     }
     setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
-    if(getUserState.role === "ADMIN"){
+    if (getUserState.role === "ADMIN") {
       if (title.length < minTitleLength) {
         setTitleDialog(true);
         e.preventDefault();
@@ -438,147 +438,146 @@ export default function NewBlogForm(props) {
   return (
     <div>
       {isLoggedIn || getUserState.role === "ADMIN" ? (
-      <motion.div
-        animate={{ y: 0, opacity: 1 }}
-        initial={{ y: 25, opacity: 0 }}
-        transition={{ duration: 0.35 }}
-      >
-        <div className="w-3/4 mx-auto my-5 ">
-          <div className="p-4 border-2 rounded-md border-black">
-            <h1 className="text-center text-3xl uppercase font-bold p-4">
-              {Ftitle}
-            </h1>
-            {/* Title input */}
-            <div className=" my-2">
-              <p className="font-semibold">Title:</p>
-              <input
-                className="border border-gray-300 w-full p-2 rounded-md"
-                type="text"
-                placeholder="Title"
-                defaultValue={BlogNeedUpdate ? BlogNeedUpdate.title : ""}
-                onInput={(e) => setTitle(e?.target.value)}
-              />
-            </div>
-
-            {getUserState.role === "ADMIN" ? 
-              <div>
-                <div className="w-full grid grid-cols-2 gap-2">
-                  <div className="my-3 col-span-1">
-                    <p className="font-semibold">Field:</p>
-                    <p className="appearance-none block w-full bg-gray-100  border border-gray-100 rounded py-3 px-4 leading-tight uppercase">announcement</p>
-                  </div>
-             
-                  {/* Categories announcement*/}
-                  <div className="my-3 col-span-1">
-                    <p className="font-semibold">Categories:</p>
-                    <p className="appearance-none block w-full bg-gray-100 border border-gray-100 rounded py-3 px-4 leading-tight uppercase">announcement</p>
-                  </div>
-                </div>
-              </div>
-              :
-              <div>
-                {/* Field Select */}
-                <div className="w-full grid grid-cols-2 gap-2">
-                  <div className="my-3 col-span-1">
-                    <p className="font-semibold">Field:</p>
-                    {BlogNeedUpdate === undefined ? (
-                      <Select
-                        options={fieldOption}
-                        isDisabled={onFieldChanging}
-                        onChange={(e) =>
-                          handleCallCategoriesOnFieldChange(e?.value)
-                        }
-                      />
-                    ) : (
-                      <Select
-                        options={fieldOption}
-                        isDisabled={true}
-                        onChange={(e) =>
-                          handleCallCategoriesOnFieldChange(e?.value)
-                        }
-                      />
-                    )}
-                  </div>
-                  {/* Categories Select */}
-
-                  <div className="my-3 col-span-1">
-                    <p className="font-semibold">Categories:</p>
-                    {BlogNeedUpdate ? (
-                      <Select
-                        value={{
-                          label: thisBlogCategoy.name,
-                          value: thisBlogCategoy.id,
-                        }}
-                        isDisabled={true}
-                      />
-                    ) : (
-                      <Select
-                        options={options}
-                        isDisabled={BlogNeedUpdate ? true : false}
-                        onChange={(e) => setSelectedCategory(e?.value)}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            }
-
-            {getUserState.role === "ADMIN" ? 
-            null
-            :
-            // Tags 
-            <div>
-                 <p className="font-semibold">Tags: </p>
-                 <ReactTags
-                   classNames={{
-                     tags: "tagsClass",
-                     tagInput: "tagInputClass",
-                     tagInputField: "tagInputFieldClass",
-                     selected: "selectedClass",
-                     tag: "tagClass",
-                     remove: "removeClass",
-                     suggestions: "suggestionsClass",
-                     activeSuggestion: "activeSuggestionClass",
-                     editTagInput: "editTagInputClass",
-                     editTagInputField: "editTagInputField",
-                     clearAll: "clearAllClass",
-                   }}
-                   autofocus={false}
-                   tags={inpputedTags}
-                   suggestions={suggestTags}
-                   handleDelete={handleDeleteTags}
-                   handleAddition={handleAddTags}
-                   delimiters={delimiters}
-                 />
-             </div>
-               // Tags
-          }
-
-            {getUserState.role === "ADMIN" ? 
-            null
-            :
-            // thumbNail URL 
-             <div className=" my-2">
-                <p className="font-semibold">Thumbnails:</p>
-                {BlogNeedUpdate?.thumbnailUrl ? (
-                  <p className="text-green-400">
-                    Thumbnails has been get from previous blog, you can skip
-                    this
-                  </p>
-                ) : null}
+        <motion.div
+          animate={{ y: 0, opacity: 1 }}
+          initial={{ y: 25, opacity: 0 }}
+          transition={{ duration: 0.35 }}
+        >
+          <div className="w-3/4 mx-auto my-5 ">
+            <div className="p-4 border-2 rounded-md border-black">
+              <h1 className="text-center text-3xl uppercase font-bold p-4">
+                {Ftitle}
+              </h1>
+              {/* Title input */}
+              <div className=" my-2">
+                <p className="font-semibold">Title:</p>
                 <input
-                  className="border border-gray-300 w-full p-1 rounded-md"
-                  type="file"
-                  onChange={(e) => {
-                    setThumbNail(e.target.files[0]);
-                    /* Set this in case update a blog can skip pick new thumbnail */
-                    setIsThumbNailSelected(true);
-                  }}
+                  className="border border-gray-300 w-full p-2 rounded-md"
+                  type="text"
+                  placeholder="Title"
+                  defaultValue={BlogNeedUpdate ? BlogNeedUpdate.title : ""}
+                  onInput={(e) => setTitle(e?.target.value)}
                 />
-            </div>
-          }
-          
-          {/* Upload img for markdown editor */}
+              </div>
+
+              {getUserState.role === "ADMIN" ? (
+                <div>
+                  <div className="w-full grid grid-cols-2 gap-2">
+                    <div className="my-3 col-span-1">
+                      <p className="font-semibold">Field:</p>
+                      <p className="appearance-none block w-full bg-gray-100  border border-gray-100 rounded py-3 px-4 leading-tight uppercase">
+                        announcement
+                      </p>
+                    </div>
+
+                    {/* Categories announcement*/}
+                    <div className="my-3 col-span-1">
+                      <p className="font-semibold">Categories:</p>
+                      <p className="appearance-none block w-full bg-gray-100 border border-gray-100 rounded py-3 px-4 leading-tight uppercase">
+                        announcement
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  {/* Field Select */}
+                  <div className="w-full grid grid-cols-2 gap-2">
+                    <div className="my-3 col-span-1">
+                      <p className="font-semibold">Field:</p>
+                      {BlogNeedUpdate === undefined ? (
+                        <Select
+                          options={fieldOption}
+                          isDisabled={onFieldChanging}
+                          onChange={(e) =>
+                            handleCallCategoriesOnFieldChange(e?.value)
+                          }
+                        />
+                      ) : (
+                        <Select
+                          options={fieldOption}
+                          isDisabled={true}
+                          onChange={(e) =>
+                            handleCallCategoriesOnFieldChange(e?.value)
+                          }
+                        />
+                      )}
+                    </div>
+                    {/* Categories Select */}
+
+                    <div className="my-3 col-span-1">
+                      <p className="font-semibold">Categories:</p>
+                      {BlogNeedUpdate ? (
+                        <Select
+                          value={{
+                            label: thisBlogCategoy.name,
+                            value: thisBlogCategoy.id,
+                          }}
+                          isDisabled={true}
+                        />
+                      ) : (
+                        <Select
+                          options={options}
+                          isDisabled={BlogNeedUpdate ? true : false}
+                          onChange={(e) => setSelectedCategory(e?.value)}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {getUserState.role === "ADMIN" ? null : (
+                // Tags
+                <div>
+                  <p className="font-semibold">Tags: </p>
+                  <ReactTags
+                    classNames={{
+                      tags: "tagsClass",
+                      tagInput: "tagInputClass",
+                      tagInputField: "tagInputFieldClass",
+                      selected: "selectedClass",
+                      tag: "tagClass",
+                      remove: "removeClass",
+                      suggestions: "suggestionsClass",
+                      activeSuggestion: "activeSuggestionClass",
+                      editTagInput: "editTagInputClass",
+                      editTagInputField: "editTagInputField",
+                      clearAll: "clearAllClass",
+                    }}
+                    autofocus={false}
+                    tags={inpputedTags}
+                    suggestions={suggestTags}
+                    handleDelete={handleDeleteTags}
+                    handleAddition={handleAddTags}
+                    delimiters={delimiters}
+                  />
+                </div>
+              )}
+
+              {getUserState.role === "ADMIN" ? null : (
+                // thumbNail URL
+                <div className=" my-2">
+                  <p className="font-semibold">Thumbnails:</p>
+                  {BlogNeedUpdate?.thumbnailUrl ? (
+                    <p className="text-green-400">
+                      Thumbnails has been get from previous blog, you can skip
+                      this
+                    </p>
+                  ) : null}
+                  <input
+                    className="border border-gray-300 w-full p-1 rounded-md"
+                    type="file"
+                    onChange={(e) => {
+                      setThumbNail(e.target.files[0]);
+                      /* Set this in case update a blog can skip pick new thumbnail */
+                      setIsThumbNailSelected(true);
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Upload img for markdown editor */}
               <div className=" my-2">
                 <p className="font-semibold">Upload img and get Url:</p>
                 <div className="border border-gray-300 p-2 rounded-md ">
@@ -617,22 +616,21 @@ export default function NewBlogForm(props) {
                   />
                 </div>
               </div>
-          
 
-            {/* Description Field */}
-            <div>
-              <p className="font-semibold mt-2">Description:</p>
-              <textarea
-                className="border border-gray-300 w-full p-2 rounded-md"
-                placeholder="Description (Max 200 character)"
-                defaultValue={
-                  BlogNeedUpdate ? BlogNeedUpdate.description : ""
-                }
-                onInput={(e) => setDescription(e?.target.value)}
-              />
-            </div>
+              {/* Description Field */}
+              <div>
+                <p className="font-semibold mt-2">Description:</p>
+                <textarea
+                  className="border border-gray-300 w-full p-2 rounded-md"
+                  placeholder="Description (Max 200 character)"
+                  defaultValue={
+                    BlogNeedUpdate ? BlogNeedUpdate.description : ""
+                  }
+                  onInput={(e) => setDescription(e?.target.value)}
+                />
+              </div>
 
-            {/* Rich Text Editor */}
+              {/* Rich Text Editor */}
               <div className="">
                 <p className="font-semibold">Blog Content:</p>
                 <div className="container border border-gray-300 rounded-md">
@@ -647,14 +645,14 @@ export default function NewBlogForm(props) {
                   />
                 </div>
               </div>
-                          
-            <div className="flex justify-end my-2 relative">
-              {sendingApprove ? (
-                <span className="absolute right-36 top-1">
-                  {" "}
-                  <CircularProgress size={30} />
-                </span>
-              ) : null}
+
+              <div className="flex justify-end my-2 relative">
+                {sendingApprove ? (
+                  <span className="absolute right-36 top-1">
+                    {" "}
+                    <CircularProgress size={30} />
+                  </span>
+                ) : null}
                 <button
                   className="py-2 px-4 shadow-md w-32 border border-gray-200 no-underline rounded-md bg-white text-black font-sans font-semibold text-sm border-blue btn-primary hover:text-white hover:bg-black focus:outline-none active:shadow-none transition ease-in-out duration-200"
                   onClick={handleSubmit}
@@ -665,8 +663,7 @@ export default function NewBlogForm(props) {
               </div>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
       ) : (
         <PageAlert
           title="Loggin Required"

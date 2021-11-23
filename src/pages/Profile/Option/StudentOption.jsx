@@ -35,8 +35,8 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
       data.description = null;
     }
     dataOfStudentToUpdate(data);
-    setEditProfile(false)
-  }
+    setEditProfile(false);
+  };
 
   //get Student information base on userProfile id
   useEffect(() => {
@@ -55,7 +55,13 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userProfile.id, majorOfStudent.name, editProfile === true, studentUser.description]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    userProfile.id,
+    majorOfStudent.name,
+    editProfile,
+    studentUser.description,
+  ]);
 
   useEffect(() => {
     const studentOption = listOfMajor.map((major) => ({
@@ -194,14 +200,12 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                         />
                       )}
                     />
-                    :
-                    null
-                  }
+                  ) : null}
                 </div>
               </div>
             ) : null}
           </div>
-          :
+        ) : (
           // SHOW PROFILE FOR GUEST OR ANOTHER ACCOUNT
           <div>
             <div className="flex flex-wrap -mx-3 mb-6">
@@ -312,8 +316,11 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
               >
                 Edit Profile
               </button>
-              {editProfile ?
-                <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0" type="submit">
+              {editProfile ? (
+                <button
+                  className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0"
+                  type="submit"
+                >
                   Save
                 </button>
               ) : null}

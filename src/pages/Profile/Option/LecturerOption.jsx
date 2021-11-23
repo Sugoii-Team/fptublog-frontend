@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
-import adminApi from '../../../services/adminApi';
-import lecturerApi from '../../../services/lecturerApi';
-
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router";
+import adminApi from "../../../services/adminApi";
+import lecturerApi from "../../../services/lecturerApi";
 
 LecturerOption.propTypes = {};
-
 
 function LecturerOption({ userProfile, updateLecturerStatus }) {
   const idOfUserProfile = useLocation().search.substr(1);
@@ -55,16 +53,13 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
     if (userProfile.role === "LECTURER") {
       try {
         if (currentUser.role === "ADMIN") {
-
-          const fields = data.field.map((field) => (
-
-            {
-              id: field,
-            }
-
-          )
+          const fields = data.field.map((field) => ({
+            id: field,
+          }));
+          const repsonseField = await adminApi.updateLecturerField(
+            userProfile.id,
+            fields
           );
-          const repsonseField = await adminApi.updateLecturerField(userProfile.id, fields);
           if (repsonseField.status === 200) {
             window.alert("Update Lecturer field successfully");
             setEditProfile(!editProfile);
@@ -72,16 +67,19 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
           } else {
             window.alert("Fail to update Lecturer field !!! Try again!");
           }
-
         } else {
-
           const lectureInfo = {
             firstName: data.firstName ? data.firstName : null,
             lastName: data.lastName ? data.lastName : null,
-            alternativeEmail: data.alternativeEmail ? data.alternativeEmail : null,
+            alternativeEmail: data.alternativeEmail
+              ? data.alternativeEmail
+              : null,
             description: data.description ? data.description : null,
-          }
-          const reponseProfile = await lecturerApi.updateLecturerProfile(idOfUserProfile, lectureInfo);
+          };
+          const reponseProfile = await lecturerApi.updateLecturerProfile(
+            idOfUserProfile,
+            lectureInfo
+          );
           if (reponseProfile.status === 200) {
             window.alert("Update Lecturer Profile successfully");
             setEditProfile(!editProfile);
@@ -89,7 +87,6 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
           } else {
             window.alert("Fail to update Lecturer Profile !!! Try again!");
           }
-
         }
       } catch (error) {
         console.log("Fail to update Lecturer profile", error);
@@ -108,7 +105,8 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
 
   return (
     <form onSubmit={handleSubmit(handleLecturerDataToUpdate)}>
-      {(currentUser.id === userProfile.id && editProfile === true) || (currentUser.role === "ADMIN" && editProfile === true) ?
+      {(currentUser.id === userProfile.id && editProfile === true) ||
+      (currentUser.role === "ADMIN" && editProfile === true) ? (
         <div>
           {/* first name and last name row */}
           <div className="flex flex-wrap -mx-3 mb-6">
@@ -118,14 +116,21 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 First Name
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {currentUser.role === "ADMIN" ?
-                (<p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">
+              {currentUser.role === "ADMIN" ? (
+                <p
+                  className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  type="text"
+                >
                   {lecturerUser.firstName}
-                </p>)
-                :
-                <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text"  {...register("firstName")} placeholder={lecturerUser.firstName} />
-              }
-
+                </p>
+              ) : (
+                <input
+                  className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  type="text"
+                  {...register("firstName")}
+                  placeholder={lecturerUser.firstName}
+                />
+              )}
             </div>
 
             {/* last name */}
@@ -134,14 +139,21 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 Last Name
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {currentUser.role === "ADMIN" ?
-                (<p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">
+              {currentUser.role === "ADMIN" ? (
+                <p
+                  className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  type="text"
+                >
                   {lecturerUser.lastName}
-                </p>)
-                :
-                (<input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" {...register("lastName")} placeholder={lecturerUser.lastName} />)
-              }
-
+                </p>
+              ) : (
+                <input
+                  className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  type="text"
+                  {...register("lastName")}
+                  placeholder={lecturerUser.lastName}
+                />
+              )}
             </div>
           </div>
 
@@ -151,14 +163,22 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 Email
               </label>
-              {currentUser.role === "ADMIN" ?
-                <p className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">{lecturerUser.email}</p>
-                :
+              {currentUser.role === "ADMIN" ? (
+                <p className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                  {lecturerUser.email}
+                </p>
+              ) : (
                 <div>
-                  <input className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder={lecturerUser.email} disabled={true} />
-                  <p className="text-red-500 text-xs italic">You can not change this field !</p>
+                  <input
+                    className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    placeholder={lecturerUser.email}
+                    disabled={true}
+                  />
+                  <p className="text-red-500 text-xs italic">
+                    You can not change this field !
+                  </p>
                 </div>
-              }
+              )}
             </div>
           </div>
 
@@ -169,16 +189,25 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 ALTERNATIVE EMAIL
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {currentUser.role === "ADMIN" ?
-                (<p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("alternativeEmail")}>
+              {currentUser.role === "ADMIN" ? (
+                <p
+                  className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  {...register("alternativeEmail")}
+                >
                   {lecturerUser.alternativeEmail}
-                </p>)
-                :
-                (<div>
-                  <input className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("alternativeEmail")} placeholder={lecturerUser.alternativeEmail} />
-                  <p className="text-red-500 text-xs italic">Please check this infomation carefully before update !</p>
-                </div>)
-              }
+                </p>
+              ) : (
+                <div>
+                  <input
+                    className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    {...register("alternativeEmail")}
+                    placeholder={lecturerUser.alternativeEmail}
+                  />
+                  <p className="text-red-500 text-xs italic">
+                    Please check this infomation carefully before update !
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -190,24 +219,29 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                   DESCRIPTION
                 </label>
                 {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT)*/}
-                {currentUser.role === "ADMIN" ?
-                  (<p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                {currentUser.role === "ADMIN" ? (
+                  <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                     {lecturerUser.description}
-                  </p>)
-                  :
-                  (lecturerUser.description != null ?
-                    <textarea className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" {...register("description")} placeholder={userProfile.description} >
-                    </textarea>
-                    :
-                    <textarea className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder="Input your description to update." {...register("description")} />
-                  )
-                }
+                  </p>
+                ) : lecturerUser.description != null ? (
+                  <textarea
+                    className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    {...register("description")}
+                    placeholder={userProfile.description}
+                  ></textarea>
+                ) : (
+                  <textarea
+                    className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    placeholder="Input your description to update."
+                    {...register("description")}
+                  />
+                )}
               </div>
             </div>
           </div>
 
           {/*ONLY ADMIN CAN UPDATE FIELD OF LECTURER */}
-          {currentUser.role === "ADMIN" ?
+          {currentUser.role === "ADMIN" ? (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
@@ -234,27 +268,30 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 </div>
               </div>
             </div>
-            :
+          ) : (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                   FIELD OF LECTURER:
                 </label>
                 <div>
-                  {(fieldOfLecturer.length !== 0) ?
+                  {fieldOfLecturer.length !== 0 ? (
                     <ol className="ml-11 text-xl my-3 center">
-                      {fieldOfLecturer.map((field, idx) =>
-                        <li key={idx} className="mt-2">{field.name}</li>)}
+                      {fieldOfLecturer.map((field, idx) => (
+                        <li key={idx} className="mt-2">
+                          {field.name}
+                        </li>
+                      ))}
                     </ol>
-                    :
+                  ) : (
                     <p>This Lecturer not have field</p>
-                  }
+                  )}
                 </div>
               </div>
             </div>
-          }
+          )}
         </div>
-        :
+      ) : (
         // SHOW PROFILE FOR GUEST OR ANOTHER ACCOUNT
         <div>
           {/* first name and last name row */}
@@ -323,32 +360,34 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
             </div>
           </div>
 
-          {userProfile.role === "ADMIN" ?
+          {userProfile.role === "ADMIN" ? (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                   FIELD OF LECTURER:
                 </label>
                 <div className="border-4 rounded-md mt-3">
-                  {options !== null ?
-                    options.map((option, idx) =>
-                      <div key={idx} className="ml-11 text-xl my-3 center" >
-                        {fieldOfLecturer &&
-                          <div>
-                            <input type="checkbox"
-                              value={option.value}
-                              defaultChecked={handleChecked(option)}
-                              {...register("field")} />
-                            <span className="ml-7">{option.label}</span>
-                          </div>}
-                      </div>)
-                    :
-                    null
-                  }
+                  {options !== null
+                    ? options.map((option, idx) => (
+                        <div key={idx} className="ml-11 text-xl my-3 center">
+                          {fieldOfLecturer && (
+                            <div>
+                              <input
+                                type="checkbox"
+                                value={option.value}
+                                defaultChecked={handleChecked(option)}
+                                {...register("field")}
+                              />
+                              <span className="ml-7">{option.label}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    : null}
                 </div>
               </div>
             </div>
-            :
+          ) : (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
@@ -369,13 +408,12 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 </div>
               </div>
             </div>
-          }
+          )}
         </div>
       )}
 
-
       {/* ADMIN UPDATE FIELD, LECTURER UPDATE THEIR PROFILE */}
-      {(currentUser.id === userProfile.id || currentUser.role === "ADMIN") ?
+      {currentUser.id === userProfile.id || currentUser.role === "ADMIN" ? (
         <span>
           <div className="relative">
             <button
