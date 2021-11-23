@@ -24,7 +24,6 @@ function HomePage() {
     (async () => {
       try {
         setLoading(true);
-        const topField = await fieldApi.getTopFieldToSuggest();
         const response = await blogApi.getAll({ currentPage, limitBlog });
         if (response.status === 200) {
           setBlogList(response.data);
