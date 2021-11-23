@@ -508,7 +508,7 @@ export default function NewBlogForm(props) {
                   }}
                 />
               </div>
-              {/* thumbNail URL */}
+              {/* Upload img for markdown editor */}
               <div className=" my-2">
                 <p className="font-semibold">Upload img and get Url:</p>
                 <div className="border border-gray-300 p-2 rounded-md ">

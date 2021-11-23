@@ -38,42 +38,22 @@ const lecturerApi = {
 
   getLecturerById(id) {
     const url = `api/lecturers/${id}`;
-    return axiosClient.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   getFieldOfLecturer(id) {
     const url = `api/lecturers/${id}/fields`;
-    return axiosClient.get(url, {
-      herders: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   getLecturersOfField(fieldId) {
     const url = `api/fields/${fieldId}/lecturers`;
-    return axiosClient.get(url, {
-      herders: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   getListOfField() {
     const url = "api/fields";
-    return axiosClient.get(url, {
-      herders: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   updateLecturerProfile(id, data) {
@@ -110,9 +90,9 @@ const lecturerApi = {
     });
   },
 
-  unbanStudentByStudentId(lecturerId, studentId) {
+  unbanStudentByStudentId(lecturerId, studentId, data) {
     const url = `api/lecturers/${lecturerId}/unbanningstudent/${studentId}`;
-    return axiosClient.patch(url, {
+    return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
@@ -122,12 +102,7 @@ const lecturerApi = {
 
   getStudentList() {
     const url = "api/students";
-    return axiosClient.get(url, {
-      herders: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    return axiosClient.get(url);
   },
 
   getBannedStudentList() {

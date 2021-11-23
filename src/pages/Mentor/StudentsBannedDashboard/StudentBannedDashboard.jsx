@@ -24,11 +24,13 @@ function StudentBannedDashboard() {
 
   const [loading, setLoading] = useState(false);
 
-
-
   const userProfileId = currentUser.id;
-  const handleUnbanAccountClick = async (id) => {
-    const banUser = await lecturerApi.unbanStudentByStudentId(userProfileId, id);
+  const handleUnbanAccountClick = async (studentId) => {
+    const banUser = await lecturerApi.unbanStudentByStudentId(
+      userProfileId,
+      studentId,
+      {}
+    );
     console.log(banUser);
     if (banUser.status === 200) {
       setStatus(true);
@@ -43,20 +45,20 @@ function StudentBannedDashboard() {
   };
 
   useEffect(() => {
-      (async () => {
-        try {
-          if (user.some) {
-            setUser([]);
-          }
-          const accountsData = await lecturerApi.getBannedStudentList();
-          const allUser = accountsData.data;
-          setUser(allUser);
-          // console.log("all user nè :", allUser);
-          setLoading(true);
-        } catch (error) {
-          console.log("Failed to fetch all user accounts: ", error);
+    (async () => {
+      try {
+        if (user.some) {
+          setUser([]);
         }
-      })();
+        const accountsData = await lecturerApi.getBannedStudentList();
+        const allUser = accountsData.data;
+        setUser(allUser);
+        // console.log("all user nè :", allUser);
+        setLoading(true);
+      } catch (error) {
+        console.log("Failed to fetch all user accounts: ", error);
+      }
+    })();
   }, [reload, currentUser, user.some]);
 
   return (
