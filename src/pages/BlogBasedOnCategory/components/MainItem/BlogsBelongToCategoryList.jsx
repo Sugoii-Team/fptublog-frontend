@@ -22,7 +22,7 @@ function BlogsBelongToCategoryList({ data }) {
   }; */
   return (
     <div>
-      {data !== null ? (
+      {data.length !== 0 ? (
         <div className="justify-center">
           {data?.map((blog, index) => (
             <div key={index}>
@@ -31,7 +31,7 @@ function BlogsBelongToCategoryList({ data }) {
           ))}
         </div>
       ) : (
-        <div>We are under mainternance</div>
+        null
       )}
     </div>
   );

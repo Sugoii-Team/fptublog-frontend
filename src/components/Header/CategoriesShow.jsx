@@ -23,19 +23,21 @@ function CategoriesShow({ fieldList, categoriesList, setShowCategories }) {
               key={idx}
             >
               <span className="borderForCategories text-lg">
-                <Link
-                  to={{
-                    pathname: "/blogBaseOnField",
-                    state: {
-                      field: { field },
-                    },
-                  }}
-                  onClick={() => handleOnFieldClick(false)}
+
+                <Link to={{
+                  pathname: '/blogBaseOnField',
+                  state: {
+                    field: { field }
+                  }
+                }}
+                onClick={() => handleOnFieldClick(false)}
+                className = "p-2 hover:bg-gray-200 hover: rounded-md transition duration-300 ease-in-out"
                 >
                   {field.name}
                 </Link>
               </span>
             </div>
+
             {categoriesList.map((category, idx) =>
               category.fieldId === field.id ? (
                 <Link

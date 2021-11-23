@@ -27,6 +27,11 @@ const tagsApi = {
       },
     });
   },
+
+  getTopTagToSuggestOnLeftSide(){
+    const url = "api/tags/top?limit=5&page=1";
+    return axiosClient.get(url);
+  }
 };
 
 export default tagsApi;

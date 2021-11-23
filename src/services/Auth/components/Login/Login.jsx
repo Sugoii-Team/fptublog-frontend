@@ -17,9 +17,9 @@ function Login({onCancelClick}) {
       const action = login(values);
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
-
       //show something after request sucessful
-      console.log("Log in success");
+      window.alert("Login successfully");
+      window.location.reload();
     } catch (error) {
       console.log("Failed to register", error);
     }

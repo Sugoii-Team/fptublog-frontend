@@ -38,6 +38,33 @@ function AdminDropDownMenu({ admin }) {
         </div>
         <div className="py-1" role="none">
           <Link
+            to="/addFieldOrCategory"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            Add new field and category
+          </Link>
+          <Link
+            to="/listOfCategory"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            List category to manage
+          </Link>
+          <Link
+            to="/listOfField"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            List field to manage
+          </Link>
+          <Link
             to="/dashboard"
             className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
             role="menuitem"

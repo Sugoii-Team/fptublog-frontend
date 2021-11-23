@@ -88,6 +88,73 @@ const adminApi = {
       },
     });
   },
+  updateLecturerField(id, data) {
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/lecturers/${id}/fields`;
+    return axiosClient.put(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  deleteCategoryByCategoryId(categoryId){
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/admin/categories/${categoryId}`;
+    return axiosClient.delete(url,{
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  deleteFieldByFieldId(fieldId){
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/admin/fields/${fieldId}`;
+    return axiosClient.delete(url,{
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  createCategory(data){
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/admin/categories`;
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  createField(data){
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/admin/fields`;
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
+  adminPostBlog(data){
+    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    console.log("token: ", accessToken);
+    const url = 'api/admin/blogs';
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+
 };
 
 export default adminApi;

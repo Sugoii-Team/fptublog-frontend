@@ -86,12 +86,17 @@ const blogApi = {
     return axiosClient.get(url);
   },
 
-  getBlogsByFieldId(fieldId) {
-    const url = `api/fields/${fieldId}/blogs?limit=3&page=1`;
+  getBlogsByFieldId(fieldId, limit, currentPage) {
+    const url = `api/fields/${fieldId}/blogs?limit=${limit}&page=${currentPage}`;
     return axiosClient.get(url);
   },
-  getBlogsBelongToCategoryByCategoryId(categoryId){
-    const url = `api/categories/${categoryId}/blogs`;
+  getBlogsBelongToCategoryByCategoryId(categoryId, limit, currentPage){
+    const url = `api/categories/${categoryId}/blogs?limit=${limit}&page=${currentPage}`;
+    return axiosClient.get(url);
+  },
+
+  getBlogsBelongToTagByTagId(tagId, limit, currentPage){
+    const url = `api/tags/${tagId}/blogs?limit=${limit}&page=${currentPage}`;
     return axiosClient.get(url);
   },
   

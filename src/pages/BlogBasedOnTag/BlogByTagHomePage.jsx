@@ -6,22 +6,23 @@ import TagSuggest from "../../components/SuggestTag/TagSuggest";
 import blogApi from "../../services/blogApi";
 import fieldApi from "../../services/fieldAPI";
 import BlogListSkeleton from "./components/MainItem/BlogListSkeleton";
-import BlogsBelongToFieldList from "./components/MainItem/BlogsBelongToFieldList";
+import BlogsBelongToTagList from "./components/MainItem/BlogsBelongToTagList";
 import BlogPopular from "./components/SideItem/BlogPopular";
 import FieldSuggest from "./components/SideItem/FieldSuggest";
 
-BlogByFieldHomePage.propTypes = {};
+BlogByTagHomePage.propTypes = {};
 
-function BlogByFieldHomePage(props) {
+function BlogByTagHomePage(props) {
   const location = useLocation();
   const [blogList, setBlogList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [fields, setFields] = useState([]);
-  //get field which is tranfered like a state when user click field suggest link from slide item
-  const fieldState = location.state.field;
-  const limitBlog = 5;
 
+
+  //get field which is tranfered like a state when user click field suggest link from slide item
+  const topTagState = location.state.topTag;
+  const limitBlog = 5;
 
   //Get blog of field
   useEffect(() => {
@@ -34,19 +35,19 @@ function BlogByFieldHomePage(props) {
         // if location.state != undefined => get field from state => then get blogs belong to that field by field id
         if (location.state !== undefined) {
           setLoading(true);
-          const blogByField = await blogApi.getBlogsByFieldId(
-            fieldState.field.id,
+          const blogByTag = await blogApi.getBlogsBelongToTagByTagId(
+            topTagState.topTag.id,
             limitBlog,
             currentPage
           );
           // if it isn't have blogs in 2 or later page, setBlogList is empty (length = 0)
-          if (blogByField.data.length === 0 && currentPage > 1) {
+          if (blogByTag.data.length === 0 && currentPage > 1) {
             setLoading(false);
             setBlogList([]);
           }
-          else if (blogByField.data.length > 0) {
+          else if (blogByTag.data.length > 0) {
             setLoading(false);
-            setBlogList(blogByField.data);
+            setBlogList(blogByTag.data);
           } else {
             setLoading(false);
             setBlogList([]);
@@ -58,18 +59,19 @@ function BlogByFieldHomePage(props) {
     })();
   }, [
     currentPage,
-    fieldState.field.id,
+    topTagState.topTag.id, 
     location.state
   ]);
 
+  // console.log("blog list của tag ne: ", blogList);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [location.state.topTag]);
 
   const handleOnpageChange = (data) => {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [location.state]);
 
   return (
     <motion.div
@@ -84,41 +86,40 @@ function BlogByFieldHomePage(props) {
             <div className="mb-4">
               <div className="text-lg font-medium uppercase">
                 <span className="border-b-2 border-gray-300">
-                  Blogs about {fieldState.field.name} field:
+                  Blogs about {topTagState.topTag.name} tag:
                 </span>
               </div>
             </div>
-            {blogList.length === 0 ?
+            {blogList.length === 0 ? 
               currentPage === 1 ?
-                (
-                  <div className="mt-10">
-                    <p className="text-center text-2xl">
-                      This field not have blogs!
-                    </p>
-                    <p className="text-center text-2xl">
-                      Let post your own blog in for this field.
-                    </p>
-                  </div>
-                )
-                :
-                null
-
+              (
+                <div className="mt-10">
+                  <p className="text-center text-2xl">
+                    This tag not have blogs!
+                  </p>
+                  <p className="text-center text-2xl">
+                    Let post your own blog in for this tag.
+                  </p>
+                </div>
+              )
               :
+              null
 
-              loading ?
-                <BlogListSkeleton />
-                :
-                <BlogsBelongToFieldList data={blogList} />
+            :
+
+            loading ?
+              <BlogListSkeleton />
+              :
+              <BlogsBelongToTagList data = {blogList} />
             }
-
-            {(blogList.length === 0 && currentPage === 1) ? null : (
+            {(blogList.length === 0 && currentPage ===1 ) ? null : (
               <Pagination
                 previousLabel={"Previous"}
                 nextLabel={"Next"}
                 pageCount={50}
                 marginPagesDisplayed={1}
                 pageRangeDisplayed={3}
-                forcePage={currentPage - 1}
+                forcePage = {currentPage-1}
                 onPageChange={handleOnpageChange}
                 containerClassName={"flex gap-1 justify-center my-4"}
                 pageLinkClassName={
@@ -129,7 +130,7 @@ function BlogByFieldHomePage(props) {
                 breakLinkClassName={"font-bold uppercase px-4 py-2"}
                 activeLinkClassName={"bg-gray-100"}
               />
-            )}
+            )} 
           </div>
           {/* Blog loader */}
           {/* Side Items */}
@@ -145,4 +146,4 @@ function BlogByFieldHomePage(props) {
   );
 }
 
-export default BlogByFieldHomePage;
+export default BlogByTagHomePage;

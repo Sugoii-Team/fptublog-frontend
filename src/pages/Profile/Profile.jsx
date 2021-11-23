@@ -25,12 +25,18 @@ function Profile(props) {
   const [listPopularBlog, setListPopularBlog] = useState([]);
   const [studentUser, setStudentUser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const defaultThumnail =
-    "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
+  const defaultThumnail = "http://geniussys.com/img/placeholder/blogpost-placeholder-100x100.png";
+  const [updateLecturerStatus, setUpdateLecturerStatus] = useState(false);
+
 
   //Get student profile to get experience point to show on profile page
   const handleStudentProfile = (data) => {
     setStudentUser(data);
+  };
+
+  //To reload description in profile (information bar)
+  const handleUpdateLecturerStatus = () => {
+    setUpdateLecturerStatus(!updateLecturerStatus);
   };
 
   const handleOnpageChange = (data) => {
@@ -45,45 +51,29 @@ function Profile(props) {
     completed: ((studentUser.experiencePoint / 4000) * 100).toFixed(0),
   };
 
+  function awardCounter(accumlator, currentValue) {
+    return accumlator + currentValue.count;
+  }
+
   const experience = () => {
-    if (
-      0 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 1000
-    ) {
+    if (0 <= studentUser.experiencePoint && studentUser.experiencePoint < 1000) {
       return "ROOKIE";
-    } else if (
-      1000 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 2000
-    ) {
+    } else if (1000 <= studentUser.experiencePoint && studentUser.experiencePoint < 2000) {
       return "NEWBIE";
-    } else if (
-      2000 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 3000
-    ) {
+    } else if (2000 <= studentUser.experiencePoint && studentUser.experiencePoint < 3000) {
       return "BLOGGER";
     } else if (studentUser.experiencePoint >= 3000) {
       return "PRO BLOGGER";
     }
   };
 
-  const nextLevel = () => {
-    if (
-      0 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 1000
-    ) {
+  const experienceForSuggest = () => {
+    if (0 <= studentUser.experiencePoint && studentUser.experiencePoint < 1000) {
       return "NEWBIE";
-    } else if (
-      1000 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 2000
-    ) {
+    } else if (1000 <= studentUser.experiencePoint && studentUser.experiencePoint < 2000) {
       return "BLOGGER";
-    } else if (
-      2000 <= studentUser.experiencePoint &&
-      studentUser.experiencePoint < 3000
-    ) {
+    } else if (2000 <= studentUser.experiencePoint) {
       return "PRO BLOGGER";
-    } else if (studentUser.experiencePoint >= 3000) {
-      return "MAX LEVEL";
     }
   };
 
@@ -91,18 +81,17 @@ function Profile(props) {
   const onHandleStudentSubmit = async (data) => {
     if (userProfile.role === "STUDENT") {
       try {
-        const reponse = await userApi.updateStudentProfile(
-          userProfile.id,
-          data
-        );
+        const reponse = await userApi.updateStudentProfile(userProfile.id, data);
         if (reponse.status === 200) {
           window.alert("Update Student Profile successfully");
         }
       } catch (error) {
         console.log("Fail to update Student profile", error);
       }
-    } else return;
-  };
+    }
+    else return;
+  }
+
 
   //Get data
   useEffect(() => {
@@ -114,11 +103,7 @@ function Profile(props) {
           setProfileAward(awardResponse.data);
         }
         const response = await userApi.viewProfile(userId);
-        const popularBlog = await userApi.getPopularBlogOfUser(
-          response.data.id,
-          currentPage,
-          limitBlog
-        );
+        const popularBlog = await userApi.getPopularBlogOfUser(response.data.id, currentPage, limitBlog);
         setUserProfile(response.data);
         setListPopularBlog(popularBlog.data);
         if (response.status === 200 && popularBlog.status === 200) {
@@ -128,7 +113,8 @@ function Profile(props) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userId, userProfile.role, userProfile.description, currentPage]);
+  }, [userId, userProfile.role, currentPage, studentUser, updateLecturerStatus]);
+
 
   //Return
   return (
@@ -187,54 +173,81 @@ function Profile(props) {
                         {experience()}
                       </div>
                     </div>
-                  ) : (
-                    <div className="col-span-1 absolute left-56 top-5">
-                      <div className="profileNameNDes">
-                        <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
-                          {userProfile.firstName + " " + userProfile.lastName}
-                        </span>
-                        <p className="text-lg">
-                          {userProfile.description !== null
-                            ? userProfile.description
-                            : "AYoooooooo <3"}
-                        </p>
+
+                    {userProfile.role === "STUDENT" ?
+                      <div className="col-span-1 absolute left-56 top-5">
+                        <div className="profileNameNDes">
+                          <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
+                            {userProfile.firstName + " " + userProfile.lastName}
+                          </span>
+                          <p className="text-lg">
+                            {userProfile.description !== null
+                              ? userProfile.description
+                              :
+                              <p className="text-gray-400">
+                                "AYoooooooo!!! Let update your description !"
+                              </p>
+                            }
+                          </p>
+                        </div>
                         <div className="mt-2 text-purple-600 font-bold uppercase">
-                          LECTURER
+                          {experience()}
                         </div>
                       </div>
-                    </div>
-                  )}
+                      :
+                      <div className="col-span-1 absolute left-56 top-5">
+                        <div className="profileNameNDes">
+                          <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
+                            {userProfile.firstName + " " + userProfile.lastName}
+                          </span>
+                          <p className="text-lg">
+                            {userProfile.description !== null
+                              ? userProfile.description
+                              :
+                              <p className="text-gray-400">
+                                "AYoooooooo!!! Let update your description !"
+                              </p>
+                            }
+                          </p>
+                          <div className="mt-2 text-purple-600 font-bold uppercase">
+                            LECTURER
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
                 </div>
-              </div>
 
-              <div className="profileStatus col-span-2 ">
-                <div className="flex flex-col items-end space-y-12 my-2 mx-10">
-                  <div className="flex flex-row gap-7 text-center text-xs uppercase text-gray-400">
-                    <div className="">
-                      <p className="text-2xl font-bold text-black">
-                        {userProfile.blogsNumber}
-                      </p>
-                      <p>Posted</p>
+                <div className="profileStatus col-span-2 ">
+                  <div className="flex flex-col items-end space-y-12 my-2 mx-10">
+                    <div className="flex flex-row gap-7 text-center text-xs uppercase text-gray-400">
+                      <div>
+                        <p className="text-2xl font-bold text-black">{userProfile.blogsNumber}</p>
+                        <p>Posted</p>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold text-black">{(userProfile.avgRate).toFixed(1)}</p>
+                        <p>Average Rate</p>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold text-black">
+                          {profileAward.length !== 0 ?
+                            profileAward.reduce(awardCounter, 0)
+                            :
+                            0
+                          }
+                        </p>
+                        <p>Award</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-2xl font-bold text-black">
-                        {userProfile.avgRate}
-                      </p>
-                      <p>Average Rate</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-black">0</p>
-                      <p>Award</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-row gap-4 text-sm cursor-pointer">
-                    <div className="text-green-500">Like</div>
-                    <div className="text-blue-500">Share</div>
+                    {/* <div className="flex flex-row gap-4 text-sm cursor-pointer">
+                        <div className="text-green-500">Like</div>
+                        <div className="text-blue-500">Share</div>
+                      </div> */}
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
         </motion.div>
 
         {/* Below */}
@@ -242,15 +255,13 @@ function Profile(props) {
         <div className="grid grid-cols-3 my-5 gap-3">
           {/* Left */}
           <div className="col-span-1">
-            {userProfile.role === "STUDENT" && loading === false ? (
+            {(userProfile.role === "STUDENT" && loading === false) ?
               <motion.div
                 animate={{ y: 0, opacity: 1 }}
                 initial={{ y: 20, opacity: 0.5 }}
                 className="border-2 border-gray-100 rounded-lg shadow-lg min-h-0 mb-3 py-4 px-7"
               >
-                <h1 className="font-bold text-xl text-center uppercase">
-                  Award
-                </h1>
+                <h1 className="font-bold text-xl text-center uppercase">Award</h1>
                 <div className="">
                   <p className="font-semibold text-md">Experience Point</p>
                   <div>
@@ -265,15 +276,13 @@ function Profile(props) {
                       Next Level:{" "}
                     </div>
                     <div className="absolute bottom-0 right-0 uppercase text-sm font-semibold text-pink-600">
-                      {nextLevel()}{" "}
+                      {experienceForSuggest()}
                     </div>
                   </div>
                 </div>
                 <div className="">
-                  <h1 className="text-center font-bold uppercase">
-                    Badges Gained
-                  </h1>
-                  {profileAward.length > 0 ? (
+                  <h1 className="text-center font-bold uppercase">Badges Gained</h1>
+                  {profileAward.length > 0 ?
                     <div className="grid grid-cols-6 gap-4">
                       {profileAward?.map((award, index) => (
                         <div className="col-span-1" key={index}>
@@ -284,23 +293,27 @@ function Profile(props) {
                               alt="award"
                               title={award?.name}
                             />
-                            <p className="flex justify-center font-semibold">
-                              1
-                            </p>
+                            <p className="flex justify-center font-semibold">1</p>
                           </div>
                         </div>
                       ))}
                     </div>
-                  ) : (
+                    :
                     <p className="uppercase text-center">No badges Gained</p>
-                  )}
+                  }
                 </div>
               </motion.div>
-            ) : null}
+
+              :
+
+              null
+
+            }
 
             {/* ///////////////////////////////////////////////////////////////// */}
 
             {/* Infomation of user to edit */}
+
 
             <motion.div
               animate={{ y: 0, opacity: 1 }}
@@ -308,20 +321,21 @@ function Profile(props) {
               transition={{ duration: 0.25 }}
               className="border-2 border-gray-100 rounded-lg shadow-lg h-100 py-4 px-7"
             >
-              <h1 className="font-bold text-xl text-center uppercase">ABOUT</h1>
-              {userProfile.role === "STUDENT" ? (
-                <StudentOption
-                  userProfile={userProfile}
-                  dataOfStudentToUpdate={onHandleStudentSubmit}
-                  studentProfile={handleStudentProfile}
-                />
-              ) : (
-                <LecturerOption userProfile={userProfile} />
-              )}
+              <h1 className="font-bold text-xl text-center uppercase">
+                ABOUT
+              </h1>
+              {userProfile.role === "STUDENT" ?
+                <StudentOption userProfile={userProfile} dataOfStudentToUpdate={onHandleStudentSubmit} studentProfile={handleStudentProfile} />
+                :
+                <LecturerOption userProfile={userProfile} updateLecturerStatus={handleUpdateLecturerStatus} />
+              }
             </motion.div>
+
+
           </div>
 
           {/* ///////////////////////////////////////////////////////////////// */}
+
 
           {/* right */}
           <motion.div
@@ -329,10 +343,9 @@ function Profile(props) {
             initial={{ y: 20, opacity: 0.5 }}
             className="col-span-2"
           >
+
             <div className=" border-2 border-gray-100 rounded-lg shadow-lg min-h-screen">
-              <h1 className="text-left font-bold text-xl mt-2 ml-5 uppercase ">
-                Blogger's POST
-              </h1>
+              <h1 className="text-left font-bold text-xl mt-2 ml-5 uppercase ">Blogger's POST</h1>
               {listPopularBlog.map((popularBlog, idx) => (
                 <Link
                   to={`blogDetail?${popularBlog.id}`}
@@ -392,6 +405,7 @@ function Profile(props) {
               responseObject={responseObject}
             />
           ) : null} */}
+
       </div>
     </div>
   );
