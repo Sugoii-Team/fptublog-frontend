@@ -8,6 +8,8 @@ import Pagination from "react-paginate";
 import { motion } from "framer-motion";
 import OwnBlogSkeleton from "./Components/OwnBlogSkeleton";
 import PageAlert from "../../components/PageAlert/PageAlert";
+import StorageKey from "../../constant/storage-keys";
+import adminApi from "../../services/adminApi";
 
 export default function MyOwnBlogTable(props) {
   const loggedInUser = useSelector((state) => state.user.current);
@@ -17,7 +19,7 @@ export default function MyOwnBlogTable(props) {
   const [deleteSuccessDialog, setDeleteSuccessDialog] = useState(false); // Set state for this to disable button when sending request
   const [blogList, setBlogList] = useState([]);
   const [reload, setReload] = useState();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const isMounted = useRef(true);
 
   // set isMounted to false when we unmount the component
@@ -30,14 +32,21 @@ export default function MyOwnBlogTable(props) {
   //Get list of own blog by current user id
   useEffect(() => {
     (async () => {
-      if (isLoggedIn) {
+      if (isLoggedIn || loggedInUser.role === StorageKey.adminRole) {
         // Only call api when user login
         try {
+          setLoading(true);
           let isMounted = true;
-          if (blogList.some) {
-            setBlogList([]);
+          if (blogList.some) setBlogList([]); //Clear cache
+          let response;
+          //If admin then load blog of admin
+          if (loggedInUser.role === StorageKey.adminRole) {
+            response = await adminApi.getAdminOwnBlog();
+          } else {
+            //Else load as usual
+            response = await userApi.getOwnBlog(loggedInUser.id);
           }
-          const response = await userApi.getOwnBlog(loggedInUser.id);
+          console.log("admin response ne : ", response);
           if (isMounted && response.status === 200) {
             setBlogList(response.data);
             setLoading(false);
@@ -60,8 +69,15 @@ export default function MyOwnBlogTable(props) {
     let check = window.confirm("Are you sure wanted to delete a blog?");
     if (check) {
       try {
-        const respone = await blogApi.removeBlog(loggedInUser.id, blogId);
-        if (respone.status === 200) {
+        let response;
+        //if is admin delete by differ api
+        if (loggedInUser.role === StorageKey.adminRole) {
+          response = await adminApi.deleteAdminOwnBlog(blogId);
+        } else {
+          //Else delete as usual
+          response = await blogApi.removeBlog(loggedInUser.id, blogId);
+        }
+        if (response.status === 200) {
           setDeleteSuccessDialog(true);
           setIsSending(false); //only set false when component still mounted
         }
@@ -122,7 +138,7 @@ export default function MyOwnBlogTable(props) {
 
   return (
     <>
-      {isLoggedIn ? (
+      {isLoggedIn || loggedInUser.role === StorageKey.adminRole ? (
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: -20, opacity: 0 }}
