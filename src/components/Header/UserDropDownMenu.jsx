@@ -50,6 +50,8 @@ function UserDropDownMenu(props) {
                 {loggedInUser.firstName + " " + loggedInUser.lastName}
               </span>
             </Link>
+          </div>
+          <div className="py-1" role="none">
             <Link
               to="/OwnBlog"
               className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
@@ -59,8 +61,15 @@ function UserDropDownMenu(props) {
             >
               Posted Blog
             </Link>
-          </div>
-          <div className="py-1" role="none">
+            <Link
+              to="/createNewPost"
+              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+              role="menuitem"
+              tabIndex="-1"
+              id="menu-item-0"
+            >
+              Post New Blog
+            </Link>
             {userRole === "LECTURER" ? (
               <div>
                 <>

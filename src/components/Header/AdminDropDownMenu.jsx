@@ -54,6 +54,15 @@ function AdminDropDownMenu({ admin }) {
             Add new field and category
           </Link>
           <Link
+            to="/listOfField"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            List fields to manage
+          </Link>
+          <Link
             to="/listOfCategory"
             className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
             role="menuitem"
@@ -63,22 +72,13 @@ function AdminDropDownMenu({ admin }) {
             List category to manage
           </Link>
           <Link
-            to="/listOfField"
-            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
-            role="menuitem"
-            tabIndex="-1"
-            id="menu-item-0"
-          >
-            List field to manage
-          </Link>
-          <Link
             to="/dashboard"
             className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
             role="menuitem"
             tabIndex="-1"
             id="menu-item-0"
           >
-            Member Management
+            Members Management
           </Link>
           <Link
             to="/bannedAccountsList"
@@ -87,7 +87,7 @@ function AdminDropDownMenu({ admin }) {
             tabIndex="-1"
             id="menu-item-0"
           >
-            Banned Account
+            Banned Accounts
           </Link>
           <Link
             to="/commentsManage"
