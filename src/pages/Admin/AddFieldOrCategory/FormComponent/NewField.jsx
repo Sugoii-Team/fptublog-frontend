@@ -56,6 +56,7 @@ function NewField(props) {
         }
       } catch (error) {
         console.log("Fail to create new field (new field component: ", error);
+        window.alert("Field already exist! Try again!");
       }
     }
   };

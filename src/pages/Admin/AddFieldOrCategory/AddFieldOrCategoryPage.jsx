@@ -6,7 +6,7 @@ import NewField from './FormComponent/NewField';
 
 
 function AddFieldOrCategoryPage(props) {
-  const currentUser = useSelector((state)=>state.user.current);
+  const currentUser = useSelector((state)=>state.admin.current);
   return (
     currentUser.role === "ADMIN" ?
     <div className = "w-10/12 mx-auto mt-3">

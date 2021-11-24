@@ -10,6 +10,7 @@ LecturerOption.propTypes = {};
 function LecturerOption({ userProfile, updateLecturerStatus }) {
   const idOfUserProfile = useLocation().search.substr(1);
   const currentUser = useSelector((state) => state.user.current);
+  const adminUser = useSelector ((state)=>state.admin.current);
   const { register, handleSubmit } = useForm();
   const [lecturerUser, setLecturerUser] = useState({});
   const [fieldOfLecturer, setFieldOfLecturer] = useState([]);
@@ -34,7 +35,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
         console.log("Failed to get profile: ", error);
       }
     })();
-  }, [userProfile.id, editProfile, currentUser]);
+  }, [userProfile.id, editProfile, currentUser, adminUser]);
 
   useEffect(() => {
     const lecturerOption = listOfField.map((field) => ({
@@ -52,7 +53,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
   const handleLecturerDataToUpdate = async (data) => {
     if (userProfile.role === "LECTURER") {
       try {
-        if (currentUser.role === "ADMIN") {
+        if (adminUser.role === "ADMIN") {
           const fields = data.field.map((field) => ({
             id: field,
           }));
@@ -106,7 +107,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
   return (
     <form onSubmit={handleSubmit(handleLecturerDataToUpdate)}>
       {(currentUser.id === userProfile.id && editProfile === true) ||
-      (currentUser.role === "ADMIN" && editProfile === true) ? (
+      (adminUser.role === "ADMIN" && editProfile === true) ? (
         <div>
           {/* first name and last name row */}
           <div className="flex flex-wrap -mx-3 mb-6">
@@ -116,7 +117,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 First Name
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {currentUser.role === "ADMIN" ? (
+              {adminUser.role === "ADMIN" ? (
                 <p
                   className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="text"
@@ -139,7 +140,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 Last Name
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {currentUser.role === "ADMIN" ? (
+              {adminUser.role === "ADMIN" ? (
                 <p
                   className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="text"
@@ -163,7 +164,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 Email
               </label>
-              {currentUser.role === "ADMIN" ? (
+              {adminUser.role === "ADMIN" ? (
                 <p className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                   {lecturerUser.email}
                 </p>
@@ -189,7 +190,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 ALTERNATIVE EMAIL
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {currentUser.role === "ADMIN" ? (
+              {adminUser.role === "ADMIN" ? (
                 <p
                   className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   {...register("alternativeEmail")}
@@ -219,7 +220,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                   DESCRIPTION
                 </label>
                 {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT)*/}
-                {currentUser.role === "ADMIN" ? (
+                {adminUser.role === "ADMIN" ? (
                   <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                     {lecturerUser.description}
                   </p>
@@ -241,7 +242,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
           </div>
 
           {/*ONLY ADMIN CAN UPDATE FIELD OF LECTURER */}
-          {currentUser.role === "ADMIN" ? (
+          {adminUser.role === "ADMIN" ? (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
@@ -360,7 +361,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
             </div>
           </div>
 
-          {userProfile.role === "ADMIN" ? (
+          {adminUser.role === "ADMIN" ? (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
@@ -413,7 +414,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
       )}
 
       {/* ADMIN UPDATE FIELD, LECTURER UPDATE THEIR PROFILE */}
-      {currentUser.id === userProfile.id || currentUser.role === "ADMIN" ? (
+      {currentUser.id === userProfile.id || adminUser.role === "ADMIN" ? (
         <span>
           <div className="relative">
             <button

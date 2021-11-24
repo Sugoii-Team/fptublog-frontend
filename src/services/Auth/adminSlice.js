@@ -13,20 +13,20 @@ export const login = createAsyncThunk(
     const jwt = responeData.headers.authorization;
     const newJwt = jwt.replace("Bearer ", "");
     localStorage.setItem(StorageKey.TOKEN, newJwt);
-    localStorage.setItem(StorageKey.USER, JSON.stringify(responeData.data));
+    localStorage.setItem(StorageKey.ADMIN, JSON.stringify(responeData.data));
     return responeData;
   }
 );
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
-    current: JSON.parse(localStorage.getItem(StorageKey.USER)) || {},
-    accessToken: localStorage.getItem(StorageKey.TOKEN) || {},
+    current: JSON.parse(localStorage.getItem(StorageKey.ADMIN)) || {},
+    accessToken: localStorage.getItem(StorageKey.ADMIN) || {},
   },
   reducers: {
     logout(state) {
       //clear local storage
-      localStorage.removeItem(StorageKey.USER);
+      localStorage.removeItem(StorageKey.ADMIN);
       localStorage.removeItem(StorageKey.TOKEN);
 
       state.current = {};

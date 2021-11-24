@@ -7,7 +7,7 @@ import fieldApi from '../../../services/fieldAPI';
 function FieldList(props) {
 
   const [fieldList, setFieldList] = useState([]);
-  const currentUser = useSelector((state) => state.user.current);
+  const currentUser = useSelector((state) => state.admin.current);
   //reload component when delete complete
   const [reload, setReload] = useState();
   useEffect(() => {
@@ -16,7 +16,7 @@ function FieldList(props) {
         const fieldReponse = await fieldApi.getAllFields();
         setFieldList(fieldReponse.data);
       } catch (error) {
-        console.log("Fail to load category list (nav bar component)", error);
+        console.log("Fail to load category list (fieldList component)", error);
       }
     })();
   }, [reload]);
@@ -24,11 +24,18 @@ function FieldList(props) {
 
   //handle delete field
   const hadleDeleteField = async (fieldId) => {
-    const deleteField = await adminApi.deleteFieldByFieldId(fieldId);
-    if (deleteField.status === 200) {
-      window.alert("Delete field successfully");
-      setReload({});
-    } else {
+    try {
+      const deleteField = await adminApi.deleteFieldByFieldId(fieldId);
+      console.log("delefield", deleteField);
+      if (deleteField.status === 200) {
+        window.alert("Delete field successfully");
+        setReload({});
+      } else {
+        window.alert("Delete field failed");
+        setReload({});
+      }
+    } catch (error) {
+      console.log("Fail to delete field (fieldList component)", error);
       window.alert("Delete field failed");
       setReload({});
     }

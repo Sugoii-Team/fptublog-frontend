@@ -46,6 +46,7 @@ export default function NewBlogForm(props) {
   /* Get current user for check if there is no user
   then can't post blog */
   const getUserState = useSelector((state) => state.user.current);
+  const getAdminState =  useSelector((state)=>state.admin.current);
   const isLoggedIn = !!getUserState.id;
   const history = useHistory();
   /* const isLoggedIn = true; */
@@ -273,7 +274,7 @@ export default function NewBlogForm(props) {
           createNewNotification(newBlogResponseId);
           setSuccessPostDialog(true);
         }
-      } else if (getUserState.role === "ADMIN") {
+      } else if (getAdminState.role === "ADMIN") {
         //admin send api to post new announment
         const blog = {
           thumbnailUrl,
@@ -363,7 +364,7 @@ export default function NewBlogForm(props) {
     }
     setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
-    if (getUserState.role === "ADMIN") {
+    if (getAdminState.role === "ADMIN") {
       if (title.length < minTitleLength) {
         setTitleDialog(true);
         e.preventDefault();
@@ -437,7 +438,7 @@ export default function NewBlogForm(props) {
 
   return (
     <div>
-      {isLoggedIn || getUserState.role === "ADMIN" ? (
+      {isLoggedIn || getAdminState.role === "ADMIN" ? (
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: 25, opacity: 0 }}
@@ -460,7 +461,7 @@ export default function NewBlogForm(props) {
                 />
               </div>
 
-              {getUserState.role === "ADMIN" ? (
+              {getAdminState.role === "ADMIN" ? (
                 <div>
                   <div className="w-full grid grid-cols-2 gap-2">
                     <div className="my-3 col-span-1">
@@ -527,7 +528,7 @@ export default function NewBlogForm(props) {
                 </div>
               )}
 
-              {getUserState.role === "ADMIN" ? null : (
+              {getAdminState.role === "ADMIN" ? null : (
                 // Tags
                 <div>
                   <p className="font-semibold">Tags: </p>
@@ -555,7 +556,7 @@ export default function NewBlogForm(props) {
                 </div>
               )}
 
-              {getUserState.role === "ADMIN" ? null : (
+              {getAdminState.role === "ADMIN" ? null : (
                 // thumbNail URL
                 <div className=" my-2">
                   <p className="font-semibold">Thumbnails:</p>
@@ -658,7 +659,7 @@ export default function NewBlogForm(props) {
                   onClick={handleSubmit}
                   disabled={sendingApprove}
                 >
-                  {getUserState.role === "ADMIN" ? "Post Blog" : "Send Approve"}
+                  {getAdminState.role === "ADMIN" ? "Post Blog" : "Send Approve"}
                 </button>
               </div>
             </div>
