@@ -30,8 +30,8 @@ function FieldList(props) {
       setReload({});
     } else {
       window.alert("Delete field failed");
+      setReload({});
     }
-    setReload({});
   }
 
   return (

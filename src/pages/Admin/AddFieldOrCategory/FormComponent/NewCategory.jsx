@@ -13,6 +13,7 @@ function NewCategory(props) {
       const updateCategory = await adminApi.createCategory([data]);
       if(updateCategory.status === 200){
         window.alert("Create category successfully.");
+        window.location.reload();
       } else {window.alert("Create category failed.")}
     } catch (error) {
       console.log("Fail to create new category: ", error);
@@ -31,11 +32,11 @@ function NewCategory(props) {
   }, []);
 
   return (
-    <div>
+    <div className = "mx-5">
       <form onSubmit={handleSubmit(handleSubmitNewCategory)}>
-        <div className="flex flex-wrap mx-3 mb-6">
+        <div>
           {/* New Field */}
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <div className="w-full md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
               Field to add category
             </label>
@@ -48,8 +49,8 @@ function NewCategory(props) {
         </div>
 
         {/* New category */}
-        <div className="flex flex-wrap mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div>
+          <div className="w-full md:mb-0">
             <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
               New Category Of Field
             </label>
@@ -57,7 +58,7 @@ function NewCategory(props) {
           </div>
         </div>
 
-        <div className=" w-1/2 relative">
+        <div className="relative mt-3">
           <button type="submit"
             className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0"
           >

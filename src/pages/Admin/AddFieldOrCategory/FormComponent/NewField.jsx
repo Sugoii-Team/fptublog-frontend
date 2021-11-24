@@ -37,8 +37,6 @@ function NewField(props) {
     } else {
       try {
         const createNewFieldReponse = await adminApi.createField(data);
-        console.log("data: ", data);
-        console.log("create field: ", createNewFieldReponse);
         if (createNewFieldReponse.status === 200) {
           const newFieldId = createNewFieldReponse.data.id;
           const requestObject = inpputedTags.map((inputed)=>(
@@ -47,10 +45,10 @@ function NewField(props) {
               fieldId: newFieldId
             }
           ))
-          console.log("request object: ", requestObject);
           const createNewCategoryOfNewField = await adminApi.createCategory(requestObject);
           if (createNewCategoryOfNewField.status === 200) {
             window.alert("Create New Field Succesfully!")
+            window.location.reload();
           }
           else {
             window.alert("Create New Field Failed!")
@@ -63,9 +61,9 @@ function NewField(props) {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className = "mx-5">
       <form onSubmit={handleSubmit(handleSubmitNewCategory)}>
-        <div className="">
+        <div>
           {/* New Field */}
           <div className="w-full md:mb-0">
             <label className="block uppercase text-gray-700 text-lg font-bold mb-2">
@@ -76,12 +74,12 @@ function NewField(props) {
         </div>
 
         {/* New category */}
-        <div className="">
+        <div>
           <div className="w-full md:mb-0">
             <label className="block uppercase text-gray-700 text-lg font-bold mb-2">
               Category of field
             </label>
-            <div className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+            <div className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
               <ReactTags
                 classNames={{
                   tags: "tagsClass",
@@ -107,7 +105,7 @@ function NewField(props) {
           </div>
         </div>
 
-        <div className=" w-1/2 relative">
+        <div className="relative">
           <button type="submit"
             className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full absolute right-0"
           >

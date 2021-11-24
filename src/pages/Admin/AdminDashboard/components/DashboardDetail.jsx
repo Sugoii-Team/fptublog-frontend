@@ -34,13 +34,6 @@ function DashboardDetail({
     setDataNeedUpdate(userData);
   };
 
-  const handleRemoveClick = (user) => {
-    confirmToRemoveOrBan = window.confirm("Are you sure to remove this user ?");
-    if (confirmToRemoveOrBan === true) {
-      onRemoveClick(user.id);
-    } else return;
-  };
-
   const handleBanAccount = (message) => {
     onBanClick(userInBanning.id, message);
     setIsBanning(false);
@@ -91,12 +84,6 @@ function DashboardDetail({
                       scope="col"
                       className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Remove Account
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
                       Ban Account
                     </th>
                   </tr>
@@ -137,14 +124,6 @@ function DashboardDetail({
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           EDIT
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <button
-                          onClick={() => handleRemoveClick(user)}
-                          className="text-red-400 hover:text-red-600"
-                        >
-                          REMOVE
                         </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
