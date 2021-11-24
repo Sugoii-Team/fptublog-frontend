@@ -23,7 +23,6 @@ function DashboardDetail({
   const [dataNeedUpdate, setDataNeedUpdate] = useState({});
   const [userInBanning, setUserInBanning] = useState({});
   const [isBanning, setIsBanning] = useState(false);
-  let confirmToRemoveOrBan = false;
 
   const handleShowSubmitForm = (values) => {
     setShowSubmitForm(values);
@@ -47,7 +46,7 @@ function DashboardDetail({
   return (
     <div className="mt-3 p-10">
       <p className="text-center text-2xl mb-10">
-        LIST STUDENTS
+        LIST ACCOUNTS
       </p>
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

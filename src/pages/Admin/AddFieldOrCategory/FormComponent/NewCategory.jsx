@@ -9,13 +9,18 @@ function NewCategory(props) {
   const { register, handleSubmit} = useForm();
 
   const handleSubmitNewCategory = async (data) => {
+    if(!data.name || data.name.length === 0){
+      window.alert("Category can not empty! Try again!");
+      return;
+    }
     try {
       const updateCategory = await adminApi.createCategory([data]);
       if(updateCategory.status === 200){
-        window.alert("Create category successfully.");
         window.location.reload();
+        window.alert("Create category successfully.");
       } else {window.alert("Create category failed.")}
     } catch (error) {
+      window.alert("Category already exist! Try again!");
       console.log("Fail to create new category: ", error);
     }
   }

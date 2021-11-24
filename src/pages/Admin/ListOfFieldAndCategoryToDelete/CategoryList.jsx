@@ -7,7 +7,7 @@ import fieldApi from '../../../services/fieldAPI';
 
 function CategoryList(props) {
 
-  const currentUser = useSelector((state) => state.user.current);
+  const currentUser = useSelector((state) => state.admin.current);
   const [categoriesList, setCategoriesList] = useState([]);
   //Get list field to make user know which of field that category belong to.
   const [fieldList, setFieldList] = useState([]);
@@ -33,15 +33,20 @@ function CategoryList(props) {
   }
 
   const hadleDeleteCategory = async (categoryId) => {
-    const deleteCategory = await adminApi.deleteCategoryByCategoryId(categoryId);
-    console.log("delete category: ", deleteCategory);
-    if (deleteCategory.status === 200) {
-      window.alert("Delete category successfully");
+    try {
+      const deleteCategory = await adminApi.deleteCategoryByCategoryId(categoryId);
+      if (deleteCategory.status === 200) {
+        window.alert("Delete category successfully");
+        setReload({});
+      } else {
+        window.alert("Delete category failed");
+        setReload({});
+      }
+    } catch (error) {
+      console.log("Fail to delete field (fieldList component)", error);
+      window.alert("Delete field failed");
       setReload({});
-    } else {
-      window.alert("Delete category failed");
     }
-    setReload({});
   }
 
   return (
