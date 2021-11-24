@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useState } from "react";
+import InputDialog from "../../../components/Dialog/InputDialog";
 
 MentorDashboardDetail.propTypes = {
   userList: PropTypes.array,
@@ -10,7 +11,9 @@ MentorDashboardDetail.propTypes = {
 function MentorDashboardDetail({ userList, onBanClick }) {
   const image =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrxuTQy4EFUjUFpOayaHu2VhS_0ziyq5sEfQ&usqp=CAU";
-  let messageConfirmToRemoveOrBan = false;
+
+  const [isBanning, setIsBanning] = useState(false);
+  const [banUser, setBanUser] = useState({});
 
   // const handleRemoveClick = (user) => {
   //   confirmToRemoveOrBan = window.confirm("Are you sure to remove this user ?");
@@ -19,21 +22,10 @@ function MentorDashboardDetail({ userList, onBanClick }) {
   //   } else return;
   // };
 
-  const handleBanAccountClick = (user) => {
-    messageConfirmToRemoveOrBan = window.prompt("Why this user is banned ?");
-    if (
-      messageConfirmToRemoveOrBan != null ||
-      messageConfirmToRemoveOrBan === "" ||
-      messageConfirmToRemoveOrBan == null ||
-      (messageConfirmToRemoveOrBan != null &&
-        messageConfirmToRemoveOrBan.trim() != null)
-    ) {
-      if (messageConfirmToRemoveOrBan == null) {
-        messageConfirmToRemoveOrBan = "";
-      }
-      onBanClick(user.id, messageConfirmToRemoveOrBan);
-    } else return;
+  const handleBanAccountClick = (reason) => {   
+    onBanClick(banUser.id, reason);
   };
+
 
   return (
     <div className="mt-3 p-10">
@@ -105,7 +97,6 @@ function MentorDashboardDetail({ userList, onBanClick }) {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {user.role}
                       </td>
-
                       {/* <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <button onClick={() => handleRemoveClick(user)} className="text-red-400 hover:text-red-600">
                           REMOVE
@@ -113,7 +104,10 @@ function MentorDashboardDetail({ userList, onBanClick }) {
                       </td> */}
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <button
-                          onClick={() => handleBanAccountClick(user)}
+                          onClick={() => {
+                            setBanUser(user);
+                            setIsBanning(true);
+                          }}
                           className="text-yellow-300 hover:text-red-600"
                         >
                           BAN
@@ -127,6 +121,15 @@ function MentorDashboardDetail({ userList, onBanClick }) {
           </div>
         </div>
       </div>
+      {isBanning ? 
+      (<InputDialog
+          isCancel = {()=>setIsBanning(false)}
+          title = "Banning student"
+          onSubmitReason={handleBanAccountClick}  
+      />)
+    :
+      null
+    }
     </div>
   );
 }

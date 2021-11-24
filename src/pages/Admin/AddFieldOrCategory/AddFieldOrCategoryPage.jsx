@@ -9,12 +9,12 @@ function AddFieldOrCategoryPage(props) {
   const currentUser = useSelector((state)=>state.user.current);
   return (
     currentUser.role === "ADMIN" ?
-    <div className = "border-2 w-10/12 mx-auto mt-3">
+    <div className = "w-10/12 mx-auto mt-3">
       <div className = "grid grid-cols-2">
-        <div className = "col-span-1 w-full mx-auto border-2">
+        <div className = "col-span-1 w-full mx-auto">
           <NewField />
         </div>
-        <div className = "col-span-1 w-full mx-auto border-2">
+        <div className = "col-span-1 w-full mx-auto">
           <NewCategory />
         </div>
       </div>

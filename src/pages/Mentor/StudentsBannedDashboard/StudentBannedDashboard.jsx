@@ -65,10 +65,15 @@ function StudentBannedDashboard() {
     <div>
       {currentUser.role === "LECTURER" ? (
         loading ? (
-          <StudentBannedDashboardDetail
+          user.length !== 0 ?
+          (<StudentBannedDashboardDetail
             userList={user}
             onUnbanClick={handleUnbanAccountClick}
-          />
+          />)
+          :
+          (<p className="text-center text-2xl my-10">
+             Banned Account list is empty (No one is banned!)
+          </p>)
         ) : (
           <UserListSkeletons />
         )
