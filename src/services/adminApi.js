@@ -89,7 +89,7 @@ const adminApi = {
     });
   },
   updateLecturerField(id, data) {
-    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = `api/lecturers/${id}/fields`;
     return axiosClient.put(url, data, {
       headers: {
@@ -99,10 +99,10 @@ const adminApi = {
     });
   },
 
-  deleteCategoryByCategoryId(categoryId){
-    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+  deleteCategoryByCategoryId(categoryId) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = `api/admin/categories/${categoryId}`;
-    return axiosClient.delete(url,{
+    return axiosClient.delete(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
@@ -110,10 +110,10 @@ const adminApi = {
     });
   },
 
-  deleteFieldByFieldId(fieldId){
-    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+  deleteFieldByFieldId(fieldId) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = `api/admin/fields/${fieldId}`;
-    return axiosClient.delete(url,{
+    return axiosClient.delete(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: accessToken,
@@ -121,8 +121,8 @@ const adminApi = {
     });
   },
 
-  createCategory(data){
-    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+  createCategory(data) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = `api/admin/categories`;
     return axiosClient.post(url, data, {
       headers: {
@@ -132,8 +132,8 @@ const adminApi = {
     });
   },
 
-  createField(data){
-    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
+  createField(data) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
     const url = `api/admin/fields`;
     return axiosClient.post(url, data, {
       headers: {
@@ -143,10 +143,9 @@ const adminApi = {
     });
   },
 
-  adminPostBlog(data){
-    const accessToken = "Bearer "+localStorage.getItem(StorageKey.TOKEN);
-    console.log("token: ", accessToken);
-    const url = 'api/admin/blogs';
+  adminPostBlog(data) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
+    const url = "api/admin/blogs";
     return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "application/json",
@@ -155,6 +154,26 @@ const adminApi = {
     });
   },
 
+  getAdminOwnBlog() {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/admin/blogs?limit=50&page=1`;
+    return axiosClient.get(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
+  deleteAdminOwnBlog(blogId) {
+    const accessToken = "Bearer " + localStorage.getItem(StorageKey.TOKEN);
+    const url = `api/admin/blogs/${blogId}`;
+    return axiosClient.delete(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: accessToken,
+      },
+    });
+  },
 };
 
 export default adminApi;

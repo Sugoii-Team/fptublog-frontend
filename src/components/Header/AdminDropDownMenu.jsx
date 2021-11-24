@@ -30,13 +30,20 @@ function AdminDropDownMenu({ admin }) {
         tabIndex="-1"
       >
         <div className="py-1" role="none">
-          <div
-            className="text-gray-700 block px-4 py-2 text-sm"
-          >
+          <div className="text-gray-700 block px-4 py-2 text-sm">
             Hello <span className="font-semibold">{userRole}</span>
           </div>
         </div>
         <div className="py-1" role="none">
+          <Link
+            to="/ownBlog"
+            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
+            role="menuitem"
+            tabIndex="-1"
+            id="menu-item-0"
+          >
+            Anouncement Posted
+          </Link>
           <Link
             to="/addFieldOrCategory"
             className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition ease-in-out duration-200"
