@@ -23,8 +23,9 @@ function MentorDashboardDetail({ userList, onBanClick }) {
   // };
 
   const handleBanAccountClick = (reason) => {   
-      onBanClick(banUser, reason);
+    onBanClick(banUser.id, reason);
   };
+
 
   return (
     <div className="mt-3 p-10">

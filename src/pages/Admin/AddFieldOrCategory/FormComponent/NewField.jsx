@@ -76,7 +76,7 @@ function NewField(props) {
         {/* New category */}
         <div>
           <div className="w-full md:mb-0">
-            <label className="block uppercase text-gray-700 text-lg font-bold mb-2">
+            <label className="block uppercase text-gray-700 text-lg font-bold">
               Category of field
             </label>
             <div className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
