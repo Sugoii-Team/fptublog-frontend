@@ -61,13 +61,13 @@ function FieldList(props) {
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900 text-center">
-                          {field.name}
+                          {field?.name}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <button
                           className="px-4 py-1 text-sm text-white bg-red-300 hover:bg-red-400 rounded"
-                          onClick={() => hadleDeleteField(field.id)}
+                          onClick={() => hadleDeleteField(field?.id)}
                         >
                           Delete
                         </button>
