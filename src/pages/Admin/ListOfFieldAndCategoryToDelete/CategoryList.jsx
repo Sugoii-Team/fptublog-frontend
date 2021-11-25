@@ -27,7 +27,7 @@ function CategoryList(props) {
   const handleFieldOfCategory = (fieldId) => {
     if (fieldList.length !== 0) {
       const field = fieldList.find((field) => field.id === fieldId);
-      return field.name;
+      return field?.name;
     } else return;
   };
 

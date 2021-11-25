@@ -34,7 +34,7 @@ export default function MyOwnBlogTable(props) {
   //Get list of own blog by current user id
   useEffect(() => {
     (async () => {
-      if (isLoggedIn || loggedInUser.role === StorageKey.adminRole) {
+      if (isLoggedIn || loggedInAdmin.role === StorageKey.adminRole) {
         // Only call api when user login
         try {
           setLoading(true);
@@ -42,7 +42,7 @@ export default function MyOwnBlogTable(props) {
           if (blogList.some) setBlogList([]); //Clear cache
           let response;
           //If admin then load blog of admin
-          if (loggedInUser.role === StorageKey.adminRole) {
+          if (loggedInAdmin.role === StorageKey.adminRole) {
             response = await adminApi.getAdminOwnBlog();
           } else {
             //Else load as usual
