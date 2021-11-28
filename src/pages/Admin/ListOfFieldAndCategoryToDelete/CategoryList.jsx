@@ -76,6 +76,7 @@ function CategoryList(props) {
                       <th className="px-6 py-2 text-xs text-gray-500">
                         Delete
                       </th>
+                    </tr>
                 </thead>
                 <tbody className="bg-white">
                   {categoriesList.map((category, idx) => (
@@ -115,7 +116,7 @@ function CategoryList(props) {
       title="Access Denied"
       description="You don't have permission to view this page!"
     />
-  );
+  ));
 }
 
 export default CategoryList;

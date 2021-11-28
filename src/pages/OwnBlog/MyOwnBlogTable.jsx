@@ -12,7 +12,6 @@ import StorageKey from "../../constant/storage-keys";
 import adminApi from "../../services/adminApi";
 
 export default function MyOwnBlogTable(props) {
-  const loggedInUser = useSelector((state) => state.admin.current);
   const loggedInUser = useSelector((state) => state.user.current);
   const loggedInAdmin = useSelector((state) => state?.admin?.current);
   const isLoggedIn = !!loggedInUser.id;
