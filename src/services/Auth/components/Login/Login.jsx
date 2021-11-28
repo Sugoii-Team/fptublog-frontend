@@ -21,6 +21,7 @@ function Login({onCancelClick}) {
       window.alert("Login successfully");
       window.location.reload();
     } catch (error) {
+      window.alert("Login Failed! Please check username, password again!");
       console.log("Failed to register", error);
     }
   };

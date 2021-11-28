@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PageAlert from "../../../components/PageAlert/PageAlert";
+import StorageKey from "../../../constant/storage-keys";
 import adminApi from "../../../services/adminApi";
 import UserListSkeletons from "../Skeletons/UserListSkeletons";
 import BannedAccountList from "./components/BannedAccountList";
@@ -25,7 +26,7 @@ function BannedAccount() {
 
   return (
     <div>
-      {currentUser.role === "ADMIN" ? (
+      {currentUser.role === StorageKey.adminRole ? (
         (loading && bannedAccountsList.length > 0) ? (
           <BannedAccountList listBannedAccounts={bannedAccountsList} />
         ) : (

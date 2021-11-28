@@ -5,6 +5,7 @@ import lecturerApi from "../../../services/lecturerApi";
 import MentorDashboardDetail from "./MentorDashboardDetail";
 import UserListSkeletons from "../Skeletons/UserListSkeletons";
 import PageAlert from "../../../components/PageAlert/PageAlert";
+import StorageKey from "../../../constant/storage-keys";
 
 MentorDashboard.propTypes = {};
 
@@ -75,7 +76,7 @@ function MentorDashboard() {
 
   return (
     <div>
-      {currentUser.role === "LECTURER" ? (
+      {currentUser.role === StorageKey.lecturerRole ? (
         loading ? (
           <MentorDashboardDetail
             userList={user}

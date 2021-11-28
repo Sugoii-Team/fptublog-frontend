@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import PageAlert from "../../../components/PageAlert/PageAlert";
-import adminApi from "../../../services/adminApi";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import PageAlert from '../../../components/PageAlert/PageAlert';
+import StorageKey from '../../../constant/storage-keys';
+import adminApi from '../../../services/adminApi';
 import categoryApi from "../../../services/categoryApi";
 import fieldApi from "../../../services/fieldAPI";
 
@@ -50,25 +51,31 @@ function CategoryList(props) {
     }
   };
 
-  return currentUser.role === "ADMIN" ? (
-    <div className="mt-4 rounded-md">
-      <p className="text-center text-2xl">LIST OF CATEGORY</p>
-      <div className="container flex justify-center mx-auto">
-        <div className="flex flex-col">
-          <div className="w-full">
-            <div className="border-b border-gray-200 shadow">
-              <table>
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-2 text-xs text-gray-500">No.</th>
-                    <th className="px-6 py-2 text-xs text-gray-500">
-                      Category
-                    </th>
-                    <th className="px-6 py-2 text-xs text-gray-500">
-                      Field of category
-                    </th>
-                    <th className="px-6 py-2 text-xs text-gray-500">Delete</th>
-                  </tr>
+  return (
+    currentUser.role === StorageKey.adminRole ?
+      (<div className="mt-4 rounded-md">
+        <p className="text-center text-2xl">
+          LIST OF CATEGORY
+        </p>
+        <div className="container flex justify-center mx-auto">
+          <div className="flex flex-col">
+            <div className="w-full">
+              <div className="border-b border-gray-200 shadow">
+                <table>
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-2 text-xs text-gray-500">
+                        No.
+                      </th>
+                      <th className="px-6 py-2 text-xs text-gray-500">
+                        Category
+                      </th>
+                      <th className="px-6 py-2 text-xs text-gray-500">
+                        Field of category
+                      </th>
+                      <th className="px-6 py-2 text-xs text-gray-500">
+                        Delete
+                      </th>
                 </thead>
                 <tbody className="bg-white">
                   {categoriesList.map((category, idx) => (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
+import StorageKey from "../../../constant/storage-keys";
 import adminApi from "../../../services/adminApi";
 import lecturerApi from "../../../services/lecturerApi";
 
@@ -18,6 +19,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
   const [options, setOptions] = useState([]);
   const [editProfile, setEditProfile] = useState(false);
 
+  console.log("user profile: ", userProfile)
   useEffect(() => {
     (async () => {
       try {
@@ -51,9 +53,9 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
 
   //Send data to API to update lecture profile: include data of lecturer and field of lecturer
   const handleLecturerDataToUpdate = async (data) => {
-    if (userProfile.role === "LECTURER") {
+    if (userProfile.role === StorageKey.lecturerRole) {
       try {
-        if (adminUser.role === "ADMIN") {
+        if (adminUser.role === StorageKey.adminRole) {
           const fields = data.field.map((field) => ({
             id: field,
           }));
@@ -107,7 +109,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
   return (
     <form onSubmit={handleSubmit(handleLecturerDataToUpdate)}>
       {(currentUser.id === userProfile.id && editProfile === true) ||
-      (adminUser.role === "ADMIN" && editProfile === true) ? (
+      (adminUser.role === StorageKey.adminRole && editProfile === true) ? (
         <div>
           {/* first name and last name row */}
           <div className="flex flex-wrap -mx-3 mb-6">
@@ -117,7 +119,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 First Name
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {adminUser.role === "ADMIN" ? (
+              {adminUser.role === StorageKey.adminRole ? (
                 <p
                   className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="text"
@@ -140,7 +142,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 Last Name
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {adminUser.role === "ADMIN" ? (
+              {adminUser.role === StorageKey.adminRole ? (
                 <p
                   className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   type="text"
@@ -164,7 +166,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
               <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                 Email
               </label>
-              {adminUser.role === "ADMIN" ? (
+              {adminUser.role === StorageKey.adminRole ? (
                 <p className="h-11 appearance-none block w-full bg-gray-100 text-gray-600 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                   {lecturerUser.email}
                 </p>
@@ -190,7 +192,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 ALTERNATIVE EMAIL
               </label>
               {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT) */}
-              {adminUser.role === "ADMIN" ? (
+              {adminUser.role === StorageKey.adminRole ? (
                 <p
                   className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   {...register("alternativeEmail")}
@@ -220,9 +222,14 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                   DESCRIPTION
                 </label>
                 {/* ADMIN CANNOT CHANGE PROFILE OF USER (LECTURER ON THIS COMPONENT)*/}
-                {adminUser.role === "ADMIN" ? (
+                {adminUser.role === StorageKey.adminRole ? (
+                  userProfile.description != null ? 
                   <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                     {lecturerUser.description}
+                  </p>
+                  :
+                  <p className="appearance block w-full bg-gray-100 text-gray-400 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                    Let update your description
                   </p>
                 ) : lecturerUser.description != null ? (
                   <textarea
@@ -242,7 +249,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
           </div>
 
           {/*ONLY ADMIN CAN UPDATE FIELD OF LECTURER */}
-          {adminUser.role === "ADMIN" ? (
+          {adminUser.role === StorageKey.adminRole ? (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
@@ -354,14 +361,20 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                   DESCRIPTION
                 </label>
+                {userProfile.description !== null ? 
                 <p className="appearance-none block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                   {userProfile.description}
                 </p>
+                :
+                  <p className="appearance block w-full bg-gray-100 text-gray-400 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                    Let update your description !
+                  </p>
+              }
               </div>
             </div>
           </div>
 
-          {adminUser.role === "ADMIN" ? (
+          {((adminUser.role === StorageKey.adminRole) && editProfile === true ) ? (
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
@@ -414,7 +427,7 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
       )}
 
       {/* ADMIN UPDATE FIELD, LECTURER UPDATE THEIR PROFILE */}
-      {currentUser.id === userProfile.id || adminUser.role === "ADMIN" ? (
+      {currentUser.id === userProfile.id || adminUser.role === StorageKey.adminRole ? (
         <span>
           <div className="relative">
             <button

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AnnouncementDialog from "../../../components/AnouncementStatusDialog/AnnouncementDialog";
 import PageAlert from "../../../components/PageAlert/PageAlert";
+import StorageKey from "../../../constant/storage-keys";
 import adminApi from "../../../services/adminApi";
 import UserListSkeletons from "../Skeletons/UserListSkeletons";
 import DashboardDetail from "./components/DashboardDetail";
@@ -27,7 +28,6 @@ function DashboardPage() {
 
   const handleUpdateUserRole = async (data) => {
     const updateUserRole = await adminApi.updateUserRole(data.id, data);
-    console.log("UpdateUserRole ne: ", updateUserRole);
     if (updateUserRole.status === 200) {
       setStatus(true);
       setResponseObject(updateUserRole);
@@ -64,7 +64,7 @@ function DashboardPage() {
   useEffect(() => {
     (async () => {
       try {
-        if (currentUser.role === "ADMIN") {
+        if (currentUser.role === StorageKey.adminRole) {
           if (user.some) {
             setUser([]);
           }
@@ -81,7 +81,7 @@ function DashboardPage() {
 
   return (
     <div>
-      {currentUser.role === "ADMIN" ? (
+      {currentUser.role === StorageKey.adminRole ? (
         loading ? (
           <DashboardDetail
             userList={user}

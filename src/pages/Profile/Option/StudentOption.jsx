@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import Select from "react-select";
+import StorageKey from "../../../constant/storage-keys";
 import userApi from "../../../services/userApi";
 
 StudentOption.propTypes = {};
@@ -152,7 +153,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                     <textarea
                       className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       {...register("description")}
-                      placeholder={userProfile.description}
+                      placeholder={studentProfile.description}
                     ></textarea>
                   ) : (
                     <textarea
@@ -166,7 +167,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
             </div>
 
             {/* Major of student */}
-            {userProfile.role === "STUDENT" ? (
+            {userProfile.role === StorageKey.studentRole ? (
               <div className="flex flex-wrap -mx-3 mb-6">
                 <div className="w-full px-3">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -270,14 +271,14 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                     DESCRIPTION
                   </label>
                   <p className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    {studentUser.description}
+                    {userProfile.description}
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Major of student */}
-            {userProfile.role === "STUDENT" ? (
+            {userProfile.role === StorageKey.studentRole ? (
               <div className="flex flex-wrap -mx-3 mb-6">
                 <div className="w-full px-3">
                   <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
