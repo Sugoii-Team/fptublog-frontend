@@ -100,7 +100,10 @@ function DashboardDetail({
                             />
                           </div>
                           <div className="ml-4 px-6">
-                            <Link to = {`/profile?${user.id}`} className="font-medium text-gray-900">
+                            <Link
+                              to={`/profile?${user.id}`}
+                              className="font-medium text-gray-900"
+                            >
                               {user.firstName} {user.lastName}
                             </Link>
                           </div>

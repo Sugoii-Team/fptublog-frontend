@@ -13,6 +13,8 @@ import adminApi from "../../services/adminApi";
 
 export default function MyOwnBlogTable(props) {
   const loggedInUser = useSelector((state) => state.admin.current);
+  const loggedInUser = useSelector((state) => state.user.current);
+  const loggedInAdmin = useSelector((state) => state?.admin?.current);
   const isLoggedIn = !!loggedInUser.id;
 
   const [isSending, setIsSending] = useState(false); // Set state for this to disable button when sending request
@@ -33,7 +35,7 @@ export default function MyOwnBlogTable(props) {
   //Get list of own blog by current user id
   useEffect(() => {
     (async () => {
-      if (isLoggedIn || loggedInUser.role === StorageKey.adminRole) {
+      if (isLoggedIn || loggedInAdmin.role === StorageKey.adminRole) {
         // Only call api when user login
         try {
           setLoading(true);
@@ -41,13 +43,12 @@ export default function MyOwnBlogTable(props) {
           if (blogList.some) setBlogList([]); //Clear cache
           let response;
           //If admin then load blog of admin
-          if (loggedInUser.role === StorageKey.adminRole) {
+          if (loggedInAdmin.role === StorageKey.adminRole) {
             response = await adminApi.getAdminOwnBlog();
           } else {
             //Else load as usual
             response = await userApi.getOwnBlog(loggedInUser.id);
           }
-          console.log("admin response ne : ", response);
           if (isMounted && response.status === 200) {
             setBlogList(response.data);
             setLoading(false);
@@ -72,7 +73,7 @@ export default function MyOwnBlogTable(props) {
       try {
         let response;
         //if is admin delete by differ api
-        if (loggedInUser.role === StorageKey.adminRole) {
+        if (loggedInAdmin?.role === StorageKey.adminRole) {
           response = await adminApi.deleteAdminOwnBlog(blogId);
         } else {
           //Else delete as usual
@@ -139,7 +140,7 @@ export default function MyOwnBlogTable(props) {
 
   return (
     <>
-      {isLoggedIn || loggedInUser.role === StorageKey.adminRole ? (
+      {isLoggedIn || loggedInAdmin?.role === StorageKey.adminRole ? (
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: -20, opacity: 0 }}

@@ -45,8 +45,8 @@ function LoginForm({onSubmit, onCancelClick}) {
         // name="identifier"
         name="username"
         type="text"
-        label="Email"
-        placeholder="eg: myemail@domain.com"
+        label="Username"
+        placeholder="eg: Username here"
         form={form}
       />
       <InputField

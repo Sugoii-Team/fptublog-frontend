@@ -4,10 +4,9 @@ import PageAlert from '../../../components/PageAlert/PageAlert';
 import StorageKey from '../../../constant/storage-keys';
 import adminApi from '../../../services/adminApi';
 import categoryApi from "../../../services/categoryApi";
-import fieldApi from '../../../services/fieldAPI';
+import fieldApi from "../../../services/fieldAPI";
 
 function CategoryList(props) {
-
   const currentUser = useSelector((state) => state.admin.current);
   const [categoriesList, setCategoriesList] = useState([]);
   //Get list field to make user know which of field that category belong to.
@@ -29,13 +28,15 @@ function CategoryList(props) {
   const handleFieldOfCategory = (fieldId) => {
     if (fieldList.length !== 0) {
       const field = fieldList.find((field) => field.id === fieldId);
-      return field.name;
+      return field?.name;
     } else return;
-  }
+  };
 
   const hadleDeleteCategory = async (categoryId) => {
     try {
-      const deleteCategory = await adminApi.deleteCategoryByCategoryId(categoryId);
+      const deleteCategory = await adminApi.deleteCategoryByCategoryId(
+        categoryId
+      );
       if (deleteCategory.status === 200) {
         window.alert("Delete category successfully");
         setReload({});
@@ -48,7 +49,7 @@ function CategoryList(props) {
       window.alert("Delete field failed");
       setReload({});
     }
-  }
+  };
 
   return (
     currentUser.role === StorageKey.adminRole ?
@@ -75,43 +76,45 @@ function CategoryList(props) {
                       <th className="px-6 py-2 text-xs text-gray-500">
                         Delete
                       </th>
+                </thead>
+                <tbody className="bg-white">
+                  {categoriesList.map((category, idx) => (
+                    <tr key={idx} className="whitespace-nowrap">
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {idx + 1}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900 text-center">
+                          {category?.name}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-500 text-center">
+                          {handleFieldOfCategory(category?.fieldId)}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          className="px-4 py-1 text-sm text-white bg-red-300 hover:bg-red-400 rounded"
+                          onClick={() => hadleDeleteCategory(category?.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="bg-white">
-                    {categoriesList.map((category, idx) =>
-                      <tr key={idx} className="whitespace-nowrap">
-                        <td className="px-6 py-4 text-sm text-gray-500">
-                          {idx + 1}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-sm text-gray-900 text-center">
-                            {category.name}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-sm text-gray-500 text-center">
-                            {handleFieldOfCategory(category.fieldId)}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <button className="px-4 py-1 text-sm text-white bg-red-300 hover:bg-red-400 rounded"
-                            onClick={() => hadleDeleteCategory(category.id)}>Delete</button>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-      </div>)
-      : (
-        <PageAlert
-          title="Access Denied"
-          description="You don't have permission to view this page!"
-        />
-      )
+      </div>
+    </div>
+  ) : (
+    <PageAlert
+      title="Access Denied"
+      description="You don't have permission to view this page!"
+    />
   );
 }
 
