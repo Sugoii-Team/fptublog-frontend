@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
+import StorageKey from "../../constant/storage-keys";
 import awardApi from "../../services/awardApi";
 import userApi from "../../services/userApi";
 import NameSectionSkeleton from "./NameSectionSkeleton";
@@ -94,7 +95,7 @@ function Profile(props) {
 
   //Handle update profile
   const onHandleStudentSubmit = async (data) => {
-    if (userProfile.role === "STUDENT") {
+    if (userProfile.role === StorageKey.studentRole) {
       try {
         const reponse = await userApi.updateStudentProfile(
           userProfile.id,
@@ -114,7 +115,7 @@ function Profile(props) {
     (async () => {
       try {
         //Get award of profile
-        if (userProfile.role === "STUDENT") {
+        if (userProfile.role === StorageKey.studentRole) {
           const awardResponse = await awardApi.getAwardOfStudent(userId);
           setProfileAward(awardResponse.data);
         }
@@ -182,7 +183,7 @@ function Profile(props) {
                       userId={userId}
                     />
                   ) : null}
-                  {userProfile.role === "STUDENT" ? (
+                  {userProfile.role === StorageKey.studentRole ? (
                     <div className="col-span-1 absolute left-56 top-5">
                       <div className="profileNameNDes">
                         <span className="font-bold uppercase text-xl text-transparent filter drop-shadow-md bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
@@ -212,9 +213,9 @@ function Profile(props) {
                           {userProfile.description !== null ? (
                             userProfile.description
                           ) : (
-                            <p className="text-gray-400">
+                            <span className="text-gray-400">
                               "AYoooooooo!!! Let update your description !"
-                            </p>
+                            </span>
                           )}
                         </p>
                         <div className="mt-2 text-purple-600 font-bold uppercase">
@@ -265,7 +266,7 @@ function Profile(props) {
         <div className="grid grid-cols-3 my-5 gap-3">
           {/* Left */}
           <div className="col-span-1">
-            {userProfile.role === "STUDENT" && loading === false ? (
+            {userProfile.role === StorageKey.studentRole && loading === false ? (
               <motion.div
                 animate={{ y: 0, opacity: 1 }}
                 initial={{ y: 20, opacity: 0.5 }}
@@ -332,7 +333,7 @@ function Profile(props) {
               className="border-2 border-gray-100 rounded-lg shadow-lg h-100 py-4 px-7"
             >
               <h1 className="font-bold text-xl text-center uppercase">ABOUT</h1>
-              {userProfile.role === "STUDENT" ? (
+              {userProfile.role === StorageKey.studentRole ? (
                 <StudentOption
                   userProfile={userProfile}
                   dataOfStudentToUpdate={onHandleStudentSubmit}

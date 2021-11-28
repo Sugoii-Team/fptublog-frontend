@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import InputDialog from "../../../../components/Dialog/InputDialog";
 import SubmitForm from "./UpdateUserDialog/SubmitForm/SubmitForm";
 
@@ -14,7 +15,6 @@ DashboardDetail.propTypes = {
 function DashboardDetail({
   userList,
   dataOfUserToUpdate,
-  onRemoveClick,
   onBanClick,
 }) {
   const image =
@@ -45,7 +45,7 @@ function DashboardDetail({
 
   return (
     <div className="mt-3 p-10">
-      <p className="text-center text-2xl mb-10">
+      <p className="text-center text-2xl mb-5">
         LIST ACCOUNTS
       </p>
       <div className="flex flex-col">
@@ -100,9 +100,9 @@ function DashboardDetail({
                             />
                           </div>
                           <div className="ml-4 px-6">
-                            <div className="font-medium text-gray-900">
+                            <Link to = {`/profile?${user.id}`} className="font-medium text-gray-900">
                               {user.firstName} {user.lastName}
-                            </div>
+                            </Link>
                           </div>
                         </div>
                       </td>

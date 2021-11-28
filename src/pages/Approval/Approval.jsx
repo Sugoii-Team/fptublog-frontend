@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import PageAlert from "../../components/PageAlert/PageAlert";
+import StorageKey from "../../constant/storage-keys";
 import lecturerApi from "../../services/lecturerApi";
 import ApprovalTable from "./components/ApprovalTable";
 
@@ -26,7 +27,7 @@ function Approval(props) {
 
   return (
     <div>
-      {userRole === "LECTURER" ? (
+      {userRole === StorageKey.lecturerRole ? (
         <ApprovalTable listReviewBlogs={reviewBlog} />
       ) : (
         <PageAlert

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PageAlert from '../../../components/PageAlert/PageAlert';
+import StorageKey from '../../../constant/storage-keys';
 import adminApi from '../../../services/adminApi';
 import fieldApi from '../../../services/fieldAPI';
 
@@ -42,7 +43,7 @@ function FieldList(props) {
   }
 
   return (
-    currentUser.role === "ADMIN" ?
+    currentUser.role === StorageKey.adminRole ?
       (<div className="mt-4 rounded-md">
         <p className="text-center text-2xl">
           LIST OF FIELD

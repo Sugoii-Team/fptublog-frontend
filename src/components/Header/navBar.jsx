@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import StorageKey from "../../constant/storage-keys";
 import Login from "../../services/Auth/components/Login/Login";
 import MyGoogleLogin from "../../services/Auth/components/LoginWithGoogle/GoogleLogin";
 import Notification from "../Notifications/Notification";
@@ -199,7 +200,7 @@ function NavBar({ fieldList, categoriesList }) {
             {/* Social icons */}
 
             {/* <!-- User icon  --> */}
-            {!isLoggedIn && !(adminLoggedIn.role === "ADMIN") && (
+            {!isLoggedIn && !(adminLoggedIn.role === StorageKey.adminRole) && (
               <div
                 className="userIcon cursor-pointer"
                 onClick={handleLoginOnclick}
@@ -222,7 +223,7 @@ function NavBar({ fieldList, categoriesList }) {
             )}
 
             {/* User field after logged in */}
-            {(isLoggedIn || adminLoggedIn.role === "ADMIN") && (
+            {(isLoggedIn || adminLoggedIn.role === StorageKey.adminRole) && (
               /* User icon when logged in */
               <div className="cursor-pointer">
                 <div onClick={toggleUserMenu}>
@@ -252,7 +253,7 @@ function NavBar({ fieldList, categoriesList }) {
 
                 {/* User Dropdown menu */}
                 {isToggleLogginUser ? (
-                  adminLoggedIn.role === "ADMIN" ? (
+                  adminLoggedIn.role === StorageKey.adminRole ? (
                     <AdminDropDownMenu admin={adminLoggedIn} />
                   ) : (
                     <UserDropDownMenu userInfo={loggedInUser} />

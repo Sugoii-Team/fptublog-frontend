@@ -274,7 +274,7 @@ export default function NewBlogForm(props) {
           createNewNotification(newBlogResponseId);
           setSuccessPostDialog(true);
         }
-      } else if (getAdminState.role === "ADMIN") {
+      } else if (getAdminState.role === StorageKey.adminRole) {
         //admin send api to post new announment
         const blog = {
           thumbnailUrl,
@@ -284,7 +284,6 @@ export default function NewBlogForm(props) {
         };
         //sending api to admin to post blog
         const adminPostBlogReponse = await adminApi.adminPostBlog(blog);
-        console.log("blog admin ne : ", adminPostBlogReponse);
         if (adminPostBlogReponse.status === 200) {
           setSuccessPostDialog(true);
         }
@@ -364,7 +363,7 @@ export default function NewBlogForm(props) {
     }
     setSendingApprove(true); // Set this to disable approve button and show loading
     e.preventDefault();
-    if (getAdminState.role === "ADMIN") {
+    if (getAdminState.role === StorageKey.adminRole) {
       if (title.length < minTitleLength) {
         setTitleDialog(true);
         e.preventDefault();
@@ -438,7 +437,7 @@ export default function NewBlogForm(props) {
 
   return (
     <div>
-      {isLoggedIn || getAdminState.role === "ADMIN" ? (
+      {isLoggedIn || getAdminState.role === StorageKey.adminRole ? (
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: 25, opacity: 0 }}
@@ -461,7 +460,7 @@ export default function NewBlogForm(props) {
                 />
               </div>
 
-              {getAdminState.role === "ADMIN" ? (
+              {getAdminState.role === StorageKey.adminRole ? (
                 <div>
                   <div className="w-full grid grid-cols-2 gap-2">
                     <div className="my-3 col-span-1">
@@ -528,7 +527,7 @@ export default function NewBlogForm(props) {
                 </div>
               )}
 
-              {getAdminState.role === "ADMIN" ? null : (
+              {getAdminState.role === StorageKey.adminRole ? null : (
                 // Tags
                 <div>
                   <p className="font-semibold">Tags: </p>
@@ -556,7 +555,7 @@ export default function NewBlogForm(props) {
                 </div>
               )}
 
-              {getAdminState.role === "ADMIN" ? null : (
+              {getAdminState.role === StorageKey.adminRole ? null : (
                 // thumbNail URL
                 <div className=" my-2">
                   <p className="font-semibold">Thumbnails:</p>
@@ -659,7 +658,7 @@ export default function NewBlogForm(props) {
                   onClick={handleSubmit}
                   disabled={sendingApprove}
                 >
-                  {getAdminState.role === "ADMIN" ? "Post Blog" : "Send Approve"}
+                  {getAdminState.role === StorageKey.adminRole ? "Post Blog" : "Send Approve"}
                 </button>
               </div>
             </div>

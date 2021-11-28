@@ -5,6 +5,7 @@ import { db } from "../../../services/fireBase";
 import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
 import { useSelector } from "react-redux";
 import PageAlert from "../../../components/PageAlert/PageAlert";
+import StorageKey from "../../../constant/storage-keys";
 
 CommentManage.propTypes = {};
 
@@ -33,7 +34,7 @@ function CommentManage(props) {
   console.log("bo warning cua loading", loading);
   return (
     <>
-      {currentUser.role === "ADMIN" ? (
+      {currentUser.role === StorageKey.adminRole ? (
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           initial={{ y: -20, opacity: 0 }}

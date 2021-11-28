@@ -12,7 +12,7 @@ import StorageKey from "../../constant/storage-keys";
 import adminApi from "../../services/adminApi";
 
 export default function MyOwnBlogTable(props) {
-  const loggedInUser = useSelector((state) => state.user.current);
+  const loggedInUser = useSelector((state) => state.admin.current);
   const isLoggedIn = !!loggedInUser.id;
 
   const [isSending, setIsSending] = useState(false); // Set state for this to disable button when sending request
@@ -29,6 +29,7 @@ export default function MyOwnBlogTable(props) {
     };
   }, []);
 
+  console.log("logged in user", loggedInUser);
   //Get list of own blog by current user id
   useEffect(() => {
     (async () => {
