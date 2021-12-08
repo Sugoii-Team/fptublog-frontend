@@ -19,7 +19,6 @@ function LecturerOption({ userProfile, updateLecturerStatus }) {
   const [options, setOptions] = useState([]);
   const [editProfile, setEditProfile] = useState(false);
 
-  console.log("user profile: ", userProfile)
   useEffect(() => {
     (async () => {
       try {

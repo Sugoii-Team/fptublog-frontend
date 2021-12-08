@@ -56,10 +56,9 @@ function App() {
           <div >
             <ScrollToTop />
             <Switch>
-              <Route path="/dashboard" component={Dashboard} exact />
               <Route path="/" component={HomePage} exact />
-              <Route path="/blogdetail" component={BlogContentFeature} exact />
               <Route path="/dashboard" component={Dashboard} exact />
+              <Route path="/blogdetail" component={BlogContentFeature} exact />
               <Route path="/createNewPost" component={PostBlog} />
               <Route path="/updateBlog" component={UpdateBlog} exact />
               <Route path="/approval" component={Approval} exact />

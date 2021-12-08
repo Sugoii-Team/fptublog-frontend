@@ -44,7 +44,7 @@ function Profile(props) {
     setCurrentPage(data.selected + 1); // Page count start at 1
   };
 
-  const limitBlog = 10;
+  const limitBlog = 3;
 
   const color = {
     frombgColor: "pink",
@@ -193,9 +193,9 @@ function Profile(props) {
                           {userProfile.description !== null ? (
                             userProfile.description
                           ) : (
-                            <p className="text-gray-400">
+                            <span className="text-gray-400">
                               "AYoooooooo!!! Let update your description !"
-                            </p>
+                            </span>
                           )}
                         </p>
                       </div>

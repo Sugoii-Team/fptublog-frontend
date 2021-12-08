@@ -17,6 +17,7 @@ export const login = createAsyncThunk(
     return responeData;
   }
 );
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {

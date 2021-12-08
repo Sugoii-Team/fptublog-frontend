@@ -151,13 +151,13 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                   </label>
                   {userProfile.description != null ? (
                     <textarea
-                      className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       {...register("description")}
-                      placeholder={studentProfile.description}
+                      placeholder={userProfile.description}
                     ></textarea>
                   ) : (
                     <textarea
-                      className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       placeholder="Input your description to update."
                       {...register("description")}
                     />
@@ -270,7 +270,7 @@ function StudentOption({ userProfile, dataOfStudentToUpdate, studentProfile }) {
                   <label className="block uppercase tracking-wide text-gray-700 text-lg font-bold mb-2">
                     DESCRIPTION
                   </label>
-                  <p className="appearance-none h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                  <p className="h-24 block w-full bg-gray-100 text-gray-700 border border-gray-100 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" placeholder={studentProfile.description}>
                     {userProfile.description}
                   </p>
                 </div>
